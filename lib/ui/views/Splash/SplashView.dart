@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import 'SplashViewModel.dart';
@@ -14,15 +16,19 @@ class SplashView extends BaseView<SplashViewModel> {
   Widget buildView(BuildContext context, SplashViewModel viewModel) {
     if (viewModel.isLoading) {
       // Splash screen with logo + black background
-      return const Scaffold(
-        backgroundColor: AppColors.black,
+      return Scaffold(
+        backgroundColor: AppColors.primary,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+          // 🔹 SVG Logo
+          SvgPicture.asset(
+          AppAssets.logo,      // path from your AppAssets
+            height: 120,         // adjust size
+            width: 120,
+          ),
              // FlutterLogo(size: 120, style: FlutterLogoStyle.markOnly),
-              SizedBox(height: 20),
-              CircularProgressIndicator(color: AppColors.white),
             ],
           ),
         ),

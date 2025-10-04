@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/constants/app_assets.dart';
-import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/utils/base_view.dart';
 import '../../../core/utils/appbar.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -19,77 +20,83 @@ class InterestsView extends BaseView<InterestsViewModel> {
 
   @override
   Widget buildView(BuildContext context, InterestsViewModel viewModel) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
         child: ResponsiveContainer(
           mobileMaxWidth: double.infinity,
-          tabletMaxWidth: 600,
-          desktopMaxWidth: 800,
+          tabletMaxWidth: double.infinity,
+          desktopMaxWidth: double.infinity,
           child: Container(
-            padding: context.isLargeScreen 
-                ? const EdgeInsets.symmetric(horizontal: 40, vertical: 30)
-                : context.isMediumScreen 
-                    ? const EdgeInsets.symmetric(horizontal: 30, vertical: 25)
-                    : const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+            padding: context.isLargeScreen
+                ? const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingXL,
+              vertical: AppDimensions.paddingL,
+            )
+                : context.isMediumScreen
+                ? const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingL,
+              vertical: AppDimensions.paddingM,
+            )
+                : const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingM,
+              vertical: AppDimensions.paddingS,
+            ),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(AppAssets.interestback),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back button
                 CustomBackButton(onTap: () => context.pop()),
                 const SizedBox(height: AppDimensions.spaceM),
-
-                // Heading
                 ResponsiveText(
-                  "Your Festival Interests",
-                  style: const TextStyle(color:AppColors.accent, fontSize: 50, fontWeight: FontWeight.bold),
+                  AppStrings.yourFestivalInterests,
+                  style: const TextStyle(
+                    color: AppColors.accent,
+                    fontSize: AppDimensions.textXXL + 10, // custom scaling
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: AppDimensions.spaceS),
-                
                 ResponsiveText(
-                  "Do their habits match yours? You go first.",
+                  AppStrings.habitsMatch,
                   style: const TextStyle(color: AppColors.primary),
                 ),
-
                 const SizedBox(height: AppDimensions.paddingL),
-                
                 ResponsiveText(
-                  "Choose from categories",
-                  style: const TextStyle(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.w600),
+                  AppStrings.chooseCategories,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontSize: AppDimensions.textL + 2,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: AppDimensions.spaceM),
-
-                // Chips
                 Expanded(
                   child: _buildInterestsGrid(context, viewModel),
                 ),
-
                 const SizedBox(height: AppDimensions.paddingL),
-
-                // Action buttons
                 _buildActionButtons(context, viewModel),
               ],
             ),
           ),
         ),
       ),
+    ),
     );
   }
-  Widget _buildInterestsGrid(BuildContext context, InterestsViewModel viewModel) {
+
+  Widget _buildInterestsGrid(
+      BuildContext context, InterestsViewModel viewModel) {
     return SingleChildScrollView(
       child: Wrap(
-        spacing: AppDimensions.spaceS,      // horizontal spacing
-        runSpacing: AppDimensions.spaceS,   // vertical spacing
+        spacing: AppDimensions.spaceS,
+        runSpacing: AppDimensions.spaceS,
         children: viewModel.categories.map((cat) {
           final selected = viewModel.isSelected(cat);
           return _buildInterestChip(cat, selected, viewModel);
@@ -98,7 +105,8 @@ class InterestsView extends BaseView<InterestsViewModel> {
     );
   }
 
-  Widget _buildInterestChip(String category, bool selected, InterestsViewModel viewModel) {
+  Widget _buildInterestChip(
+      String category, bool selected, InterestsViewModel viewModel) {
     return ChoiceChip(
       showCheckmark: false,
       label: Padding(
@@ -109,8 +117,11 @@ class InterestsView extends BaseView<InterestsViewModel> {
         child: Text(
           category,
           style: TextStyle(
-            color: selected ? AppColors.onPrimary : AppColors.onSurfaceVariant,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+            color: selected
+                ? AppColors.onPrimary
+                : AppColors.onSurfaceVariant,
+            fontWeight:
+            selected ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
       ),
@@ -128,45 +139,44 @@ class InterestsView extends BaseView<InterestsViewModel> {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, InterestsViewModel viewModel) {
+  Widget _buildActionButtons(
+      BuildContext context, InterestsViewModel viewModel) {
     return Column(
       children: [
-        // Next button
         SizedBox(
           width: double.infinity,
           height: AppDimensions.buttonHeightXL,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: viewModel.hasSelection
-                  ? AppColors.accent
-                  : AppColors.accent,
-
+              backgroundColor: AppColors.accent,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                borderRadius:
+                BorderRadius.circular(AppDimensions.radiusXL),
               ),
             ),
             onPressed: viewModel.hasSelection && !viewModel.isLoading
                 ? () {
-                    FocusScope.of(context).unfocus();
-                    viewModel.saveInterests();
-                  }
+              FocusScope.of(context).unfocus();
+              viewModel.saveInterests();
+            }
                 : null,
             child: viewModel.isLoading
                 ? const SizedBox(
-                    width: AppDimensions.iconS,
-                    height: AppDimensions.iconS,
-                    child: CircularProgressIndicator(
-                      color: AppColors.onPrimary,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : const Text(
-                    AppStrings.next,
-                    style: TextStyle(fontSize:20,color:  AppColors.onPrimary),
-                  ),
+              width: AppDimensions.iconM,
+              height: AppDimensions.iconM,
+              child: CircularProgressIndicator(
+                color: AppColors.primary,
+                strokeWidth: AppDimensions.loadingIndicatorStrokeWidth,
+              ),
+            )
+                : Text(
+              AppStrings.next,
+              style: const TextStyle(
+                  fontSize: AppDimensions.textXL,
+                  color: AppColors.onPrimary),
+            ),
           ),
         ),
-
         const SizedBox(height: AppDimensions.spaceM),
       ],
     );

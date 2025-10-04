@@ -1,6 +1,8 @@
 import 'package:festival_rumour/ui/views/homeview/post_model.dart';
+import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
 import '../../ui/views/Splash/SplashView.dart';
+import '../../ui/views/comment/comment_view.dart';
 import '../../ui/views/eventscreen/event_view.dart';
 import '../../ui/views/firstname/first_name_view.dart';
 import '../../ui/views/homeview/home_view.dart';
@@ -49,6 +51,8 @@ class AppRoutes {
   static const String compose = '/compose';
   static const String settings = '/settings';
   static const String leaderboard = '/leaderboard';
+  static const String comments = '/comments';
+  static const String username = '/username';
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -124,6 +128,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case AppRoutes.leaderboard:
       return SmoothPageRoute(page: const LeaderboardView());
+
+      case AppRoutes.comments:
+      return SmoothPageRoute(page: const CommentView());
+
+      case AppRoutes.username:
+        return SmoothPageRoute(page: const UsernameView());
 
     default:
       return MaterialPageRoute(

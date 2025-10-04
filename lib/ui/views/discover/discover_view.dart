@@ -1,109 +1,120 @@
+import 'package:festival_rumour/core/utils/backbutton.dart';
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import '../../../core/utils/base_view.dart';
-import '../../../core/constants/app_strings.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
-import 'discover_viewmodel.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_widget.dart';
 
-class DiscoverView extends BaseView<DiscoverViewModel> {
+import 'discover_viewmodel.dart';
+import 'widgets/event_header_card.dart';
+import 'widgets/action_tile.dart';
+import 'widgets/grid_option.dart';
+class DiscoverView extends BaseView<DiscoverViewmodel> {
   const DiscoverView({super.key});
 
   @override
-  DiscoverViewModel createViewModel() => DiscoverViewModel();
+  DiscoverViewmodel createViewModel() => DiscoverViewmodel();
 
   @override
-  Widget buildView(BuildContext context, DiscoverViewModel viewModel) {
+  Widget buildView(BuildContext context, DiscoverViewmodel viewModel) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        automaticallyImplyLeading: false,
-        title: const Text(AppStrings.selectFestivalsBy),
-        titleTextStyle: const TextStyle(
-          fontSize: AppDimensions.size25,
-          fontWeight: FontWeight.bold,
-          color: AppColors.black,
-        ),
-        centerTitle: false,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
-      ),
-      body: Column(
+      extendBodyBehindAppBar: true,
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(AppDimensions.paddingS),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _CategoryChip(AppStrings.live, viewModel.selected == AppStrings.live, () => viewModel.select(AppStrings.live)),
-                _CategoryChip("Upcoming", viewModel.selected == "Upcoming", () => viewModel.select("Upcoming")),
-                _CategoryChip("Past", viewModel.selected == "Past", () => viewModel.select("Past")),
-              ],
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.bottomsheet,
+              fit: BoxFit.cover,
             ),
           ),
-
-          Expanded(
-            child: PageView.builder(
-              itemCount: viewModel.festivals.length,
-              itemBuilder: (context, index) {
-                final fest = viewModel.festivals[index];
-                return Card(
-                  margin: const EdgeInsets.all(AppDimensions.paddingM),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusL)),
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-                        child: Image.asset(fest['image']!, fit: BoxFit.cover, width: double.infinity),
-                      ),
-                      Positioned(
-                        top: 10,
-                        left: 10,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS, vertical: AppDimensions.paddingXS),
-                          decoration: BoxDecoration(
-                            color: AppColors.black,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                          ),
-                          child: const Text(AppStrings.live, style: TextStyle(color: AppColors.white)),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.paddingM),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// Header row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomBackButton(onTap: () => context.pop()),
+                        Text(
+                          AppStrings.overview,
+                          style: const TextStyle(
+                              color: AppColors.primary,
+                              fontSize: AppDimensions.textXL),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 20,
-                        left: 20,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(fest['title']!, style: const TextStyle(color: AppColors.white, fontSize: AppDimensions.textTitle, fontWeight: FontWeight.bold)),
-                            Text(fest['date']!, style: const TextStyle(color: AppColors.white)),
+                        Row(
+                          children: const [
+                            Icon(Icons.favorite_border, color: AppColors.primary),
+                            SizedBox(width: AppDimensions.spaceM),
+                            Icon(Icons.ios_share_sharp, color: AppColors.primary),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+
+                    const SizedBox(height: AppDimensions.spaceL),
+
+                    /// Event Header
+                    const EventHeaderCard(),
+
+                    const SizedBox(height: AppDimensions.spaceL),
+
+                    /// “Get Ready” section
+                    const Text(
+                      "GET READY",
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+
+                    const SizedBox(height: AppDimensions.spaceL),
+
+                    /// Action Tiles
+                    const ActionTile(
+                      iconPath: AppAssets.handicon,
+                      text: "Count me in, catch ya at Luna Fest",
+                    ),
+                    const SizedBox(height: AppDimensions.spaceS),
+                    const ActionTile(
+                      iconPath: AppAssets.iconcharcter,
+                      text: "Invite your festie bestie",
+                    ),
+
+                    const SizedBox(height: AppDimensions.spaceM),
+
+                    /// Grid Options
+                    GridView.count(
+                      crossAxisCount: screenWidth < 600 ? 2 : 3,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      mainAxisSpacing: AppDimensions.spaceM,
+                      crossAxisSpacing: AppDimensions.spaceM,
+                      childAspectRatio: 1.2,
+                      children: const [
+                        GridOption(title: "LOCATION", icon: AppAssets.mapicon),
+                        GridOption(title: "CHAT ROOMS", icon: AppAssets.chaticon),
+                        GridOption(title: "RUMORS", icon: AppAssets.rumors),
+                        GridOption(title: "DETAIL", icon: AppAssets.detailicon),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _CategoryChip extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _CategoryChip(this.label, this.isSelected, this.onTap);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Chip(
-        label: Text(label),
-        backgroundColor: isSelected ? AppColors.black : AppColors.grey200,
-        labelStyle: TextStyle(color: isSelected ? AppColors.white : AppColors.black),
       ),
     );
   }

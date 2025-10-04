@@ -2,19 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../constants/app_assets.dart';
-import '../constants/app_strings.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_font.dart';
+import '../constants/app_sizes.dart';
+import '../constants/app_strings.dart'; // new constants file
 
 class AuthBackground extends StatelessWidget {
   const AuthBackground({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+     resizeToAvoidBottomInset: false,
+      body: Stack(
       children: [
+
         /// Background Image
         SizedBox(
           width: double.infinity,
-          height: 900,
+          height: screenHeight * 0.7,
           child: Image.asset(
             AppAssets.background,
             fit: BoxFit.cover,
@@ -24,49 +33,50 @@ class AuthBackground extends StatelessWidget {
         /// Black Overlay
         Container(
           width: double.infinity,
-          height: 800,
-          color: Colors.black.withOpacity(0.4), // change opacity as needed
+          height: screenHeight,
+          color: Colors.black.withOpacity(0.5),
         ),
 
         /// Logo + Welcome text
         SizedBox(
           width: double.infinity,
-          height: 553,
+          height: screenHeight * 0.60,
           child: Stack(
             children: [
               Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 80),
+                  padding: EdgeInsets.only(top: screenHeight * 0.1),
                   child: SvgPicture.asset(
-                    AppAssets.logoPng,
+                    AppAssets.logo,
                     color: Colors.white,
-                    height: 180,
+                    height: screenHeight * 0.22,
                   ),
                 ),
               ),
-              const Positioned(
-                top: 277,
-                left: 43,
-                right: 43,
+              Positioned(
+                top: screenHeight * 0.37,
+                left: screenWidth * 0.1,
+                right: screenWidth * 0.1,
                 child: Column(
                   children: [
                     Text(
                       AppStrings.welcome,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Helix',
-                        color: Colors.white,
-                        fontSize: 45,
-                        fontWeight: FontWeight.w900,
+                        color: AppColors.headingColor,
+                        fontSize: screenHeight * 0.04,
+                        fontWeight: AppFonts.headingFontWeight,
                       ),
                     ),
+                    SizedBox(height: screenHeight * 0.01),
                     Text(
                       AppStrings.FestivalRumour,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Helix',
-                        color: Colors.white,
-                        fontSize: 45,
-                        fontWeight: FontWeight.w900,
+                        color: AppColors.headingColor,
+                        fontSize: screenHeight * 0.04,
+                        fontWeight: AppFonts.headingFontWeight,
                       ),
                     ),
                   ],
@@ -76,6 +86,7 @@ class AuthBackground extends StatelessWidget {
           ),
         ),
       ],
+    ),
     );
   }
 }

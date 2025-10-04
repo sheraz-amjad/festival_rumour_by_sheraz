@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/app_assets.dart';
-import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/utils/appbar.dart';
+import '../../../core/utils/base_view.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/widgets/responsive_widget.dart';
-import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'opt_view_model.dart';
 
@@ -22,162 +20,218 @@ class OtpView extends BaseView<OtpViewModel> {
   @override
   Widget buildView(BuildContext context, OtpViewModel viewModel) {
     return Scaffold(
-      appBar: const CustomAppBar(),
-      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true, // 👈 Background extends behind status bar
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: ResponsiveContainer(
-              mobileMaxWidth: double.infinity,
-              tabletMaxWidth: 600,
-              desktopMaxWidth: 800,
-              child: Container(
-                padding: context.isLargeScreen 
-                    ? const EdgeInsets.symmetric(horizontal: 50, vertical: 50)
-                    : context.isMediumScreen 
-                        ? const EdgeInsets.symmetric(horizontal: 40, vertical: 40)
-                        : const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppAssets.bottomsheet),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 60),
+          /// 🔹 Background image (full screen, including status bar)
+          const Positioned.fill(
+            child: Image(
+              image: AssetImage(AppAssets.bottomsheet),
+              fit: BoxFit.cover,
+            ),
+          ),
 
-                    ResponsiveText(
-                      AppStrings.enterCode,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+          /// 🔹 Foreground content inside SafeArea
+          SafeArea(
+            child: Center(
+              child: ResponsiveContainer(
+                mobileMaxWidth: double.infinity,
+                tabletMaxWidth: 500,
+                desktopMaxWidth: 600,
+                child: Padding(
+                  padding: context.isLargeScreen
+                      ? const EdgeInsets.symmetric(horizontal: 80, vertical: 60)
+                      : context.isMediumScreen
+                      ? const EdgeInsets.symmetric(
+                      horizontal: 50, vertical: 40)
+                      : const EdgeInsets.symmetric(
+                      horizontal: 25, vertical: 30),
+                  child: Column(
+                    children: [
+                      /// 🔹 Top Back Button
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: CustomBackButton(onTap: () => context.pop()),
                       ),
-                    ),
-                    const SizedBox(height: AppDimensions.spaceS),
 
-                    ResponsiveText(
-                      "Enter the four digit code we sent to you\n+62 873 7764 2922",
-                      style: const TextStyle(color: AppColors.primary, fontSize: 15),
-                    ),
-                    const SizedBox(height: AppDimensions.paddingL),
+                      const Spacer(),
 
-                    // OTP Input
-                    _buildOtpInput(context, viewModel),
+                      /// 🔹 Header Section
+                      const _HeaderTexts(),
+                      const SizedBox(height: AppDimensions.paddingL),
 
-                    const SizedBox(height: AppDimensions.paddingXL),
+                      /// 🔹 OTP Input
+                      _OtpInput(viewModel: viewModel),
+                      const SizedBox(height: AppDimensions.paddingXL),
 
-                    // Signup button
-                    _buildSignupButton(context, viewModel),
+                      /// 🔹 Sign Up Button
+                      _SignupButton(viewModel: viewModel),
+                      const SizedBox(height: AppDimensions.spaceM),
 
-                    const SizedBox(height: AppDimensions.spaceM),
+                      /// 🔹 Resend Button
+                      _ResendButton(viewModel: viewModel),
 
-                    // Resend code button
-                    _buildResendButton(context, viewModel),
-                  ],
+                      const Spacer(),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          ),
-
-          // Back button (top left, floating)
-          Positioned(
-            top: 16,
-            left: 16,
-            child: CustomBackButton(onTap: () => context.pop()),
-          ),
         ],
       ),
     );
-  }Widget _buildOtpInput(BuildContext context, OtpViewModel viewModel) {
-    return PinCodeTextField(
-      appContext: context,
-      length: 4,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      autoFocus: true,
-      animationType: AnimationType.fade,
+  }
+}
 
-      pinTheme: PinTheme(
-        shape: PinCodeFieldShape.circle,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+/// 🔹 Header Texts (Title + Description)
+class _HeaderTexts extends StatelessWidget {
+  const _HeaderTexts();
 
-        // Increase size of circles
-        fieldHeight: AppDimensions.buttonHeightXL,
-        fieldWidth: AppDimensions.buttonHeightXL,
-
-        // Fill colors
-        activeFillColor: AppColors.onPrimary,    // No fill color for active
-        inactiveFillColor: AppColors.onPrimary,  // No fill color for inactive
-        selectedFillColor: AppColors.onPrimary,  // No fill color for selected
-
-        // Border colors
-        inactiveColor: Colors.transparent,       // White border
-        selectedColor: Colors.transparent,       // White border when selected
-        activeColor: Colors.transparent,         // White border for active
-      ),
-
-      textStyle: const TextStyle(
-        color: AppColors.primary,                // White text color
-        fontSize: 30,                           // Slightly larger text
-        fontWeight: FontWeight.bold,
-      ),
-      cursorColor: AppColors.primary,
-      animationDuration: const Duration(milliseconds: 200),
-      enableActiveFill: true,
-      onChanged: viewModel.onCodeChanged,
-      onCompleted: (value) {
-        FocusScope.of(context).unfocus();
-        viewModel.verifyCode();
-      },
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          AppStrings.enterCode,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
+          ),
+        ),
+        SizedBox(height: AppDimensions.spaceS),
+        Text(
+          AppStrings.enterOtpDescription,
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 18,
+          ),
+        ),
+      ],
     );
   }
+}
 
-  Widget _buildSignupButton(BuildContext context, OtpViewModel viewModel) {
+/// 🔹 OTP Input
+class _OtpInput extends StatelessWidget {
+  final OtpViewModel viewModel;
+
+  const _OtpInput({required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PinCodeTextField(
+          appContext: context,
+          length: 4,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          autoFocus: true,
+          animationType: AnimationType.fade,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.circle,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+            fieldHeight: AppDimensions.buttonHeightXL,
+            fieldWidth: AppDimensions.buttonHeightXL,
+            activeFillColor: AppColors.onPrimary,
+            inactiveFillColor: AppColors.onPrimary,
+            selectedFillColor: AppColors.onPrimary,
+            inactiveColor: Colors.transparent,
+            selectedColor: Colors.transparent,
+            activeColor: Colors.transparent,
+          ),
+          textStyle: const TextStyle(
+            color: AppColors.primary,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+          cursorColor: AppColors.primary,
+          animationDuration: const Duration(milliseconds: 200),
+          enableActiveFill: true,
+          onChanged: (value) {
+            viewModel.onCodeChanged(value);
+          },
+          onCompleted: (value) {
+            FocusScope.of(context).unfocus();
+            viewModel.verifyCode();
+          },
+        ),
+        if (viewModel.otpError != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              viewModel.otpError!,
+              style: const TextStyle(color: Colors.red, fontSize: 14),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// 🔹 Signup Button
+class _SignupButton extends StatelessWidget {
+  final OtpViewModel viewModel;
+
+  const _SignupButton({required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: AppDimensions.buttonHeightXL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.accent,
+          backgroundColor: viewModel.isOtpValid
+              ? AppColors.accent
+              : AppColors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
         ),
-        onPressed: viewModel.isLoading ? null : viewModel.verifyCode,
+        onPressed:
+        viewModel.isOtpValid && !viewModel.isLoading ? viewModel.verifyCode : null,
         child: viewModel.isLoading
             ? const SizedBox(
-                width: AppDimensions.iconS,
-                height: AppDimensions.iconS,
-                child: CircularProgressIndicator(
-                  color: AppColors.onPrimary,
-                  strokeWidth: 2,
-                ),
-              )
+          width: AppDimensions.iconM,
+          height: AppDimensions.iconM,
+          child: CircularProgressIndicator(
+            color: AppColors.primary,
+            strokeWidth: 2,
+          ),
+        )
             : const Text(
-                AppStrings.signUp,
-                style: TextStyle(color: AppColors.onPrimary, fontSize: 16),
-              ),
+          AppStrings.signUp,
+          style: TextStyle(
+            color: AppColors.onPrimary,
+            fontSize: 22,
+          ),
+        ),
       ),
     );
   }
+}
 
-  Widget _buildResendButton(BuildContext context, OtpViewModel viewModel) {
-    return Center(
-      child: TextButton(
-        onPressed: viewModel.isLoading ? null : viewModel.resendCode,
-        child: const Text(
-          AppStrings.resendCode,
-          style: TextStyle(
-            color: AppColors.primary,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
+/// 🔹 Resend Button
+class _ResendButton extends StatelessWidget {
+  final OtpViewModel viewModel;
+
+  const _ResendButton({required this.viewModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: viewModel.isLoading ? null : viewModel.resendCode,
+      child: const Text(
+        AppStrings.resendCode,
+        style: TextStyle(
+          color: AppColors.primary,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

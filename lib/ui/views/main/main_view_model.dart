@@ -22,5 +22,3 @@ class MainViewModel extends BaseViewModel {
     _currentIndex = 0;
   }
 }
-
-

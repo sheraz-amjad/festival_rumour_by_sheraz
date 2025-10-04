@@ -16,7 +16,7 @@ class AppDimensions {
   static const double spaceM = 16.0;
   static const double spaceL = 24.0;
   static const double spaceXL = 32.0;
-  static const double spaceXXL = 48.0;
+  static const double spaceXXL = 55.0;
 
   // Border Radius
   static const double radiusXS = 4.0;
@@ -26,6 +26,54 @@ class AppDimensions {
   static const double radiusXL = 20.0;
   static const double radiusXXL = 24.0;
   static const double radiusCircular = 50.0;
+
+  //Me Add
+  static const double buttonPadding = 14;
+  static const double headerHeightRatio = 0.45;
+  static const double closeButtonTop = 40;
+  static const double closeButtonLeft = 16;
+  static const double countryPickerWidth = 120;
+  static const double tabletWidth = double.infinity;
+  static const double desktopWidth = double.infinity;
+
+  static const double postMarginHorizontal = 16.0;
+  static const double postMarginVertical = 10.0;
+  static const double postBorderRadius = 12.0;
+  static const double postBoxShadowBlur = 5.0;
+  static const double postBoxShadowOpacity = 0.5;
+  static const double postBoxShadowOffsetY = 2.0;
+  static const double postContentPaddingHorizontal = 12.0;
+  static const double reactionIconSize = 20.0;
+  static const double reactionIconSpacing = 6.0;
+  static const double actionRowSpacing = 12.0;
+  static const double eventCardAspectRatio = 16 / 9;
+
+  static const double pageViewportFraction = 0.9;
+  static const int pageBaseMultiplier = 1000;
+  static const double overlayOpacity = 0.5;
+  static const double authHeaderSpacing = 0.15; // % of screen height
+  static const double logoHeightRatio = 0.25; // % of screen height
+  static const double authTextSpacing = 0.05; // % of screen height
+  static const double authTextHorizontalPadding = 0.1; // % of screen width
+  static const double welcomeFontSize = 35;
+
+
+  // Row Heights
+  static const double appBarVerticalMobile = 12.0;
+  static const double appBarVerticalTablet = 12.0;
+  static const double appBarVerticalDesktop = 16.0;
+
+  static const double appBarHorizontalMobile = 16.0;
+  static const double appBarHorizontalTablet = 24.0;
+  static const double appBarHorizontalDesktop = 32.0;
+
+  static const double loginButtonHeight = 60.0;
+  static const double loginButtonIconSize = 25.0;
+  static const double loginButtonFontSize = 16.0;
+  static const double loginButtonPadding = 16.0;
+  static const double loginButtonIconPadding = 8.0;
+  static const double loginButtonBorderRadius = 12.0;
+
 
   // Icon Sizes
   static const double iconXS = 16.0;
@@ -40,6 +88,7 @@ class AppDimensions {
   static const double buttonHeightM = 40.0;
   static const double buttonHeightL = 48.0;
   static const double buttonHeightXL = 56.0;
+  static const double buttonWidth = 180.0;
 
   // AppBar
   static const double appBarHeight = 56.0;
@@ -84,9 +133,9 @@ class AppDimensions {
   static const double textXS = 10.0;
   static const double textS = 12.0;
   static const double textM = 14.0;
-  static const double textL = 16.0;
-  static const double textXL = 18.0;
-  static const double textXXL = 20.0;
+  static const double textL = 20.0;
+  static const double textXL = 26.0;
+  static const double textXXL = 35.0;
   static const double textTitle = 22.0;
   static const double textHeading = 24.0;
   static const double textDisplay = 32.0;

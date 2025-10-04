@@ -1,53 +1,79 @@
+import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/constants/app_strings.dart';
 
 class FirstNameViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  
+
+  final FocusNode nameFocusNode = FocusNode();
+  final TextEditingController nameController = TextEditingController();
+
   String _firstName = "";
-  String get firstName => _firstName;
-
-  bool get isNameEntered => _firstName.trim().isNotEmpty;
-
+  String? _nameError;
   bool _showWelcome = false;
+
+  String get firstName => _firstName;
+  String? get nameError => _nameError;
   bool get showWelcome => _showWelcome;
+  bool get isNameEntered => _firstName.trim().isNotEmpty;
 
   void onNameChanged(String value) {
     _firstName = value;
+    _nameError = null; // clear error when typing
     notifyListeners();
   }
 
-  Future<void> onNextPressed() async {
-    if (isNameEntered) {
-      await handleAsync(() async {
-        // Simulate API call to save first name
-        await Future.delayed(const Duration(seconds: 1));
-        
-        _showWelcome = true;
-        notifyListeners();
-        
-        // Navigate to next screen after showing welcome
-        await Future.delayed(const Duration(seconds: 2));
-      //  _navigationService.navigateTo(AppRoutes.uploadphotos);
-      }, errorMessage: 'Failed to save name. Please try again.');
+  /// ✅ Validation logic
+  bool validateName() {
+    final name = _firstName.trim();
+    if (name.isEmpty) {
+      _nameError = "*First name is required.";
+    } else if (name.length < 3) {
+      _nameError = "*Name must be at least 4 characters.";
+    } else {
+      _nameError = null;
     }
-  }
-
-  void onEditName() {
-    _showWelcome = false;
     notifyListeners();
+    return _nameError == null;
   }
 
+  /// ✅ Called when user presses "Next"
+  Future<void> onNextPressed() async {
+    if (!validateName()) return; // 🚫 Stop if invalid
+
+    await handleAsync(() async {
+      await Future.delayed(const Duration(seconds: 1)); // simulate API
+      _showWelcome = true;
+      notifyListeners();
+    }, errorMessage: AppStrings.saveNameError);
+  }
+
+  /// 🧭 Continue button in welcome dialog
   Future<void> continueToNext() async {
     await handleAsync(() async {
-      // Navigate to next screen
       _navigationService.navigateTo(AppRoutes.uploadphotos);
-    }, errorMessage: 'Failed to continue. Please try again.');
+    }, errorMessage: AppStrings.continueError);
   }
 
-  void goBack() {
-    _navigationService.pop();
+  /// ✏️ Edit Name handler
+  void onEditName(BuildContext context) {
+    _showWelcome = false;
+    notifyListeners();
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      FocusScope.of(context).requestFocus(nameFocusNode);
+    });
+  }
+
+  void goBack() => _navigationService.pop();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    nameFocusNode.dispose();
+    super.dispose();
   }
 }

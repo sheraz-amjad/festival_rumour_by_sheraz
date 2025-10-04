@@ -1,16 +1,17 @@
 import 'package:festival_rumour/ui/views/homeview/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/utils/base_view.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/base_view.dart';
 import '../../../core/utils/custom_navbar.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'home_viewmodel.dart';
-
 class HomeView extends BaseView<HomeViewModel> {
   const HomeView({super.key});
 
@@ -26,81 +27,95 @@ class HomeView extends BaseView<HomeViewModel> {
   @override
   Widget buildView(BuildContext context, HomeViewModel viewModel) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top AppBar
-            _buildAppBar(context, viewModel),
-
-            // Search Bar
-            _buildSearchBar(context),
-
-            const SizedBox(height: AppDimensions.spaceS),
-
-            // Feed List
-            Expanded(
-              child: _buildFeedList(context, viewModel),
+      backgroundColor: Colors.transparent, // keep background visible
+      body: Stack(
+        children: [
+          /// 🔹 Background Image covering entire screen
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.bottomsheet,
+              fit: BoxFit.cover,
             ),
-          ],
-        ),
+          ),
+
+          /// 🔹 Main Content inside SafeArea
+          SafeArea(
+            child: Column(
+              children: [
+                _buildAppBar(context, viewModel),
+                _buildSearchBar(context),
+                const SizedBox(height: AppDimensions.spaceS),
+                Expanded(
+                  child: _buildFeedList(context, viewModel),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildAppBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsivePadding(
-      mobilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      tabletPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      desktopPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      mobilePadding: const EdgeInsets.symmetric(
+        vertical: AppDimensions.appBarVerticalMobile,
+      ),
+      tabletPadding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.appBarHorizontalTablet,
+        vertical: AppDimensions.appBarVerticalTablet,
+      ),
+      desktopPadding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.appBarHorizontalDesktop,
+        vertical: AppDimensions.appBarVerticalDesktop,
+      ),
       child: Row(
         children: [
           SvgPicture.asset(
-            "assets/icons/logo.svg",
-            width: AppDimensions.iconM,
-            height: AppDimensions.iconM,
+            AppAssets.logo,
+            color: AppColors.primary,
+            width: AppDimensions.iconXXL,
+            height: AppDimensions.iconXXL,
           ),
-          const SizedBox(width: AppDimensions.spaceS),
+          const SizedBox(width: AppDimensions.spaceL),
           ResponsiveText(
-            "Luna Fest 2025",
+            AppStrings.lunaFest2025,
             style: const TextStyle(
-              fontSize: 18,
+              color: AppColors.primary,
+              fontSize: AppDimensions.textXXL,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: AppDimensions.spaceS),
+          const SizedBox(width: AppDimensions.spaceL),
+          IconButton(
+            icon: SvgPicture.asset(
+              AppAssets.jobicon,
+              width: AppDimensions.iconM,
+              height: AppDimensions.iconM,
+            ),
+            onPressed: () {},
+          ),
+          const SizedBox(width: AppDimensions.spaceM),
           GestureDetector(
             onTap: viewModel.goToSubscription,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingS, 
-                  vertical: 2),
+                horizontal: AppDimensions.paddingS,
+                vertical: 2,
+              ),
               decoration: BoxDecoration(
-                color: AppColors.warning,
+                color: AppColors.proLabelBackground,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: const Text(
-                "PRO",
+                AppStrings.proLabel,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12),
+                  color: AppColors.proLabelText,
+                  fontWeight: FontWeight.bold,
+                  fontSize: AppDimensions.textS,
+                ),
               ),
             ),
-          ),
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.notifications_none),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-          const SizedBox(width: AppDimensions.spaceS),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              // Handle more options
-            },
           ),
         ],
       ),
@@ -108,45 +123,119 @@ class HomeView extends BaseView<HomeViewModel> {
   }
 
   Widget _buildSearchBar(BuildContext context) {
+    String selectedFilter = AppStrings.allFilter;
+
     return ResponsiveContainer(
       mobileMaxWidth: double.infinity,
-      tabletMaxWidth: 600,
-      desktopMaxWidth: 800,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.paddingM, 
-            vertical: AppDimensions.paddingS),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.search, color: AppColors.onSurfaceVariant),
-            SizedBox(width: AppDimensions.spaceS),
-            Text(
-              "Select Festival",
-              style: TextStyle(color: AppColors.onSurfaceVariant),
-            )
-          ],
-        ),
+      tabletMaxWidth: double.infinity,
+      desktopMaxWidth: double.infinity,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+            decoration: BoxDecoration(
+              color: AppColors.onPrimary,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
+
+                const SizedBox(width: AppDimensions.spaceS),
+                const Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: AppStrings.searchHint,
+                      hintStyle: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: AppDimensions.textM,
+                      ),
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: AppDimensions.textM,
+
+                    ),
+                  ),
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    dropdownColor: AppColors.onPrimary,
+                    isExpanded: false,
+                    menuMaxHeight: MediaQuery.of(context).size.height * 0.35,
+                    icon: Container(
+                      padding: const EdgeInsets.all(AppDimensions.paddingXS),
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.arrow_drop_down, color: AppColors.onPrimary),
+                    ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: AppStrings.live,
+                        child: Row(
+                          children: [
+                            Icon(Icons.wifi_tethering, color: AppColors.primary, size: 20),
+                            SizedBox(width: 8),
+                            Text(AppStrings.live, style: TextStyle(color: AppColors.primary)),
+                          ],
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: AppStrings.upcoming,
+                        child: Row(
+                          children: [
+                            Icon(Icons.schedule, color: AppColors.primary, size: 20),
+                            SizedBox(width: 8),
+                            Text(AppStrings.upcoming, style: TextStyle(color: AppColors.primary)),
+                          ],
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: AppStrings.past,
+                        child: Row(
+                          children: [
+                            Icon(Icons.history, color: AppColors.primary, size: 20),
+                            SizedBox(width: 8),
+                            Text(AppStrings.past, style: TextStyle(color: AppColors.primary)),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => selectedFilter = value);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildFeedList(BuildContext context, HomeViewModel viewModel) {
     if (viewModel.isLoading && viewModel.posts.isEmpty) {
-      return const LoadingWidget(message: 'Loading posts...');
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (viewModel.posts.isEmpty) {
       return const Center(
         child: Text(
-          'No posts available',
+          AppStrings.noPostsAvailable,
           style: TextStyle(
-            fontSize: 16,
-            color: AppColors.onSurfaceVariant,
+            fontSize: AppDimensions.textM,
+            color: AppColors.onPrimary,
           ),
         ),
       );
@@ -157,7 +246,13 @@ class HomeView extends BaseView<HomeViewModel> {
       itemCount: viewModel.posts.length,
       itemBuilder: (context, index) {
         final post = viewModel.posts[index];
-        return PostWidget(post: post);
+        return Column(
+          children: [
+            PostWidget(post: post),
+            if (index != viewModel.posts.length - 1)
+              const SizedBox(height: AppDimensions.spaceM),
+          ],
+        );
       },
     );
   }

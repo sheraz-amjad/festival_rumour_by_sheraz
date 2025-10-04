@@ -15,70 +15,59 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {"icon": Icons.home, "label": "Home"},
-      {"icon": Icons.explore, "label": "Discover"},
-      {"icon": Icons.person, "label": "Profile"},
+      {"icon": Icons.home_outlined, "label": "Home"},
+      {"icon": Icons.explore_outlined, "label": "Discover"},
+      {"icon": Icons.person_outline, "label": "Profile"},
     ];
-    final bool isWide = MediaQuery.of(context).size.width >= AppDimensions.tabletBreakpoint;
-    final double horizontalPadding = isWide ? AppDimensions.paddingL : AppDimensions.paddingM;
-    final double verticalPadding = isWide ? AppDimensions.paddingM : AppDimensions.paddingS;
-    final double iconSize = isWide ? AppDimensions.iconL : AppDimensions.iconM;
+
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double containerWidth = screenWidth / items.length;
+    final double iconSize = AppDimensions.iconM;
 
     return SafeArea(
       top: false,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
-        decoration: const BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x1F000000),
-              blurRadius: 12,
-              offset: Offset(0, -4),
-            ),
-          ],
-        ),
+        color: Colors.transparent,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(items.length, (index) {
             final bool selected = currentIndex == index;
             final item = items[index];
 
-            final Color iconColor = selected ? AppColors.primary : AppColors.onSurfaceVariant;
-            final Color chipColor = selected ? AppColors.primary.withOpacity(0.08) : Colors.transparent;
-            final TextStyle labelStyle = TextStyle(
-              color: AppColors.onSurface,
-              fontWeight: FontWeight.w600,
-              fontSize: isWide ? 14 : 12,
-            );
-
             return GestureDetector(
               onTap: () => onTap(index),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 220),
-                padding: EdgeInsets.symmetric(
-                  horizontal: selected && isWide ? AppDimensions.paddingS : 0,
-                  vertical: AppDimensions.paddingS,
-                ),
+                duration: const Duration(milliseconds: 250),
+                width: containerWidth,
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: chipColor,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusCircular),
+                  color: selected
+                      ? Colors.transparent
+                      : Colors.transparent,
+                  border: Border(
+                  ),
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       item["icon"] as IconData,
-                      color: iconColor,
+                      color: selected
+                          ? AppColors.onPrimary
+                          : AppColors.onSurfaceVariant,
                       size: iconSize,
                     ),
-                    if (selected && isWide) ...[
-                      const SizedBox(width: AppDimensions.spaceS),
-                      Text(
-                        item["label"] as String,
-                        style: labelStyle,
+                    const SizedBox(height: 4),
+                    Text(
+                      item["label"] as String,
+                      style: TextStyle(
+                        color: selected
+                            ? AppColors.onPrimary
+                            : AppColors.onSurface,
+                        fontWeight:
+                        selected ? FontWeight.bold : FontWeight.w500,
+                        fontSize: 12,
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),

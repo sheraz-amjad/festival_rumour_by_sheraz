@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../event_model.dart';
 
 class EventCard extends StatelessWidget {
@@ -19,166 +22,123 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // tap works for entire card
+      onTap: onTap,
       child: AspectRatio(
-        aspectRatio: 16 / 9,
+        aspectRatio: AppDimensions.eventCardAspectRatio,
         child: Stack(
-        children: [
-          // Main Event Card
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              image: DecorationImage(
-                image: AssetImage(event.imagepath),
-                fit: BoxFit.cover,
+          children: [
+            // Main Event Card
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                image: DecorationImage(
+                  image: AssetImage(event.imagepath),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(28),
-              child: Stack(
-                children: [
-                  // Overlay
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                child: Stack(
+                  children: [
+                    // Overlay
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.eventOverlay,
+                      ),
                     ),
-                  ),
 
-                  // NOW badge
-                  if (event.isLive)
+                    // NOW badge
+                    if (event.isLive)
+                      Positioned(
+                        top: AppDimensions.paddingS,
+                        left: AppDimensions.paddingS,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppDimensions.paddingM,
+                              vertical: AppDimensions.paddingXS),
+                          decoration: BoxDecoration(
+                            color: AppColors.nowBadge,
+                            borderRadius:
+                            BorderRadius.circular(AppDimensions.radiusS),
+                          ),
+                          child: const Text(
+                            AppStrings.nowBadgeText,
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppDimensions.textXL,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    // Back icon
                     Positioned(
-                      top: 12,
-                      left: 12,
+                      top: AppDimensions.paddingS,
+                      right: AppDimensions.paddingS,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          "NOW",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
+                          shape: BoxShape.circle,
+                          color: AppColors.onPrimary,
+                          border: Border.all(
+                            color: AppColors.primary, // border color
+                            width: 2.0, // border thickness
                           ),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.primary,
+                          ),
+                          onPressed: onNext,
                         ),
                       ),
                     ),
 
-                  // Back icon
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                        ),
-                        onPressed: onNext,
+                    // Bottom Info
+                    Positioned(
+                      left: AppDimensions.paddingL,
+                      right: AppDimensions.paddingL,
+                      bottom: AppDimensions.paddingL,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            event.location,
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: AppDimensions.textS,
+                              letterSpacing: 1,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: AppDimensions.spaceXS),
+                          Text(
+                            event.title,
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: AppDimensions.textXXL,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: AppDimensions.spaceXS),
+                          Text(
+                            event.date,
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: AppDimensions.textS,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-
-                  // Bottom Info
-                  Positioned(
-                    left: 16,
-                    right: 16,
-                    bottom: 20,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          event.location,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            letterSpacing: 1,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          event.title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          event.date,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-
-          // Left button container
-          // Positioned(
-          //   left: 10,
-          //   top: 100,
-          //   child: GestureDetector(
-          //     onTap: onTap,
-          //     child: SizedBox(
-          //       width: 40,
-          //       height: 100,
-          //       child: Container(
-          //         decoration: BoxDecoration(
-          //           color: Colors.red,
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //         child: const Center(
-          //           child: Text(
-          //             "L",
-          //             style: TextStyle(color: Colors.white),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          //
-          // // Right button container
-          // Positioned(
-          //   right: 10,
-          //   top: 100,
-          //   child: GestureDetector(
-          //     onTap: onTap,
-          //     child: SizedBox(
-          //       width: 40,
-          //       height: 100,
-          //       child: Container(
-          //         decoration: BoxDecoration(
-          //           color: Colors.blue,
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //         child: const Center(
-          //           child: Text(
-          //             "R",
-          //             style: TextStyle(color: Colors.white),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ],
+          ],
         ),
       ),
     );

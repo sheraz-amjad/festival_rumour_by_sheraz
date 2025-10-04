@@ -10,7 +10,7 @@ class StatTile extends StatelessWidget {
     super.key,
     required this.count,
     required this.label,
-    this.onTap,
+    this.onTap, required Color textColor,
   });
 
   @override

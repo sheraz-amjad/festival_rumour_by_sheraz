@@ -1,21 +1,48 @@
 import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
-import '../../../core/di/locator.dart';
-import '../../../core/services/navigation_service.dart';
 
 class CommentViewModel extends BaseViewModel {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final TextEditingController commentController = TextEditingController();
+  TextEditingController commentController = TextEditingController();
+  bool _showEmojiGrid = false;
 
-  final List<String> emojis = ["😀", "😂", "😍", "🔥", "🥳", "👍", "🙏", "🎉", "😎", "❤️"];
+  List<String> emojis = [
+    "😀", "😂", "😍", "👍", "👏", "😢", "🔥", "❤️"
+  ];
+
+  bool get showEmojiGrid => _showEmojiGrid;
+
+  void showEmojiKeyboard() {
+    _showEmojiGrid = true;
+    notifyListeners();
+  }
+
+  void hideEmojiKeyboard() {
+    _showEmojiGrid = false;
+    notifyListeners();
+  }
 
   void insertEmoji(String emoji) {
     commentController.text += emoji;
+    commentController.selection = TextSelection.fromPosition(
+      TextPosition(offset: commentController.text.length),
+    );
     notifyListeners();
   }
 
   void postComment() {
-    // Handle post logic
-    _navigationService.pop();
+    print("Comment posted: ${commentController.text}");
+    commentController.clear();
+    hideEmojiKeyboard();
+  }
+
+  void closeCommentView() {
+    // Logic to close view
+    print("Comment view closed");
+  }
+
+  @override
+  void onDispose() {
+    commentController.dispose();
+    super.onDispose();
   }
 }

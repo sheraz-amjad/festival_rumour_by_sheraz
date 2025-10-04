@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/appbar.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -18,120 +18,130 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
 
   @override
   Widget buildView(BuildContext context, FirstNameViewModel viewModel) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          /// Main content
-          Positioned.fill(
-            child: ResponsiveContainer(
-              mobileMaxWidth: double.infinity,
-              tabletMaxWidth: double.infinity,
-              desktopMaxWidth: double.infinity,
-              child: Container(
-                padding: context.isLargeScreen
-                    ? const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingXL,
-                  vertical: AppDimensions.paddingXL,
-                )
-                    : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingL,
-                  vertical: AppDimensions.paddingL,
-                )
-                    : const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingM,
-                  vertical: AppDimensions.paddingL,
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppAssets.firstnameback),
-                    fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: ResponsiveContainer(
+                mobileMaxWidth: double.infinity,
+                tabletMaxWidth: double.infinity,
+                desktopMaxWidth: double.infinity,
+                child: Container(
+                  padding: context.isLargeScreen
+                      ? const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingXL,
+                    vertical: AppDimensions.paddingXL,
+                  )
+                      : context.isMediumScreen
+                      ? const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingL,
+                    vertical: AppDimensions.paddingL,
+                  )
+                      : const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingM,
+                    vertical: AppDimensions.paddingL,
                   ),
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(AppDimensions.radiusL),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AppAssets.firstnameback),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: const BorderRadius.vertical(
+                      // top: Radius.circular(AppDimensions.radiusL),
+                    ),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: AppDimensions.spaceXXL),
-
-                    ResponsiveText(
-                      "What's your first name?",
-                      style: const TextStyle(
-                        fontSize: 40, // only heading uses font size
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: AppDimensions.spaceXXL),
+                      ResponsiveText(
+                        AppStrings.firstNameQuestion,
+                        style: const TextStyle(
+                          fontSize: AppDimensions.textXXL,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppDimensions.paddingL),
-
-                    _buildNameInput(context, viewModel),
-                    const SizedBox(height: AppDimensions.paddingXL),
-
-                    const ResponsiveText(
-                      "This is how it'll appear on your profile.\nCan't change it later.",
-                      style: TextStyle(color: AppColors.primary),
-                    ),
-
-                    const Spacer(),
-
-                    _buildNextButton(context, viewModel),
-                  ],
+                      const SizedBox(height: AppDimensions.paddingL),
+                      _buildNameInput(context, viewModel),
+                      const SizedBox(height: AppDimensions.paddingXL),
+                      const ResponsiveText(
+                        AppStrings.firstNameInfo,
+                        style: TextStyle(color: AppColors.primary),
+                      ),
+                      const Spacer(),
+                      _buildNextButton(context, viewModel),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-
-          /// Back button
-          _buildBackButton(context),
-
-          /// Welcome dialog
-          if (viewModel.showWelcome) _buildWelcomeDialog(context, viewModel),
-        ],
+            _buildBackButton(context),
+            if (viewModel.showWelcome) ...[
+              // 👇 dim background
+              Container(
+                color: Colors.black.withOpacity(0.6),
+              ),
+              _buildWelcomeDialog(context, viewModel),
+            ],
+          ],
+        ),
       ),
     );
   }
 
-  /// 🔹 Name input field
+
   Widget _buildNameInput(BuildContext context, FirstNameViewModel viewModel) {
     return TextField(
-      decoration: const InputDecoration(
-        hintText: "Enter first name",
-        border: UnderlineInputBorder(),
-        hintStyle: TextStyle(color: AppColors.grey400),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onPrimary, width: 0),
+      controller: viewModel.nameController,
+      focusNode: viewModel.nameFocusNode,
+      onChanged: (value) {
+        viewModel.onNameChanged(value);
+        viewModel.validateName(); // Validate as user types
+      },
+      decoration: InputDecoration(
+        hintText: AppStrings.firstNameHint,
+        hintStyle: const TextStyle(color: AppColors.grey400),
+        errorText: viewModel.nameError,
+        errorStyle: const TextStyle(
+          color: AppColors.accent, // ✅ white error text
+          fontSize: AppDimensions.textS,
+          fontWeight: FontWeight.w500,
+        ),// Shows error if validation fails
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primary, width: 0),
+        ),
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.accent, width: 2),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
       style: const TextStyle(color: AppColors.primary),
-      onChanged: viewModel.onNameChanged,
+      cursorColor: AppColors.primary, // White cursor
       textInputAction: TextInputAction.done,
-      onSubmitted: (_) {
-        FocusScope.of(context).unfocus();
-        if (viewModel.isNameEntered) {
-          viewModel.onNextPressed();
-        }
-      },
+      onSubmitted: (_) => FocusScope.of(context).unfocus(),
     );
   }
 
-  /// 🔹 Next button
   Widget _buildNextButton(BuildContext context, FirstNameViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-          viewModel.isNameEntered ? AppColors.accent : Colors.transparent,
+          backgroundColor: viewModel.isNameEntered && viewModel.nameError == null
+              ? AppColors.accent
+              : AppColors.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingXS),
+          elevation: 0,
         ),
-        onPressed: viewModel.isNameEntered && !viewModel.isLoading
+        onPressed: viewModel.isNameEntered && viewModel.nameError == null && !viewModel.isLoading
             ? () {
           FocusScope.of(context).unfocus();
           viewModel.onNextPressed();
@@ -139,22 +149,26 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
             : null,
         child: viewModel.isLoading
             ? const SizedBox(
-          width: AppDimensions.iconS,
-          height: AppDimensions.iconS,
+          width: AppDimensions.iconM,
+          height: AppDimensions.iconM,
           child: CircularProgressIndicator(
-            color: AppColors.accent,
+            color: AppColors.primary,
             strokeWidth: 2,
           ),
         )
-            : const Text(
+            : Text(
           AppStrings.next,
-          style: TextStyle(color: AppColors.onPrimary),
+          style: TextStyle(
+            fontSize: AppDimensions.textXXL,
+            color: viewModel.isNameEntered && viewModel.nameError == null
+                ? AppColors.onPrimary
+                : AppColors.accent,
+          ),
         ),
       ),
     );
   }
 
-  /// 🔹 Back button
   Widget _buildBackButton(BuildContext context) {
     return Positioned(
       left: AppDimensions.paddingM,
@@ -168,8 +182,11 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
         ),
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: const Icon(Icons.arrow_back,
-              size: AppDimensions.iconM, color: AppColors.onSurface),
+          icon: const Icon(
+            Icons.arrow_back,
+            size: AppDimensions.iconM,
+            color: AppColors.onSurface,
+          ),
           onPressed: () =>
               Provider.of<FirstNameViewModel>(context, listen: false).goBack(),
         ),
@@ -177,17 +194,16 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
     );
   }
 
-  /// 🔹 Welcome dialog
-  Widget _buildWelcomeDialog(BuildContext context, FirstNameViewModel viewModel) {
-    return Container(
-      alignment: Alignment.center,
+  Widget _buildWelcomeDialog(
+      BuildContext context, FirstNameViewModel viewModel) {
+    return Center(
       child: ResponsiveContainer(
         mobileMaxWidth: double.infinity,
-        tabletMaxWidth: 500,
-        desktopMaxWidth: 600,
+        tabletMaxWidth: double.infinity,
+        desktopMaxWidth: double.infinity,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
-          padding: const EdgeInsets.all(AppDimensions.paddingL),
+          padding: const EdgeInsets.all(AppDimensions.paddingM),
           decoration: BoxDecoration(
             color: AppColors.onPrimary,
             borderRadius: BorderRadius.circular(AppDimensions.radiusL),
@@ -195,54 +211,40 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // ✅ Background image only at bottom-right
-              Positioned(
-                bottom: 0,
-                right: 0,
-            // adjust visibility
-                  child: Image.asset(
-                  AppAssets.welcomeback,  // your image asset
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-
-              // ✅ Foreground content
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text("👋", style: TextStyle(fontSize: 40)),
+                  const Text(
+                    "👋",
+                    style: TextStyle(fontSize: AppDimensions.textXXL),
+                  ),
                   const SizedBox(height: AppDimensions.spaceS),
-
                   ResponsiveText(
-                    "Welcome! ${viewModel.firstName}",
+                    "${AppStrings.welcome} ${viewModel.firstName}",
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: AppDimensions.textL,
                       color: AppColors.accent,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppDimensions.spaceS),
-
                   const ResponsiveText(
-                    "There's a lot out there to discover,\n"
-                        "but let's get your profile set up first.",
+                    AppStrings.welcomeInfo,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: AppColors.primary),
                   ),
                   const SizedBox(height: AppDimensions.paddingL),
-
                   Column(
                     children: [
                       SizedBox(
-                        width: 180,
+                        width: AppDimensions.buttonWidth,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.accent,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                              borderRadius:
+                              BorderRadius.circular(AppDimensions.radiusXL),
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: AppDimensions.paddingM,
@@ -250,14 +252,12 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                           ),
                           onPressed: viewModel.continueToNext,
                           child: const Text(
-                            "Let's Go",
+                            AppStrings.letsGo,
                             style: TextStyle(color: AppColors.onPrimary),
                           ),
                         ),
                       ),
-
                       const SizedBox(height: AppDimensions.spaceS),
-
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -265,16 +265,28 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                             backgroundColor: Colors.transparent,
                             elevation: 0,
                           ),
-                          onPressed: viewModel.onEditName,
+                          onPressed: () => viewModel.onEditName(context),
                           child: const Text(
-                            "Edit Name",
+                            AppStrings.editName,
                             style: TextStyle(color: AppColors.accent),
                           ),
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
+              ),
+
+              // Positioned welcome image
+              Positioned(
+                bottom: -8,
+                right: -8,
+                child: Image.asset(
+                  AppAssets.welcomeback,
+                  height: 85,
+                  width: 100,
+                  fit: BoxFit.contain,
+                ),
               ),
             ],
           ),

@@ -7,7 +7,6 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/backbutton.dart';
-import '../../../shared/widgets/gradient_text.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
@@ -22,64 +21,70 @@ class SignupView extends BaseView<SignupViewModel> {
   @override
   Widget buildView(BuildContext context, SignupViewModel viewModel) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // ✅ Prevent keyboard overlap
       body: Stack(
         children: [
-
-          /// Background
+          /// 🔹 Background
           const AuthBackground(),
 
-          /// Signup container at bottom
+          /// 🔹 Signup container at bottom (protected by SafeArea)
           Align(
             alignment: Alignment.bottomCenter,
-            child: ResponsiveContainer(
-              mobileMaxWidth: double.infinity,
-              tabletMaxWidth: 600,
-              desktopMaxWidth: 800,
-              child: Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(0),
-                padding: context.isLargeScreen
-                    ? const EdgeInsets.symmetric(horizontal: 30, vertical: 60)
-                    : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(horizontal: 20, vertical: 50)
-                    : const EdgeInsets.symmetric(horizontal: 15, vertical: 45),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppAssets.bottomsheet),
-                    fit: BoxFit.cover,
+            child: SafeArea( // ✅ Prevent system navigation bar overlap
+              top: false,
+              child: ResponsiveContainer(
+                mobileMaxWidth: double.infinity,
+                tabletMaxWidth: AppDimensions.tabletWidth,
+                desktopMaxWidth: AppDimensions.desktopWidth,
+                child: Container(
+                  width: double.infinity,
+                  padding: context.isLargeScreen
+                      ? const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingXL,
+                    vertical: AppDimensions.paddingXXL,
+                  )
+                      : context.isMediumScreen
+                      ? const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingL,
+                    vertical: AppDimensions.paddingXL,
+                  )
+                      : const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.paddingM,
+                    vertical: AppDimensions.paddingL,
                   ),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      /// Back + Title Row
-                      _buildHeader(context),
-                      const SizedBox(height: AppDimensions.paddingL),
-
-                      /// Phone Row (Country Picker + Number)
-                      _buildPhoneInput(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingL),
-
-                      /// Description
-                      _buildDescription(context),
-                      const SizedBox(height: AppDimensions.paddingXL),
-
-                      /// Continue Button
-                      _buildContinueButton(context, viewModel),
-                    ],
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AppAssets.bottomsheet),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(AppDimensions.radiusL),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildHeader(context),
+                        const SizedBox(height: AppDimensions.paddingL),
+                        _buildPhoneInput(context, viewModel),
+                        const SizedBox(height: AppDimensions.paddingL),
+                        _buildDescription(context),
+                        const SizedBox(height: AppDimensions.paddingXL),
+                        _buildContinueButton(context, viewModel),
+                        const SizedBox(height: AppDimensions.paddingL),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
 
-          /// Loader
+          /// 🔹 Loader overlay
           if (viewModel.isLoading)
             Container(
-              color: Colors.black45,
+              color: AppColors.overlay,
               alignment: Alignment.center,
               child: const LoadingWidget(color: AppColors.onPrimary),
             ),
@@ -93,10 +98,10 @@ class SignupView extends BaseView<SignupViewModel> {
       children: [
         CustomBackButton(onTap: () => context.pop()),
         const SizedBox(width: AppDimensions.spaceS),
-        ResponsiveText(
+        Text(
           AppStrings.signUp,
           style: const TextStyle(
-            fontSize: 28,
+            fontSize: AppDimensions.textXXL,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
@@ -109,36 +114,23 @@ class SignupView extends BaseView<SignupViewModel> {
     return Row(
       children: [
         SizedBox(
-          width: 120,
+          width: AppDimensions.countryPickerWidth,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.paddingS),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
             height: AppDimensions.buttonHeightM,
-            decoration: BoxDecoration(
-             // border: Border.all(color: AppColors.primary),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-            ),
-            child: Localizations.override(
-              context: context,
-              locale: const Locale('en'),
-              child: CountryCodePicker(
-                onChanged: (country) {
-                  // Handle country selection
-                  print("Selected: ${country.dialCode} - ${country.name}");
-                },
-                initialSelection: 'PK',
-                favorite: ['+92', 'PK', 'US'],
-                showCountryOnly: false,
-                showOnlyCountryWhenClosed: false,
-                alignLeft: false,
-                padding: EdgeInsets.zero,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-                showFlag: true,
-                showFlagDialog: true,
+            child: CountryCodePicker(
+              onChanged: (country) {},
+              initialSelection: AppStrings.defaultCountryCode,
+              favorite: AppStrings.favoriteCountries,
+              showFlag: true,
+              padding: EdgeInsets.zero,
+              textStyle: const TextStyle(
+                fontSize: AppDimensions.textM,
+                color: AppColors.primary,
+              ),
+              dialogTextStyle: const TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -146,32 +138,39 @@ class SignupView extends BaseView<SignupViewModel> {
         const SizedBox(width: AppDimensions.spaceM),
         Expanded(
           child: TextField(
-            style: const TextStyle(color: AppColors.white),
-            decoration: const InputDecoration(
-              hintText: "878 7764 2922",
-              hintStyle: TextStyle(color: AppColors.white),
-              enabledBorder: UnderlineInputBorder(
-               // borderSide: BorderSide(color: AppColors.primary),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary, width: 2),
-              ),
-            ),
+            controller: viewModel.phoneController,
             keyboardType: TextInputType.phone,
             cursorColor: AppColors.white,
+            style: const TextStyle(color: AppColors.white),
+            decoration: InputDecoration(
+              hintText: AppStrings.phoneHint,
+              hintStyle: const TextStyle(color: AppColors.primary),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary, width: 2),
+              ),
+              // ✅ White underline and white text when error occurs
+              errorBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.accent, width: 2),
+              ),
+              focusedErrorBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary, width: 2),
+              ),
+              errorText: viewModel.phoneError,
+              errorStyle: const TextStyle(
+                color: AppColors.accent, // ✅ white error text
+                fontSize: AppDimensions.textS,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    return ResponsiveText(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
-          "sed do eiusmod tempor incididunt ut labore",
-      style: const TextStyle(color: AppColors.white, fontSize: 14),
-    );
-  }
 
   Widget _buildContinueButton(BuildContext context, SignupViewModel viewModel) {
     return SizedBox(
@@ -183,29 +182,36 @@ class SignupView extends BaseView<SignupViewModel> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
         ),
-        onPressed: viewModel.isLoading ? null : viewModel.goToOtp,
+        onPressed: viewModel.isLoading
+            ? null
+            : () async {
+          FocusScope.of(context).unfocus(); // hide keyboard
+          await viewModel.goToOtp();
+        },
         child: viewModel.isLoading
-            ? const SizedBox(
-          width: AppDimensions.iconS,
-          height: AppDimensions.iconS,
-          child: CircularProgressIndicator(
-            color: AppColors.onPrimary,
-            strokeWidth: 2,
-          ),
+            ? const CircularProgressIndicator(
+          color: AppColors.onPrimary,
+          strokeWidth: 2,
         )
-            : Text(
-        AppStrings.continueText,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: AppColors.onPrimary, // Change to desired color
+            : const Text(
+          AppStrings.continueText,
+          style: TextStyle(
+            fontSize: AppDimensions.textXL,
+            fontWeight: FontWeight.bold,
+            color: AppColors.onPrimary,
+          ),
         ),
       ),
+    );
+  }
+  Widget _buildDescription(BuildContext context) {
+    return Text(
+      AppStrings.description,
+      style: const TextStyle(
+        color: AppColors.white,
+        fontSize: AppDimensions.textM,
       ),
     );
   }
 }
-
-
