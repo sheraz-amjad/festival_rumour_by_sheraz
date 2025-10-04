@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/utils/custom_navbar.dart';
-import '../../../core/constants/app_strings.dart';
 import '../homeview/home_view.dart';
 import '../discover/discover_view.dart';
 import '../ProfileView/profile_view.dart';
@@ -37,5 +36,3 @@ class MainView extends BaseView<MainViewModel> {
     }
   }
 }
-
-

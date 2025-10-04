@@ -39,7 +39,7 @@ class AutBackground extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SvgPicture.asset(AppAssets.logoPng),
+                  SvgPicture.asset(AppAssets.logo),
                   const SizedBox(height: 8),
                 ],
               ),

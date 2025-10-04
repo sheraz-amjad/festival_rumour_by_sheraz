@@ -7,7 +7,6 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/backbutton.dart';
-import '../../../shared/widgets/gradient_text.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
@@ -24,50 +23,51 @@ class SignupView extends BaseView<SignupViewModel> {
     return Scaffold(
       body: Stack(
         children: [
-
-          /// Background
+          /// 🔹 Background
           const AuthBackground(),
 
-          /// Signup container at bottom
+          /// 🔹 Signup container at bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: ResponsiveContainer(
               mobileMaxWidth: double.infinity,
-              tabletMaxWidth: 600,
-              desktopMaxWidth: 800,
+              tabletMaxWidth: AppDimensions.tabletWidth,
+              desktopMaxWidth: AppDimensions.desktopWidth,
               child: Container(
                 width: double.infinity,
-                margin: const EdgeInsets.all(0),
                 padding: context.isLargeScreen
-                    ? const EdgeInsets.symmetric(horizontal: 30, vertical: 60)
+                    ? const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.paddingXL,
+                  vertical: AppDimensions.paddingXXL,
+                )
                     : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(horizontal: 20, vertical: 50)
-                    : const EdgeInsets.symmetric(horizontal: 15, vertical: 45),
+                    ? const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.paddingL,
+                  vertical: AppDimensions.paddingXL,
+                )
+                    : const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.paddingM,
+                  vertical: AppDimensions.paddingL,
+                ),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(AppAssets.bottomsheet),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppDimensions.radiusL),
+                  ),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      /// Back + Title Row
                       _buildHeader(context),
                       const SizedBox(height: AppDimensions.paddingL),
-
-                      /// Phone Row (Country Picker + Number)
                       _buildPhoneInput(context, viewModel),
                       const SizedBox(height: AppDimensions.paddingL),
-
-                      /// Description
                       _buildDescription(context),
                       const SizedBox(height: AppDimensions.paddingXL),
-
-                      /// Continue Button
                       _buildContinueButton(context, viewModel),
                     ],
                   ),
@@ -76,10 +76,10 @@ class SignupView extends BaseView<SignupViewModel> {
             ),
           ),
 
-          /// Loader
+          /// 🔹 Loader overlay
           if (viewModel.isLoading)
             Container(
-              color: Colors.black45,
+              color: AppColors.overlay,
               alignment: Alignment.center,
               child: const LoadingWidget(color: AppColors.onPrimary),
             ),
@@ -93,10 +93,10 @@ class SignupView extends BaseView<SignupViewModel> {
       children: [
         CustomBackButton(onTap: () => context.pop()),
         const SizedBox(width: AppDimensions.spaceS),
-        ResponsiveText(
+        Text(
           AppStrings.signUp,
           style: const TextStyle(
-            fontSize: 28,
+            fontSize: AppDimensions.textXXL,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
@@ -109,31 +109,27 @@ class SignupView extends BaseView<SignupViewModel> {
     return Row(
       children: [
         SizedBox(
-          width: 120,
+          width: AppDimensions.countryPickerWidth,
           child: Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: AppDimensions.paddingS),
             height: AppDimensions.buttonHeightM,
             decoration: BoxDecoration(
-             // border: Border.all(color: AppColors.primary),
               borderRadius: BorderRadius.circular(AppDimensions.radiusS),
             ),
             child: Localizations.override(
               context: context,
-              locale: const Locale('en'),
+              locale: const Locale(AppStrings.localeEnglish),
               child: CountryCodePicker(
-                onChanged: (country) {
-                  // Handle country selection
-                  print("Selected: ${country.dialCode} - ${country.name}");
-                },
-                initialSelection: 'PK',
-                favorite: ['+92', 'PK', 'US'],
+                onChanged: (country) {},
+                initialSelection: AppStrings.defaultCountryCode,
+                favorite: AppStrings.favoriteCountries,
                 showCountryOnly: false,
                 showOnlyCountryWhenClosed: false,
                 alignLeft: false,
                 padding: EdgeInsets.zero,
                 textStyle: const TextStyle(
-                  fontSize: 14,
+                  fontSize: AppDimensions.textM,
                   color: AppColors.white,
                   fontWeight: FontWeight.w500,
                 ),
@@ -148,13 +144,12 @@ class SignupView extends BaseView<SignupViewModel> {
           child: TextField(
             style: const TextStyle(color: AppColors.white),
             decoration: const InputDecoration(
-              hintText: "878 7764 2922",
+              hintText: AppStrings.phoneHint,
               hintStyle: TextStyle(color: AppColors.white),
-              enabledBorder: UnderlineInputBorder(
-               // borderSide: BorderSide(color: AppColors.primary),
-              ),
+              enabledBorder: UnderlineInputBorder(),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary, width: 2),
+                borderSide:
+                BorderSide(color: AppColors.primary, width: 2),
               ),
             ),
             keyboardType: TextInputType.phone,
@@ -166,10 +161,12 @@ class SignupView extends BaseView<SignupViewModel> {
   }
 
   Widget _buildDescription(BuildContext context) {
-    return ResponsiveText(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
-          "sed do eiusmod tempor incididunt ut labore",
-      style: const TextStyle(color: AppColors.white, fontSize: 14),
+    return Text(
+      AppStrings.description,
+      style: const TextStyle(
+        color: AppColors.white,
+        fontSize: AppDimensions.textM,
+      ),
     );
   }
 
@@ -183,7 +180,8 @@ class SignupView extends BaseView<SignupViewModel> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+          padding: const EdgeInsets.symmetric(
+              vertical: AppDimensions.paddingM),
         ),
         onPressed: viewModel.isLoading ? null : viewModel.goToOtp,
         child: viewModel.isLoading
@@ -195,17 +193,15 @@ class SignupView extends BaseView<SignupViewModel> {
             strokeWidth: 2,
           ),
         )
-            : Text(
-        AppStrings.continueText,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: AppColors.onPrimary, // Change to desired color
+            :  Text(
+          AppStrings.continueText,
+          style: TextStyle(
+            fontSize: AppDimensions.textL,
+            fontWeight: FontWeight.bold,
+            color: AppColors.onPrimary,
+          ),
         ),
-      ),
       ),
     );
   }
 }
-
-

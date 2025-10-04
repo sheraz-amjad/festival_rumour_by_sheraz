@@ -22,10 +22,8 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     return Scaffold(
       body: Stack(
         children: [
-          /// Background
           const AuthBackground(),
 
-          /// Signup container at bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: ResponsiveContainer(
@@ -35,11 +33,11 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
               child: Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(0),
-                padding: context.isLargeScreen 
+                padding: context.isLargeScreen
                     ? const EdgeInsets.symmetric(horizontal: 24, vertical: 44)
-                    : context.isMediumScreen 
-                        ? const EdgeInsets.symmetric(horizontal: 18, vertical: 36)
-                        : const EdgeInsets.symmetric(horizontal: 12, vertical: 28),
+                    : context.isMediumScreen
+                    ? const EdgeInsets.symmetric(horizontal: 18, vertical: 36)
+                    : const EdgeInsets.symmetric(horizontal: 12, vertical: 28),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(AppAssets.bottomsheet),
@@ -51,23 +49,14 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// Back + Title Row
                       _buildHeader(context),
                       const SizedBox(height: AppDimensions.paddingM),
-
-                      /// Email Field
                       _buildEmailField(context, viewModel),
                       const SizedBox(height: AppDimensions.paddingM),
-
-                      /// Password Field
                       _buildPasswordField(context, viewModel),
                       const SizedBox(height: AppDimensions.paddingM),
-
-                      /// Confirm Password Field
                       _buildConfirmPasswordField(context, viewModel),
                       const SizedBox(height: AppDimensions.paddingL),
-
-                      /// Continue Button
                       _buildContinueButton(context, viewModel),
                     ],
                   ),
@@ -76,7 +65,6 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
             ),
           ),
 
-          /// Loader
           if (viewModel.isLoading)
             Container(
               color: Colors.black45,
@@ -94,7 +82,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
         CustomBackButton(onTap: () => context.pop()),
         const SizedBox(width: AppDimensions.spaceS),
         ResponsiveText(
-        AppStrings.signUp,
+          AppStrings.signUp,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -180,23 +168,25 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           ),
           padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
         ),
-        onPressed: viewModel.isLoading ? null : () {
+        onPressed: viewModel.isLoading
+            ? null
+            : () {
           FocusScope.of(context).unfocus();
           viewModel.goToOtp();
         },
         child: viewModel.isLoading
             ? const SizedBox(
-                width: AppDimensions.iconS,
-                height: AppDimensions.iconS,
-                child: CircularProgressIndicator(
-                  color: AppColors.accent,
-                  strokeWidth: 2,
-                ),
-              )
+          width: AppDimensions.iconS,
+          height: AppDimensions.iconS,
+          child: CircularProgressIndicator(
+            color: AppColors.accent,
+            strokeWidth: 2,
+          ),
+        )
             : const Text(
-            AppStrings.continueText,
-                style: TextStyle(color: AppColors.onPrimary, fontSize: 16),
-              ),
+          AppStrings.continueText,
+          style: TextStyle(color: AppColors.onPrimary, fontSize: 16),
+        ),
       ),
     );
   }

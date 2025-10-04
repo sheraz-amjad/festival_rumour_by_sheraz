@@ -29,8 +29,8 @@ class CustomNavBar extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
         decoration: const BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
+          color: AppColors.primary,
+         // borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimensions.radiusXL)),
           boxShadow: [
             BoxShadow(
               color: Color(0x1F000000),
@@ -45,7 +45,7 @@ class CustomNavBar extends StatelessWidget {
             final bool selected = currentIndex == index;
             final item = items[index];
 
-            final Color iconColor = selected ? AppColors.primary : AppColors.onSurfaceVariant;
+            final Color iconColor = selected ? AppColors.onPrimary : AppColors.onSurfaceVariant;
             final Color chipColor = selected ? AppColors.primary.withOpacity(0.08) : Colors.transparent;
             final TextStyle labelStyle = TextStyle(
               color: AppColors.onSurface,

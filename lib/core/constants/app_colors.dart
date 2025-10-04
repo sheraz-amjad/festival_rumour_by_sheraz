@@ -42,6 +42,35 @@ class AppColors {
   static const Color errorContainer = Color(0xFFFCD8DF);
   static const Color onErrorContainer = Color(0xFF370617);
 
+
+  //Add ME
+  //static const Color background = Colors.black;
+  static const Color textPrimary = Colors.white;
+  static const Color borderPrimary = Colors.white;
+  static const Color buttonPrimary = Color(0xFFF3B126); // Yellow tone
+  static const Color buttonText = Colors.white;
+  static const Color iconPrimary = Colors.white;
+  static const Color closeButtonBg = Color(0xFFD6D6D6);
+  static const Color closeButtonIcon = Colors.black;
+  static const Color overlay = Colors.black45;
+  static const Color loginButtonText = Colors.white;
+
+
+  static const Color postBackground = Colors.black;
+  static const Color postShadow = Colors.grey;
+  static const Color reactionLike = Colors.red;
+  static const Color reactionLove = Colors.blue;
+  static const Color proLabelBackground = Colors.orange;
+  static const Color proLabelText = Colors.white;
+  static const Color eventOverlay = Colors.black54;
+  static const Color nowBadge = Colors.black;
+  static const Color iconBackground = Colors.grey;
+  static const Color iconColor = Colors.black;
+  static const Color headlineBackground = Colors.black54;
+  static const Color overlayBlack = Colors.black;
+  static const Color headingColor = Colors.white;
+  static const Color subHeadingColor = Colors.white70;
+
   // Surface Colors
   static const Color surface = Color(0xFFFFFFFF);        // White surface
   static const Color onSurface = Color(0xFF000000);      // Black text

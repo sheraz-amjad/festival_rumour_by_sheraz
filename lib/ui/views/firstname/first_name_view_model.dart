@@ -2,10 +2,11 @@ import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/constants/app_strings.dart';
 
 class FirstNameViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  
+
   String _firstName = "";
   String get firstName => _firstName;
 
@@ -24,14 +25,14 @@ class FirstNameViewModel extends BaseViewModel {
       await handleAsync(() async {
         // Simulate API call to save first name
         await Future.delayed(const Duration(seconds: 1));
-        
+
         _showWelcome = true;
         notifyListeners();
-        
+
         // Navigate to next screen after showing welcome
         await Future.delayed(const Duration(seconds: 2));
-      //  _navigationService.navigateTo(AppRoutes.uploadphotos);
-      }, errorMessage: 'Failed to save name. Please try again.');
+        // _navigationService.navigateTo(AppRoutes.uploadphotos);
+      }, errorMessage: AppStrings.saveNameError);
     }
   }
 
@@ -42,9 +43,8 @@ class FirstNameViewModel extends BaseViewModel {
 
   Future<void> continueToNext() async {
     await handleAsync(() async {
-      // Navigate to next screen
       _navigationService.navigateTo(AppRoutes.uploadphotos);
-    }, errorMessage: 'Failed to continue. Please try again.');
+    }, errorMessage: AppStrings.continueError);
   }
 
   void goBack() {

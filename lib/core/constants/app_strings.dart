@@ -47,6 +47,8 @@ class AppStrings {
   static const String privacy = 'Privacy';
   static const String terms = 'Terms';
 
+
+
   //Button
 
   // Authentication
@@ -79,6 +81,94 @@ class AppStrings {
   static const String uploadsubtitle  = 'Upload 2 photos to start. Add 4 or more to make your profile stand out.';
   static const String taponupload = 'Tap to upload image';
   static const String headlineText = 'Skip the silence, lead me to the  wild alliance';
+  static const String phoneHint = '878 7764 2922';
+  static const String description =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, '
+      'sed do eiusmod tempor incididunt ut labore';
+  static const String countryPk = 'PK';
+  static const String countryUs = 'US';
+  static const String localeEnglish = 'en';
+  static const String defaultCountryCode = 'PK';
+  static const List<String> favoriteCountries = ['+92', 'PK', 'US'];
+  static const String primarySettings = "Primary Settings";
+  static const String enterOtpDescription = "Enter the four digit code we sent to you";
+  static const String otpVerificationError = "Failed to verify OTP. Please try again.";
+  static const String otpResendError = "Failed to resend OTP. Please try again.";
+  static const String yourFestivalInterests = "Your Festival Interests";
+  static const String habitsMatch = "Do their habits match yours? You go first.";
+  static const String chooseCategories = "Choose from categories";
+  static const String lunaFest2025 = "Global Feed";
+  static const String proLabel = "PRO";
+  static const String selectFestival = "Select Festival";
+  static const String loadingPosts = "Loading posts...";
+  static const String noPostsAvailable = "No posts available";
+
+
+  // Category names
+  static const String culture = "Culture";
+  static const String food = "Food";
+  static const String music = "Music";
+  static const String meetPeople = "Meet People";
+  static const String socialsOnWeekends = "Socials on weekends";
+  static const String comedy = "Comedy";
+  static const String dance = "Dance";
+  static const String art = "Art";
+
+  // Error / status messages
+  static const String saveInterestsError = "Failed to save interests. Please try again.";
+  static const String skipInterestsError = "Failed to continue. Please try again.";
+
+  static const String failedToLoadPosts = "Failed to load posts";
+  static const String postContent =
+      "Lorem Ipsum is simply dummy text of the printing industry.";
+  static const String timeAgo = "1 hr ago";
+  static const String likesnumber = "100";
+  static const String commentnumber = "100";
+  static const String firstNameQuestion = "What's your first name?";
+  static const String firstNameHint = "Enter first name";
+  static const String firstNameInfo =
+      "This is how it'll appear on your profile.\nCan't change it later.";
+  static const String welcomeInfo =
+      "There's a lot out there to discover,\nbut let's get your profile set up first.";
+  static const String letsGo = "Let's Go";
+  static const String editName = "Edit Name";
+  static const String saveNameError = "Failed to save name. Please try again.";
+  static const String continueError = "Failed to continue. Please try again.";
+  static const String nowBadgeText = "NOW";
+
+  static const String searchHint = "Search...";
+  static const String allFilter = "";
+  static const String usersFilter = "Users";
+  static const String postsFilter = "Posts";
+  static const String eventsFilter = "Events";
+  static const String loadingEvents = "Loading events...";
+  static const String noEventsAvailable = "No events available";
+  static const String exploreText = "Explore Events";
+  static const String failedToLoadEvents = "Failed to load events";
+  static const String commentHint = "Ask a question, gather people or share your thoughts";
+  // Event titles
+  static const String eventTitle = "Music Fest";
+  // Locations
+  static const String eventlocation = "Lahore";
+  // Dates
+  static const String eventdate = "Oct 28, 2025";
+
+
+  static const String upgradeToPremium = "Upgrade to Premium";
+ // static const String subscribeNow = "Subscribe Now";
+  static const String monthlyPlan = "Monthly";
+  static const String yearlyPlan = "Yearly";
+  static const String lifetimePlan = "Lifetime";
+
+  static const String subscriptionDetails =
+      "Subscription Details\n"
+      "• Users can join anonymously and remain hidden\n"
+      "• Posts and comments will show as 'Anonymous'\n"
+      "• Only available to users who purchase this as an in-app premium feature.";
+
+  static const String privacyAgreementText =
+      "By continuing you agree with the ";
+  static const String privacyPolicy = "Privacy Policy.";
 
   // Festival Related
   static const String festivals = 'Festivals';

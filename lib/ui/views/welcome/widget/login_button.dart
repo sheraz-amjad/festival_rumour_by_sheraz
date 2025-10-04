@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class LoginButton extends StatelessWidget {
   final String text;
-  final String iconPath; // SVG or PNG
+  final String iconPath; // SVG or PNG asset path
   final Color bgColor;
   final Color textColor;
   final VoidCallback onTap;
@@ -14,37 +16,50 @@ class LoginButton extends StatelessWidget {
     required this.text,
     required this.onTap,
     required this.bgColor,
-    this.textColor = Colors.white,
+    this.textColor = AppColors.loginButtonText,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 55,
+      height: AppDimensions.loginButtonHeight,
       child: ElevatedButton.icon(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppDimensions.loginButtonBorderRadius),
           ),
           elevation: 2,
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.loginButtonPadding),
         ),
-        icon: Container(
-          padding: const EdgeInsets.all(8),
-          child: iconPath.endsWith(".svg")
-              ? SvgPicture.asset(iconPath, height: 22, width: 22)
-              : Image.asset(iconPath, height: 22, width: 22),
-        ),
+        icon: _buildIcon(),
         label: Text(
           text,
           style: TextStyle(
             color: textColor,
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: AppDimensions.loginButtonFontSize,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildIcon() {
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.loginButtonIconPadding),
+      child: iconPath.endsWith(".svg")
+          ? SvgPicture.asset(
+        iconPath,
+        height: AppDimensions.loginButtonIconSize,
+        width: AppDimensions.loginButtonIconSize,
+      )
+          : Image.asset(
+        iconPath,
+        height: AppDimensions.loginButtonIconSize,
+        width: AppDimensions.loginButtonIconSize,
       ),
     );
   }

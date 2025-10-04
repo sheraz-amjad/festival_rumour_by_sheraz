@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constants/app_colors.dart';
+import '../constants/app_font.dart';
 import '../constants/app_sizes.dart';
 
 /// App theme configuration with light and dark themes
@@ -12,6 +13,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      fontFamily: AppFonts.montserrat,
 
       // Color Scheme
       colorScheme: const ColorScheme.light(
@@ -239,6 +241,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: AppFonts.montserrat,
 
       // Color Scheme (Dark variants)
       colorScheme: const ColorScheme.dark(

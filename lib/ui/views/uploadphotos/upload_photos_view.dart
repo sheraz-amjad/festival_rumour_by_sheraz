@@ -7,11 +7,11 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/utils/appbar.dart';
+
 import '../../../core/utils/backbutton.dart';
-import '../../../core/utils/custom_navbar.dart';
+
 import '../../../shared/widgets/responsive_widget.dart';
-import '../../../shared/widgets/loading_widget.dart';
+
 import '../../../shared/extensions/context_extensions.dart';
 import 'upload_photos_view_model.dart';
 
@@ -23,11 +23,11 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
 
   @override
   Widget buildView(BuildContext context, UploadPhotosViewModel viewModel) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: ResponsiveContainer(
+    return SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+          ResponsiveContainer(
           mobileMaxWidth: double.infinity,
           tabletMaxWidth: 600,
           desktopMaxWidth: 800,
@@ -43,7 +43,7 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                 image: AssetImage(AppAssets.addpic),
                 fit: BoxFit.cover,
               ),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+             // borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +67,9 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
             ),
           ),
         ),
-      ),
+      ]
+          ),
+    ),
     );
   }
 

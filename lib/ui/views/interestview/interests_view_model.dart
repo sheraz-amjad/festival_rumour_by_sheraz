@@ -2,19 +2,20 @@ import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/constants/app_strings.dart';
 
 class InterestsViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  
+
   final List<String> categories = [
-    'Culture',
-    'Food',
-    'Music',
-    'Meet People',
-    'Socials on weekends',
-    'Comedy',
-    'Dance',
-    'Art',
+    AppStrings.culture,
+    AppStrings.food,
+    AppStrings.music,
+    AppStrings.meetPeople,
+    AppStrings.socialsOnWeekends,
+    AppStrings.comedy,
+    AppStrings.dance,
+    AppStrings.art,
   ];
 
   final Set<String> _selected = {};
@@ -37,16 +38,16 @@ class InterestsViewModel extends BaseViewModel {
     await handleAsync(() async {
       // Simulate API call to save interests
       await Future.delayed(const Duration(seconds: 1));
-      
+
       // Navigate to next screen
       _navigationService.navigateTo(AppRoutes.event);
-    }, errorMessage: 'Failed to save interests. Please try again.');
+    }, errorMessage: AppStrings.saveInterestsError);
   }
 
   Future<void> skipInterests() async {
     await handleAsync(() async {
       // Navigate to next screen without saving
       _navigationService.navigateTo(AppRoutes.event);
-    }, errorMessage: 'Failed to continue. Please try again.');
+    }, errorMessage: AppStrings.skipInterestsError);
   }
 }

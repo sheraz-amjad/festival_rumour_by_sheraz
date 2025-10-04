@@ -14,6 +14,10 @@ class NavViewModel extends BaseViewModel {
   void goToHome() => setIndex(0);
   void goToDiscover() => setIndex(1);
   void goToProfile() => setIndex(2);
+
+  @override
+  void init() {
+    super.init();
+    _currentIndex = 0;
+  }
 }
-
-

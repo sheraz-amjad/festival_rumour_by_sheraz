@@ -1,7 +1,10 @@
+import '../../../core/constants/app_numbers.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_assets.dart';
 import 'post_model.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -10,28 +13,28 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> loadPosts() async {
     await handleAsync(() async {
-      // Simulate API call
       await Future.delayed(const Duration(seconds: 1));
-      
+
       posts = [
         PostModel(
-          username: "Sufyan Ch",
-          timeAgo: "1 hr ago",
-          content: "Lorem Ipsum is simply dummy text of the printing industry.",
-          imagePath: "assets/images/Rectangle_2593.png",
-          likes: 120,
-          comments: 12,
+          username: AppStrings.username,
+          timeAgo: AppStrings.timeAgo,
+          content: AppStrings.postContent,
+          imagePath: AppAssets.post,
+          likes: AppNumbers.likesnumber,
+          comments: AppNumbers.commentnumber,
+
         ),
         PostModel(
-          username: "Jeremiah",
-          timeAgo: "3 hr ago",
-          content: "Lorem Ipsum is simply dummy text of the printing industry.",
-          imagePath: "assets/images/Rectangle_2593.png",
-          likes: 90,
-          comments: 8,
+          username: AppStrings.username,
+          timeAgo: AppStrings.timeAgo,
+          content: AppStrings.postContent,
+          imagePath: AppAssets.post,
+          likes: AppNumbers.likesnumber,
+          comments: AppNumbers.commentnumber,
         ),
       ];
-    }, errorMessage: 'Failed to load posts');
+    }, errorMessage: AppStrings.failedToLoadPosts);
   }
 
   Future<void> refreshPosts() async {

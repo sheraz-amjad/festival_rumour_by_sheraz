@@ -1,51 +1,55 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_sizes.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
 import 'event_model.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_durations.dart';
 
 class EventViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  
+
   final List<EventModel> events = [];
   int currentPage = 0;
-  // Single centered slide with side peeks. We'll jump to a high initial page after data loads
-  final PageController pageController = PageController(viewportFraction: 0.9);
+
+  final PageController pageController = PageController(viewportFraction: AppDimensions.pageViewportFraction);
   Timer? _autoSlideTimer;
 
   Future<void> loadEvents() async {
     await handleAsync(() async {
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 1));
-      
-      // Example data (replace with API/local data)
+      await Future.delayed(AppDurations.loadEventsDelay);
+
       events.addAll([
         EventModel(
-            title: "Music Fest",
-            location: "Lahore",
-            date: "Oct 28, 2025",
-            imagepath: "assets/images/Rectangle_2593.png",
-            isLive: false),
+          title: AppStrings.eventTitle,
+          location: AppStrings.location,
+          date: AppStrings.eventdate,
+          imagepath: AppAssets.eventimage,
+          isLive: false,
+        ),
         EventModel(
-            title: "Art Expo",
-            location: "Karachi",
-            date: "Nov 12, 2025",
-            imagepath: "assets/images/Rectangle_2593.png",
-            isLive: true),
+          title: AppStrings.eventTitle,
+          location: AppStrings.eventlocation,
+          date: AppStrings.eventdate,
+          imagepath: AppAssets.eventimage,
+          isLive: true,
+        ),
         EventModel(
-            title: "Food Carnival",
-            location: "Islamabad",
-            date: "Dec 5, 2025",
-            imagepath: "assets/images/Rectangle_2593.png",
-            isLive: false),
+          title: AppStrings.eventTitle,
+          location: AppStrings.eventlocation,
+          date: AppStrings.eventdate,
+          imagepath: AppAssets.eventimage,
+          isLive: false,
+        ),
       ]);
-    }, errorMessage: 'Failed to load events');
-    
-    // After data load, set initial page and start auto-slide outside error handling
+    }, errorMessage: AppStrings.failedToLoadEvents);
+
     if (events.isNotEmpty) {
-      final int base = (events.length * 1000) + 1; // start at logical slide 2
+      final int base = (events.length * AppDimensions.pageBaseMultiplier) + 1;
       currentPage = base;
       _jumpToInitialWhenReady(base);
       _startAutoSlide();
@@ -61,12 +65,12 @@ class EventViewModel extends BaseViewModel {
     _autoSlideTimer?.cancel();
     if (events.isEmpty) return;
 
-    _autoSlideTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _autoSlideTimer = Timer.periodic(AppDurations.autoSlideInterval, (_) {
       if (pageController.positions.isEmpty) return;
       final int nextPage = currentPage + 1;
       pageController.animateToPage(
         nextPage,
-        duration: const Duration(milliseconds: 400),
+        duration: AppDurations.slideAnimationDuration,
         curve: Curves.easeInOut,
       );
       currentPage = nextPage;
@@ -87,7 +91,7 @@ class EventViewModel extends BaseViewModel {
     final int nextPage = currentPage + 1;
     pageController.animateToPage(
       nextPage,
-      duration: const Duration(milliseconds: 300),
+      duration: AppDurations.slideAnimationDuration,
       curve: Curves.easeInOut,
     );
     currentPage = nextPage;

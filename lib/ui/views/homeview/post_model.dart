@@ -48,11 +48,11 @@ class PostModel {
   @override
   int get hashCode {
     return username.hashCode ^
-        timeAgo.hashCode ^
-        content.hashCode ^
-        imagePath.hashCode ^
-        likes.hashCode ^
-        comments.hashCode;
+    timeAgo.hashCode ^
+    content.hashCode ^
+    imagePath.hashCode ^
+    likes.hashCode ^
+    comments.hashCode;
   }
 
   @override
