@@ -20,7 +20,6 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
   Widget buildView(BuildContext context, FirstNameViewModel viewModel) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             Positioned.fill(
@@ -49,7 +48,7 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                       fit: BoxFit.cover,
                     ),
                     borderRadius: const BorderRadius.vertical(
-                      // top: Radius.circular(AppDimensions.radiusL),
+                      //    top: Radius.circular(AppDimensions.radiusL),
                     ),
                   ),
                   child: Column(
@@ -79,51 +78,32 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
               ),
             ),
             _buildBackButton(context),
-            if (viewModel.showWelcome) ...[
-              // 👇 dim background
-              Container(
-                color: Colors.black.withOpacity(0.6),
-              ),
-              _buildWelcomeDialog(context, viewModel),
-            ],
+            if (viewModel.showWelcome) _buildWelcomeDialog(context, viewModel),
           ],
         ),
       ),
     );
   }
 
-
   Widget _buildNameInput(BuildContext context, FirstNameViewModel viewModel) {
     return TextField(
-      controller: viewModel.nameController,
-      focusNode: viewModel.nameFocusNode,
-      onChanged: (value) {
-        viewModel.onNameChanged(value);
-        viewModel.validateName(); // Validate as user types
-      },
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: AppStrings.firstNameHint,
-        hintStyle: const TextStyle(color: AppColors.grey400),
-        errorText: viewModel.nameError,
-        errorStyle: const TextStyle(
-          color: AppColors.accent, // ✅ white error text
-          fontSize: AppDimensions.textS,
-          fontWeight: FontWeight.w500,
-        ),// Shows error if validation fails
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 0),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accent, width: 2),
-        ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
+        border: UnderlineInputBorder(),
+        hintStyle: TextStyle(color: AppColors.grey400),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onPrimary, width: 0),
         ),
       ),
       style: const TextStyle(color: AppColors.primary),
-      cursorColor: AppColors.primary, // White cursor
+      onChanged: viewModel.onNameChanged,
       textInputAction: TextInputAction.done,
-      onSubmitted: (_) => FocusScope.of(context).unfocus(),
+      onSubmitted: (_) {
+        FocusScope.of(context).unfocus();
+        if (viewModel.isNameEntered) {
+          viewModel.onNextPressed();
+        }
+      },
     );
   }
 
@@ -132,16 +112,14 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: viewModel.isNameEntered && viewModel.nameError == null
-              ? AppColors.accent
-              : AppColors.primary,
+          backgroundColor:
+          viewModel.isNameEntered ? AppColors.accent : Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingXS),
-          elevation: 0,
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
         ),
-        onPressed: viewModel.isNameEntered && viewModel.nameError == null && !viewModel.isLoading
+        onPressed: viewModel.isNameEntered && !viewModel.isLoading
             ? () {
           FocusScope.of(context).unfocus();
           viewModel.onNextPressed();
@@ -149,21 +127,16 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
             : null,
         child: viewModel.isLoading
             ? const SizedBox(
-          width: AppDimensions.iconM,
-          height: AppDimensions.iconM,
+          width: AppDimensions.iconS,
+          height: AppDimensions.iconS,
           child: CircularProgressIndicator(
-            color: AppColors.primary,
+            color: AppColors.accent,
             strokeWidth: 2,
           ),
         )
-            : Text(
+            : const Text(
           AppStrings.next,
-          style: TextStyle(
-            fontSize: AppDimensions.textXXL,
-            color: viewModel.isNameEntered && viewModel.nameError == null
-                ? AppColors.onPrimary
-                : AppColors.accent,
-          ),
+          style: TextStyle(color: AppColors.onPrimary),
         ),
       ),
     );
@@ -182,11 +155,8 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
         ),
         child: IconButton(
           padding: EdgeInsets.zero,
-          icon: const Icon(
-            Icons.arrow_back,
-            size: AppDimensions.iconM,
-            color: AppColors.onSurface,
-          ),
+          icon: const Icon(Icons.arrow_back,
+              size: AppDimensions.iconM, color: AppColors.onSurface),
           onPressed: () =>
               Provider.of<FirstNameViewModel>(context, listen: false).goBack(),
         ),
@@ -194,15 +164,16 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
     );
   }
 
-  Widget _buildWelcomeDialog(
-      BuildContext context, FirstNameViewModel viewModel) {
+  Widget _buildWelcomeDialog(BuildContext context,
+      FirstNameViewModel viewModel) {
     return Center(
       child: ResponsiveContainer(
         mobileMaxWidth: double.infinity,
         tabletMaxWidth: double.infinity,
         desktopMaxWidth: double.infinity,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
+          margin: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingL),
           padding: const EdgeInsets.all(AppDimensions.paddingM),
           decoration: BoxDecoration(
             color: AppColors.onPrimary,
@@ -215,9 +186,7 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    "👋",
-                    style: TextStyle(fontSize: AppDimensions.textXXL),
-                  ),
+                      "👋", style: TextStyle(fontSize: AppDimensions.textXXL)),
                   const SizedBox(height: AppDimensions.spaceS),
                   ResponsiveText(
                     "${AppStrings.welcome} ${viewModel.firstName}",
@@ -243,8 +212,8 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.accent,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(AppDimensions.radiusXL),
+                              borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusXL),
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: AppDimensions.paddingM,
@@ -265,7 +234,7 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                             backgroundColor: Colors.transparent,
                             elevation: 0,
                           ),
-                          onPressed: () => viewModel.onEditName(context),
+                          onPressed: viewModel.onEditName,
                           child: const Text(
                             AppStrings.editName,
                             style: TextStyle(color: AppColors.accent),
@@ -273,7 +242,7 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
 

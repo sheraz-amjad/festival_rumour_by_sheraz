@@ -8,49 +8,34 @@ class OtpViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
 
   String code = "";
-  String? _otpError;
-  bool _isLoading = false;
-
-  String? get otpError => _otpError;
-  bool get isOtpValid => code.length == 4 && _otpError == null;
-  bool get isLoading => _isLoading;
+  bool isCodeEntered = false;
 
   void onCodeChanged(String value) {
     code = value;
-    _otpError = null; // Clear error while typing
+    isCodeEntered = value.length == 4;
     notifyListeners();
   }
 
-  bool validateCode() {
-    if (code.isEmpty) {
-      _otpError = "OTP cannot be empty";
-    } else if (code.length != 4) {
-      _otpError = "OTP must be 4 digits";
-    } else {
-      _otpError = null;
-    }
+  void setCodeEntered(bool value) {
+    if (isCodeEntered == value) return;
+    isCodeEntered = value;
     notifyListeners();
-    return _otpError == null;
   }
 
   Future<void> verifyCode() async {
-    if (!validateCode()) return; // Stop if invalid
-
-    _isLoading = true;
-    notifyListeners();
-
     await handleAsync(() async {
-      await Future.delayed(const Duration(seconds: 2)); // Simulate verification
+      // TODO: Replace with actual verification call
+      await Future.delayed(const Duration(seconds: 2));
+
+      // On success, navigate to next screen
       _navigationService.navigateTo(AppRoutes.firstname);
     }, errorMessage: AppStrings.otpVerificationError);
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<void> resendCode() async {
     await handleAsync(() async {
-      await Future.delayed(const Duration(seconds: 1)); // Simulate resend
+      // TODO: Implement resend OTP logic
+      await Future.delayed(const Duration(seconds: 1));
     }, errorMessage: AppStrings.otpResendError);
   }
 }

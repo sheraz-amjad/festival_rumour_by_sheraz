@@ -18,21 +18,18 @@ class SubscriptionView extends BaseView<SubscriptionViewModel> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true, // ✅ Prevent keyboard overlay
       backgroundColor: AppColors.black,
-      body: SafeArea( // ✅ Prevent overlap with status/navigation bar
-        child: Column(
-          children: [
-            _HeaderSection(screenHeight: screenHeight),
-            _BottomSection(viewModel: viewModel),
-          ],
-        ),
+      body: Column(
+        children: [
+          _HeaderSection(screenHeight: screenHeight),
+          _BottomSection(viewModel: viewModel),
+        ],
       ),
     );
   }
 }
 
-/// 🔹 Header Section
+/// Header Section
 class _HeaderSection extends StatelessWidget {
   final double screenHeight;
 
@@ -43,8 +40,7 @@ class _HeaderSection extends StatelessWidget {
     return SizedBox(
       height: screenHeight * 0.45,
       child: Stack(
-        fit: StackFit.expand,
-        children: const [
+        children: [
           _BackgroundImage(),
           _CloseButton(),
           _Title(),
@@ -54,10 +50,7 @@ class _HeaderSection extends StatelessWidget {
   }
 }
 
-/// 🔹 Background Image
 class _BackgroundImage extends StatelessWidget {
-  const _BackgroundImage();
-
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -69,14 +62,11 @@ class _BackgroundImage extends StatelessWidget {
   }
 }
 
-/// 🔹 Close Button
 class _CloseButton extends StatelessWidget {
-  const _CloseButton();
-
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 16,
+      top: 40,
       left: 16,
       child: Container(
         decoration: const BoxDecoration(
@@ -92,10 +82,7 @@ class _CloseButton extends StatelessWidget {
   }
 }
 
-/// 🔹 Title
 class _Title extends StatelessWidget {
-  const _Title();
-
   @override
   Widget build(BuildContext context) {
     return const Align(
@@ -124,7 +111,7 @@ class _Title extends StatelessWidget {
   }
 }
 
-/// 🔹 Bottom Section
+/// Bottom Section
 class _BottomSection extends StatelessWidget {
   final SubscriptionViewModel viewModel;
 
@@ -133,31 +120,27 @@ class _BottomSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SafeArea(
-        top: false, // ✅ Keeps above nav bar but not double-padding top
-        child: Container(
-          padding: const EdgeInsets.all(AppDimensions.paddingM),
-          decoration: const BoxDecoration(
-            color: AppColors.black,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+      child: Container(
+        padding: const EdgeInsets.all(AppDimensions.paddingM),
+        decoration: const BoxDecoration(
+          color: AppColors.black,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _PlanTiles(viewModel: viewModel),
-                const SizedBox(height: 20),
-                const _SubscriptionDetails(),
-                const SizedBox(height: 20),
-                _SubscribeButton(viewModel: viewModel),
-                const SizedBox(height: 12),
-                const _PrivacyText(),
-              ],
-            ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _PlanTiles(viewModel: viewModel),
+              const SizedBox(height: 20),
+              const _SubscriptionDetails(),
+              const SizedBox(height: 20),
+              _SubscribeButton(viewModel: viewModel),
+              const SizedBox(height: 12),
+              const _PrivacyText(),
+            ],
           ),
         ),
       ),
@@ -165,7 +148,7 @@ class _BottomSection extends StatelessWidget {
   }
 }
 
-/// 🔹 Plan Tiles
+/// Plan Tiles
 class _PlanTiles extends StatelessWidget {
   final SubscriptionViewModel viewModel;
 
@@ -198,7 +181,7 @@ class _PlanTiles extends StatelessWidget {
   }
 }
 
-/// 🔹 Subscription Details Box
+/// Subscription Details
 class _SubscriptionDetails extends StatelessWidget {
   const _SubscriptionDetails();
 
@@ -224,7 +207,7 @@ class _SubscriptionDetails extends StatelessWidget {
   }
 }
 
-/// 🔹 Subscribe Button
+/// Subscribe Button
 class _SubscribeButton extends StatelessWidget {
   final SubscriptionViewModel viewModel;
 
@@ -244,40 +227,34 @@ class _SubscribeButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        child: const Text(
-          AppStrings.subscribeNow,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        child: const Text(AppStrings.subscribeNow),
       ),
     );
   }
 }
 
-/// 🔹 Privacy Text
+/// Privacy Text
 class _PrivacyText extends StatelessWidget {
   const _PrivacyText();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Text.rich(
-        TextSpan(
-          text: 'By continuing you agree with the ',
-          style: const TextStyle(color: Colors.white),
-          children: [
-            TextSpan(
-              text: 'Privacy Policy.',
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
-                color: Colors.white,
-              ),
+    return Text.rich(
+      TextSpan(
+        text: 'By continuing you agree with the ',
+        style: const TextStyle(color: Colors.white),
+        children: [
+          TextSpan(
+            text: 'Privacy Policy.',
+            style: const TextStyle(
+              decoration: TextDecoration.underline,
+              decorationColor: Colors.white,
+              color: Colors.white,
             ),
-          ],
-        ),
-        textAlign: TextAlign.center,
+          ),
+        ],
       ),
+      textAlign: TextAlign.center,
     );
   }
 }

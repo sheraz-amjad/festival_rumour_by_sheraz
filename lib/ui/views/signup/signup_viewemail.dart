@@ -23,61 +23,47 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       body: Stack(
         children: [
           const AuthBackground(),
+
           Align(
             alignment: Alignment.bottomCenter,
-            child: SafeArea( // ✅ Prevent overlay from navigation bar
-              top: false,
-              child: ResponsiveContainer(
-                mobileMaxWidth: double.infinity,
-                tabletMaxWidth: double.infinity,
-                desktopMaxWidth: double.infinity,
-                child: Container(
-                  width: double.infinity,
-                  padding: context.isLargeScreen
-                      ? const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingXL,
-                    vertical: AppDimensions.paddingXXL,
-                  )
-                      : context.isMediumScreen
-                      ? const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingL,
-                    vertical: AppDimensions.paddingXL,
-                  )
-                      : const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingM,
-                    vertical: AppDimensions.paddingL,
+            child: ResponsiveContainer(
+              mobileMaxWidth: double.infinity,
+              tabletMaxWidth: 600,
+              desktopMaxWidth: 800,
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(0),
+                padding: context.isLargeScreen
+                    ? const EdgeInsets.symmetric(horizontal: 24, vertical: 44)
+                    : context.isMediumScreen
+                    ? const EdgeInsets.symmetric(horizontal: 18, vertical: 36)
+                    : const EdgeInsets.symmetric(horizontal: 12, vertical: 28),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.bottomsheet),
+                    fit: BoxFit.cover,
                   ),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.bottomsheet),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(AppDimensions.radiusL),
-                    ),
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildHeader(context),
-                        const SizedBox(height: AppDimensions.paddingM),
-                        _buildEmailField(context, viewModel),
-                        const SizedBox(height: AppDimensions.paddingM),
-                        _buildPasswordField(context, viewModel),
-                        const SizedBox(height: AppDimensions.paddingM),
-                        _buildConfirmPasswordField(context, viewModel),
-                        const SizedBox(height: AppDimensions.paddingXL),
-                        _buildContinueButton(context, viewModel),
-                        const SizedBox(height: AppDimensions.paddingL),
-                      ],
-                    ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context),
+                      const SizedBox(height: AppDimensions.paddingM),
+                      _buildEmailField(context, viewModel),
+                      const SizedBox(height: AppDimensions.paddingM),
+                      _buildPasswordField(context, viewModel),
+                      const SizedBox(height: AppDimensions.paddingM),
+                      _buildConfirmPasswordField(context, viewModel),
+                      const SizedBox(height: AppDimensions.paddingL),
+                      _buildContinueButton(context, viewModel),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-
 
           if (viewModel.isLoading)
             Container(
@@ -106,109 +92,81 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       ],
     );
   }
+
   Widget _buildEmailField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
-      controller: viewModel.emailController,
       style: const TextStyle(color: AppColors.primary),
+      decoration: const InputDecoration(
+        labelText: AppStrings.emailLabel,
+        hintText: AppStrings.emailHint,
+        labelStyle: TextStyle(color: AppColors.primary),
+        hintStyle: TextStyle(color: AppColors.primary),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+        ),
+      ),
       keyboardType: TextInputType.emailAddress,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: AppStrings.emailLabel,
-        hintText: AppStrings.emailHint,
-        labelStyle: const TextStyle(color: AppColors.primary),
-        hintStyle: const TextStyle(color: AppColors.primary),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accent, width: 2),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorText: viewModel.emailError,
-        errorStyle: const TextStyle(
-          color: AppColors.accent, // ✅ white validation message
-          fontSize: AppDimensions.textS,
-          fontWeight: FontWeight.w500,
-        ),// 👈 show validation error
-      ),
     );
   }
 
   Widget _buildPasswordField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
-      controller: viewModel.passwordController,
       style: const TextStyle(color: AppColors.primary),
+      decoration: const InputDecoration(
+        labelText: AppStrings.passwordLabel,
+        hintText: AppStrings.passwordHint,
+        labelStyle: TextStyle(color: AppColors.primary),
+        hintStyle: TextStyle(color: AppColors.primary),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+        ),
+      ),
       obscureText: true,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-        labelText: AppStrings.passwordLabel,
-        hintText: AppStrings.passwordHint,
-        labelStyle: const TextStyle(color: AppColors.primary),
-        hintStyle: const TextStyle(color: AppColors.primary),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accent, width: 2),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorText: viewModel.passwordError,
-        errorStyle: const TextStyle(
-          color: AppColors.accent, // ✅ white validation message
-          fontSize: AppDimensions.textS,
-          fontWeight: FontWeight.w500,
-        ),// // 👈 show validation error
-      ),
     );
   }
 
   Widget _buildConfirmPasswordField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
-      controller: viewModel.confirmPasswordController,
       style: const TextStyle(color: AppColors.primary),
+      decoration: const InputDecoration(
+        labelText: AppStrings.confirmPasswordLabel,
+        hintText: AppStrings.confirmPasswordHint,
+        labelStyle: TextStyle(color: AppColors.primary),
+        hintStyle: TextStyle(color: AppColors.primary),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+        ),
+      ),
       obscureText: true,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        labelText: AppStrings.confirmPasswordLabel,
-        hintText: AppStrings.confirmPasswordHint,
-        labelStyle: const TextStyle(color: AppColors.primary),
-        hintStyle: const TextStyle(color: AppColors.primary),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.accent, width: 2),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorText: viewModel.confirmPasswordError,
-        errorStyle: const TextStyle(
-          color: AppColors.accent, // ✅ white validation message
-          fontSize: AppDimensions.textS,
-          fontWeight: FontWeight.w500,
-        ),// 👈 show validation error
-      ),
     );
   }
+
   Widget _buildContinueButton(BuildContext context, SignupViewEmailModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: AppDimensions.buttonHeightXL,
+      height: AppDimensions.buttonHeightL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingXS),
+          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
         ),
         onPressed: viewModel.isLoading
             ? null
@@ -218,16 +176,16 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
         },
         child: viewModel.isLoading
             ? const SizedBox(
-          width: AppDimensions.iconM,
-          height: AppDimensions.iconM,
+          width: AppDimensions.iconS,
+          height: AppDimensions.iconS,
           child: CircularProgressIndicator(
-            color: AppColors.primary,
+            color: AppColors.accent,
             strokeWidth: 2,
           ),
         )
             : const Text(
           AppStrings.continueText,
-          style: TextStyle(color: AppColors.onPrimary, fontSize: AppDimensions.textXL),
+          style: TextStyle(color: AppColors.onPrimary, fontSize: 16),
         ),
       ),
     );

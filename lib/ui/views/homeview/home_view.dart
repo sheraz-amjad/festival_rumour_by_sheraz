@@ -12,6 +12,7 @@ import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'home_viewmodel.dart';
+
 class HomeView extends BaseView<HomeViewModel> {
   const HomeView({super.key});
 
@@ -26,32 +27,34 @@ class HomeView extends BaseView<HomeViewModel> {
 
   @override
   Widget buildView(BuildContext context, HomeViewModel viewModel) {
-    return Scaffold(
-      backgroundColor: Colors.transparent, // keep background visible
-      body: Stack(
-        children: [
-          /// 🔹 Background Image covering entire screen
-          Positioned.fill(
-            child: Image.asset(
-              AppAssets.bottomsheet,
-              fit: BoxFit.cover,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // makes background image visible
+        body: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                AppAssets.bottomsheet, // from your constants
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-          /// 🔹 Main Content inside SafeArea
-          SafeArea(
-            child: Column(
-              children: [
-                _buildAppBar(context, viewModel),
-                _buildSearchBar(context),
-                const SizedBox(height: AppDimensions.spaceS),
-                Expanded(
-                  child: _buildFeedList(context, viewModel),
-                ),
-              ],
+            // Main Content
+            SafeArea(
+              child: Column(
+                children: [
+                  _buildAppBar(context, viewModel),
+                  _buildSearchBar(context),
+                  const SizedBox(height: AppDimensions.spaceS),
+                  Expanded(
+                    child: _buildFeedList(context, viewModel),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -59,6 +62,7 @@ class HomeView extends BaseView<HomeViewModel> {
   Widget _buildAppBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsivePadding(
       mobilePadding: const EdgeInsets.symmetric(
+       // horizontal: AppDimensions.appBarHorizontalMobile,
         vertical: AppDimensions.appBarVerticalMobile,
       ),
       tabletPadding: const EdgeInsets.symmetric(
@@ -80,6 +84,7 @@ class HomeView extends BaseView<HomeViewModel> {
           const SizedBox(width: AppDimensions.spaceL),
           ResponsiveText(
             AppStrings.lunaFest2025,
+
             style: const TextStyle(
               color: AppColors.primary,
               fontSize: AppDimensions.textXXL,
@@ -87,15 +92,17 @@ class HomeView extends BaseView<HomeViewModel> {
             ),
           ),
           const SizedBox(width: AppDimensions.spaceL),
+
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-              width: AppDimensions.iconM,
-              height: AppDimensions.iconM,
+             // color: AppColors.primary,
+              width: 24,
+              height: 24,
             ),
             onPressed: () {},
           ),
-          const SizedBox(width: AppDimensions.spaceM),
+          const SizedBox(width: AppDimensions.spaceL),
           GestureDetector(
             onTap: viewModel.goToSubscription,
             child: Container(
@@ -121,7 +128,6 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
     );
   }
-
   Widget _buildSearchBar(BuildContext context) {
     String selectedFilter = AppStrings.allFilter;
 
@@ -141,8 +147,9 @@ class HomeView extends BaseView<HomeViewModel> {
             child: Row(
               children: [
                 const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
-
                 const SizedBox(width: AppDimensions.spaceS),
+
+                /// 🔹 Search Field
                 const Expanded(
                   child: TextField(
                     decoration: InputDecoration(
@@ -160,12 +167,14 @@ class HomeView extends BaseView<HomeViewModel> {
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                       fontSize: AppDimensions.textM,
-
                     ),
                   ),
                 ),
+
+                /// 🔹 Dropdown Filter
                 DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
+                   // value: selectedFilter == AppStrings.allFilter ? AppStrings.live : selectedFilter,
                     dropdownColor: AppColors.onPrimary,
                     isExpanded: false,
                     menuMaxHeight: MediaQuery.of(context).size.height * 0.35,
@@ -212,6 +221,7 @@ class HomeView extends BaseView<HomeViewModel> {
                     onChanged: (value) {
                       if (value != null) {
                         setState(() => selectedFilter = value);
+                        debugPrint("Selected Filter: $value");
                       }
                     },
                   ),
@@ -226,7 +236,7 @@ class HomeView extends BaseView<HomeViewModel> {
 
   Widget _buildFeedList(BuildContext context, HomeViewModel viewModel) {
     if (viewModel.isLoading && viewModel.posts.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const LoadingWidget(message: AppStrings.loadingPosts);
     }
 
     if (viewModel.posts.isEmpty) {
@@ -249,6 +259,7 @@ class HomeView extends BaseView<HomeViewModel> {
         return Column(
           children: [
             PostWidget(post: post),
+            // Add spacing except after the last post
             if (index != viewModel.posts.length - 1)
               const SizedBox(height: AppDimensions.spaceM),
           ],

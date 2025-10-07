@@ -1,11 +1,14 @@
-import 'package:festival_rumour/ui/views/welcome/widget/login_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/welcome/welcome_view_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/group_image.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -18,129 +21,194 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
 
   @override
   Widget buildView(BuildContext context, WelcomeViewModel viewModel) {
-    final mediaQuery = MediaQuery.of(context);
-    final keyboardVisible = mediaQuery.viewInsets.bottom > 0;
+    return Scaffold(
+      body: Stack(
+        children: [
+          /// Background
+          const AuthBackground(),
 
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Stack(
-          children: [
-            /// 🖼️ Background
-            const AuthBackground(),
-
-            /// 🌫️ Overlay for dim effect
-            Container(color: Colors.black.withOpacity(0.5)),
-
-            /// 🧱 Bottom Login Section
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
-                  reverse: true,
-                  padding: EdgeInsets.only(
-                    bottom: keyboardVisible ? mediaQuery.viewInsets.bottom : 0,
+          /// Bottom Login Box
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ResponsiveContainer(
+              mobileMaxWidth: double.infinity,
+              tabletMaxWidth: AppDimensions.tabletWidth,
+              desktopMaxWidth: AppDimensions.desktopWidth,
+              child: Container(
+                width: double.infinity,
+                padding:
+                    context.isLargeScreen
+                        ? const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.paddingL,
+                          vertical: AppDimensions.paddingXL,
+                        )
+                        : context.isMediumScreen
+                        ? const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.paddingL,
+                          vertical: AppDimensions.paddingXL,
+                        )
+                        : const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.paddingM,
+                          vertical: AppDimensions.paddingL,
+                        ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.bottomsheet),
+                    fit: BoxFit.cover,
                   ),
-                  child: ResponsiveContainer(
-                    mobileMaxWidth: double.infinity,
-                    tabletMaxWidth: AppDimensions.tabletWidth,
-                    desktopMaxWidth: AppDimensions.desktopWidth,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(AppAssets.bottomsheet),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(AppDimensions.radiusL),
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.paddingL,
-                        vertical: AppDimensions.paddingXXL,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          /// 🔹 Google Login
-                          LoginButton(
-                            iconPath: AppAssets.googleIcon,
-                            text: AppStrings.loginWithGoogle,
-                            bgColor: Colors.red,
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "🧠 Google Sign-In is under development",
-                                  ),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                          ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppDimensions.radiusL),
+                  ),
+                ),
 
-                          const SizedBox(height: 20),
-
-                          /// 🔹 Email Login
-                          LoginButton(
-                            iconPath: AppAssets.phoneIcon,
-                            text: AppStrings.loginWithEmailPhone,
-                            bgColor: const Color.fromARGB(255, 55, 92, 161),
-                            onTap: viewModel.loginWithEmail,
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          /// 🔹 Apple Login
-                          LoginButton(
-                            iconPath: AppAssets.appleIcon,
-                            text: AppStrings.loginWithApple,
-                            bgColor: AppColors.black,
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "🍏 Apple Sign-In is under development",
-                                  ),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                          ),
-
-                          const SizedBox(height: 25),
-
-                          /// 🔹 Signup Text
-                          _buildSignupText(viewModel),
-                        ],
-                      ),
-                    ),
+                // Login Buttons
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      _buildGoogleLogin(viewModel),
+                      const SizedBox(height: 20),
+                      _buildEmailLogin(viewModel),
+                      const SizedBox(height: 20),
+                      _buildAppleLogin(viewModel),
+                      const SizedBox(height: 20),
+                      _buildSignupText(viewModel),
+                      const SizedBox(height: 25),
+                    ],
                   ),
                 ),
               ),
             ),
+          ),
 
-            /// ⏳ Loader
-            if (viewModel.isLoading)
-              Container(
-                color: Colors.black45,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
+          /// Loader
+          if (viewModel.isLoading)
+            Container(
+              color: Colors.black45,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGoogleLogin(WelcomeViewModel viewModel) {
+    return SizedBox(
+      width: double.infinity,
+      height: AppDimensions.buttonHeightXL,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+          ),
+        ),
+        onPressed: viewModel.loginWithGoogle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start, // keep icon left
+          crossAxisAlignment: CrossAxisAlignment.center, // vertical alignment
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0),
+              child: _buildCircleIcon(AppAssets.googleIcon),
+            ),
+            const SizedBox(width: 55),
+            Expanded( // makes text use remaining space
+              child: Text(
+                AppStrings.loginWithGoogle,
+                style: const TextStyle(color: Colors.white),
               ),
+            ),
           ],
         ),
       ),
     );
   }
 
+
+  Widget _buildEmailLogin(WelcomeViewModel viewModel) {
+    return SizedBox(
+      width: double.infinity,
+      height: AppDimensions.buttonHeightXL,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 55, 92, 161),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+          ),
+        ),
+        onPressed: viewModel.loginWithEmail,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0),
+              child: _buildCircleIcon(AppAssets.phoneIcon),
+            ),
+            const SizedBox(width: 35),
+            Text(
+              AppStrings.loginWithEmailPhone,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppleLogin(WelcomeViewModel viewModel) {
+    return SizedBox(
+      width: double.infinity,
+      height: AppDimensions.buttonHeightXL,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+          ),
+        ),
+        onPressed: viewModel.loginWithApple,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0),
+              child: _buildCircleIcon(AppAssets.appleIcon),
+            ),
+            const SizedBox(width: 55),
+            Text(
+              AppStrings.loginWithApple,
+              style: const TextStyle(color: AppColors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 Shared Circle Icon Builder
+  Widget _buildCircleIcon(String assetPath) {
+    return Container(
+      padding: EdgeInsets.all(AppDimensions.paddingS), // padding from constants
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primary, // background color for icon circle
+      ),
+      child: SvgPicture.asset(
+        assetPath,
+        height: AppDimensions.iconM, // icon size from constants
+        width: AppDimensions.iconM,
+      ),
+    );
+  }
   /// 🔹 Signup Text
   Widget _buildSignupText(WelcomeViewModel viewModel) {
     return GestureDetector(
       onTap: viewModel.goToSignup,
       child: const Center(
+        // <-- Center the text
         child: Text.rich(
           TextSpan(
             text: AppStrings.dontHaveAccount,
@@ -155,7 +223,8 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
               ),
             ],
           ),
-          textAlign: TextAlign.center,
+          textAlign:
+              TextAlign.center, // ensures text is centered inside its bounds
         ),
       ),
     );

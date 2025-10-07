@@ -7,8 +7,11 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
+
 import '../../../core/utils/backbutton.dart';
+
 import '../../../shared/widgets/responsive_widget.dart';
+
 import '../../../shared/extensions/context_extensions.dart';
 import 'upload_photos_view_model.dart';
 
@@ -20,56 +23,53 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
 
   @override
   Widget buildView(BuildContext context, UploadPhotosViewModel viewModel) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      extendBodyBehindAppBar: true, // 👈 allows background behind status bar
-      body: Stack(
-        children: [
-          /// 🔹 Background image covers whole screen, even status bar
-          const Positioned.fill(
-            child: Image(
-              image: AssetImage(AppAssets.addpic),
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          /// 🔹 Foreground content inside SafeArea
-          SafeArea(
-            child: ResponsiveContainer(
-              mobileMaxWidth: double.infinity,
-              tabletMaxWidth: 600,
-              desktopMaxWidth: 900,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth < 600
-                      ? 20
-                      : screenWidth < 900
-                      ? 40
-                      : 60,
-                  vertical: screenWidth < 600
-                      ? 25
-                      : screenWidth < 900
-                      ? 35
-                      : 50,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(context),
-                    const SizedBox(height: AppDimensions.paddingL),
-                    _buildTitleSection(context),
-                    const SizedBox(height: AppDimensions.paddingXL),
-                    Expanded(child: _buildImageContainer(context, viewModel)),
-                    const SizedBox(height: AppDimensions.paddingL),
-                    _buildActionButtons(context, viewModel),
-                  ],
-                ),
+    return SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+          ResponsiveContainer(
+          mobileMaxWidth: double.infinity,
+          tabletMaxWidth: 600,
+          desktopMaxWidth: 800,
+          child: Container(
+            padding:
+                context.isLargeScreen
+                    ? const EdgeInsets.symmetric(horizontal: 40, vertical: 40)
+                    : context.isMediumScreen
+                    ? const EdgeInsets.symmetric(horizontal: 30, vertical: 35)
+                    : const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppAssets.addpic),
+                fit: BoxFit.cover,
               ),
+             // borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header with back button
+                _buildHeader(context),
+                const SizedBox(height: AppDimensions.paddingL),
+
+                // Title and subtitle
+                _buildTitleSection(context),
+                const SizedBox(height: AppDimensions.paddingXL),
+
+                // Image container
+                Expanded(child: _buildImageContainer(context, viewModel)),
+
+                const SizedBox(height: AppDimensions.paddingL),
+
+                // Action buttons
+                _buildActionButtons(context, viewModel),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ]
+          ),
+    ),
     );
   }
 
@@ -78,14 +78,12 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
       children: [
         CustomBackButton(onTap: () => context.pop()),
         const SizedBox(width: AppDimensions.spaceS),
-        Flexible(
-          child: ResponsiveText(
-            AppStrings.uploadphoto,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
+        ResponsiveText(
+          AppStrings.uploadphoto,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primary,
           ),
         ),
       ],
@@ -100,17 +98,18 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
           AppStrings.picupload,
           style: const TextStyle(
             color: AppColors.primary,
-            fontSize: 28,
+            fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: AppDimensions.spaceM),
+        const SizedBox(height: AppDimensions.spaceS),
+
         ResponsiveText(
-          AppStrings.uploadSubtitle,
+          AppStrings.uploadsubtitle,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: AppColors.primary,
-            height: 1.5,
+            height: 1.4,
           ),
         ),
       ],
@@ -118,21 +117,13 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
   }
 
   Widget _buildImageContainer(
-      BuildContext context, UploadPhotosViewModel viewModel) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    double containerHeight;
-    if (screenWidth < 600) {
-      containerHeight = 430;
-    } else if (screenWidth < 900) {
-      containerHeight = 450;
-    } else {
-      containerHeight = 480;
-    }
-
+    BuildContext context,
+    UploadPhotosViewModel viewModel,
+  ) {
     return GestureDetector(
       onTap: () => _showImageSourceFullScreen(context, viewModel),
       child: Stack(
-        clipBehavior: Clip.none,
+        clipBehavior: Clip.none, // allow circle to be outside
         children: [
           Card(
             shape: RoundedRectangleBorder(
@@ -141,47 +132,52 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
             elevation: AppDimensions.elevationS,
             child: DottedBorder(
               color: AppColors.accent,
-              strokeWidth: 3,
+              strokeWidth: 4,
               borderType: BorderType.RRect,
-              radius: const Radius.circular(AppDimensions.radiusL),
-              dashPattern: const [10, 4],
+              radius: Radius.circular(AppDimensions.radiusL),
+              dashPattern: const [12, 3],
               child: Container(
                 width: double.infinity,
-                height: containerHeight,
+                height:
+                    490, // ✅ fixed height (same whether empty or with image)
                 decoration: BoxDecoration(
-                  color: AppColors.lightBlack,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                   color: AppColors.lightBlack,
+                   // 🔥 light layer background
+                  //color: Colors.black.withOpacity(0.9),
                 ),
-                child: viewModel.hasImage
-                    ? ClipRRect(
-                  borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusL),
-                  child: Image.file(
-                    File(viewModel.selectedImage!.path),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-                )
-                    : null,
+                child:
+                    viewModel.hasImage
+                        ? ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusL,
+                          ),
+                          child: Image.file(
+                            File(viewModel.selectedImage!.path),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        )
+                        : null, // no shrink, just background stays
               ),
             ),
           ),
+          // Plus circle outside (bottom right)
           Positioned(
-            bottom: -7,
+            bottom: -22,
             right: -22,
             child: Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(2), // border thickness
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primary, width: 3),
+                border: Border.all(
+                  color: AppColors.primary, // white border
+                  width: 3, // thickness
+                ),
                 color: AppColors.onPrimary,
               ),
-              child: const Icon(
-                Icons.add,
-                color: AppColors.primary,
-                size: 40,
-              ),
+              child: Icon(Icons.add, color: AppColors.primary, size: 55),
             ),
           ),
         ],
@@ -190,98 +186,102 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
   }
 
   Widget _buildActionButtons(
-      BuildContext context, UploadPhotosViewModel viewModel) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      switchInCurve: Curves.easeIn,
-      switchOutCurve: Curves.easeOut,
-      child: viewModel.hasImage
-          ? Column(
-        key: const ValueKey('nextButtonVisible'),
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: AppDimensions.buttonHeightXL,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.accent,
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.circular(AppDimensions.radiusXL),
-                ),
-              ),
-              onPressed: !viewModel.isLoading
-                  ? viewModel.continueToNext
-                  : null,
-              child: viewModel.isLoading
-                  ? const SizedBox(
-                width: AppDimensions.iconM,
-                height: AppDimensions.iconM,
-                child: CircularProgressIndicator(
-                  color: AppColors.primary,
-                  strokeWidth: 2,
-                ),
-              )
-                  : const Text(
-                AppStrings.next,
-                style: TextStyle(
-                  fontSize: AppDimensions.textXL,
-                  color: AppColors.onPrimary,
-                ),
+    BuildContext context,
+    UploadPhotosViewModel viewModel,
+  ) {
+    return Column(
+      children: [
+        // Next button
+        SizedBox(
+          width: double.infinity,
+          height: AppDimensions.buttonHeightXL,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  viewModel.hasImage ? AppColors.accent : AppColors.accent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
               ),
             ),
+            onPressed:
+                viewModel.hasImage && !viewModel.isLoading
+                    ? viewModel.continueToNext
+                    : null,
+            child:
+                viewModel.isLoading
+                    ? const SizedBox(
+                      width: AppDimensions.iconS,
+                      height: AppDimensions.iconS,
+                      child: CircularProgressIndicator(
+                        color: AppColors.onPrimary,
+                        strokeWidth: 2,
+                      ),
+                    )
+                    : const Text(
+                      AppStrings.next,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.onPrimary,
+                      ),
+                    ),
           ),
-          const SizedBox(height: AppDimensions.spaceM),
-        ],
-      )
-          : SizedBox(
-        key: const ValueKey('nextButtonHidden'),
-        height: AppDimensions.buttonHeightXL + AppDimensions.spaceM,
-      ),
+        ),
+
+        const SizedBox(height: AppDimensions.spaceM),
+
+        // Skip button
+      ],
     );
   }
 
-
   void _showImageSourceFullScreen(
-      BuildContext context,
-      UploadPhotosViewModel viewModel,
-      ) {
+    BuildContext context,
+    UploadPhotosViewModel viewModel,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => Scaffold(
-          body: SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isMobile = constraints.maxWidth < 600;
-
-                return Stack(
+        builder:
+            (_) => Scaffold(
+              body: SafeArea(
+                child: Stack(
                   children: [
+                    // ✅ Background image (PNG/JPG)
                     Positioned.fill(
                       child: Image.asset(
-                        AppAssets.uploadphoto,
+                        AppAssets.uploadphoto, // must be PNG/JPG
                         fit: BoxFit.cover,
                       ),
                     ),
                     Container(
                       color: Colors.black.withOpacity(0.5),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.4,
                     ),
-                    // Responsive app bar
+
+                    // ✅ Custom AppBar inside Stack
                     Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isMobile ? 12 : 24,
-                          vertical: isMobile ? 10 : 16,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
                         ),
-                        color: AppColors.primary,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(0),
+                          ),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            // Back Button
                             CustomBackButton(
                               onTap: () => Navigator.of(context).pop(),
                             ),
+
                             const Text(
                               AppStrings.selectsourse,
                               style: TextStyle(
@@ -290,87 +290,108 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                                 color: AppColors.onPrimary,
                               ),
                             ),
-                            const SizedBox(width: 48),
+
+                            const SizedBox(
+                              width: 48,
+                            ), // spacer to balance the back button
                           ],
                         ),
                       ),
                     ),
-                    // Foreground options
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: isMobile ? 120 : 160,
-                        left: isMobile ? 20 : 40,
-                        right: isMobile ? 20 : 40,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              await viewModel.pickImageFromCamera();
-                              Navigator.of(context).pop();
-                            },
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: AppColors.primary,
-                                  child: SvgPicture.asset(
-                                    AppAssets.camera,
-                                    width: AppDimensions.iconXXL,
-                                    height: AppDimensions.iconXXL,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                const Text(
-                                  AppStrings.camera,
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ],
-                            ),
+
+                    // ✅ Foreground content
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        double width = constraints.maxWidth;
+
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: width < 600 ? 20 : 40,
+                            vertical:
+                                width < 600
+                                    ? 80
+                                    : 100, // ⬅ leave space for custom appbar
                           ),
-                          const SizedBox(height: 20),
-                          const Divider(color: AppColors.accent, thickness: 1.5),
-                          const SizedBox(height: 20),
-                          GestureDetector(
-                            onTap: () async {
-                              await viewModel.pickImageFromGallery();
-                              Navigator.of(context).pop();
-                            },
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: AppColors.primary,
-                                  child: SvgPicture.asset(
-                                    AppAssets.gallary,
-                                    width: AppDimensions.iconXXL,
-                                    height: AppDimensions.iconXXL,
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 40),
+
+                              // 📸 Camera Option
+                              GestureDetector(
+                                onTap: () async {
+                                  await viewModel.pickImageFromCamera();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: AppColors.primary,
+                                      child: SvgPicture.asset(
+                                        AppAssets.camera,
+                                        width: AppDimensions.iconXXL,
+                                        height: AppDimensions.iconXXL,
+                                        // color: AppColors.onPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    const Text(
+                                      AppStrings.camera,
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 16),
-                                const Text(
-                                  AppStrings.gallery,
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.primary,
-                                  ),
+                              ),
+
+                              const SizedBox(height: 20),
+                              const Divider(
+                                color: AppColors.accent,
+                                thickness: 1.5,
+                              ),
+                              const SizedBox(height: 20),
+
+                              // 🖼️ Gallery Option
+                              GestureDetector(
+                                onTap: () async {
+                                  await viewModel.pickImageFromGallery();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: AppColors.primary,
+                                      child: SvgPicture.asset(
+                                        AppAssets.gallary,
+                                        width: AppDimensions.iconXXL,
+                                        height: AppDimensions.iconXXL,
+                                        // color: AppColors.onPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    const Text(
+                                      AppStrings.gallery,
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ],
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

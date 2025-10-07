@@ -29,10 +29,7 @@ class EventView extends BaseView<EventViewModel> {
     final pageController = viewModel.pageController;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppAssets.bottomsheet),
@@ -89,26 +86,24 @@ class EventView extends BaseView<EventViewModel> {
         const SizedBox(width: AppDimensions.paddingM),
         Expanded(
           child: Container(
-            height: AppDimensions.buttonHeightL,
+            height: AppDimensions.buttonHeightM,
             decoration: BoxDecoration(
               color: AppColors.onPrimary,
               borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             child: Row(
               children: [
                 const Icon(Icons.search, color: AppColors.primary, size: AppDimensions.iconM),
                 const SizedBox(width: AppDimensions.paddingS),
                 Expanded(
                   child: TextField(
-                    cursorColor: AppColors.primary,
                     decoration: const InputDecoration(
                       hintText: AppStrings.searchHint,
                       hintStyle: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: AppDimensions.textM,
-
                       ),
                       border: InputBorder.none,
                       isDense: true,
@@ -213,7 +208,7 @@ class EventView extends BaseView<EventViewModel> {
   Widget _titleHeadline(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingXXL, vertical: AppDimensions.paddingS),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
       decoration: BoxDecoration(
         color: AppColors.headlineBackground,
       ),

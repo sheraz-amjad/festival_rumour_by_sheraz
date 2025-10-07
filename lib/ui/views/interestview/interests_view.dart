@@ -22,8 +22,7 @@ class InterestsView extends BaseView<InterestsViewModel> {
   Widget buildView(BuildContext context, InterestsViewModel viewModel) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
+      body: SafeArea(
         child: ResponsiveContainer(
           mobileMaxWidth: double.infinity,
           tabletMaxWidth: double.infinity,
@@ -162,10 +161,10 @@ class InterestsView extends BaseView<InterestsViewModel> {
                 : null,
             child: viewModel.isLoading
                 ? const SizedBox(
-              width: AppDimensions.iconM,
-              height: AppDimensions.iconM,
+              width: AppDimensions.iconS,
+              height: AppDimensions.iconS,
               child: CircularProgressIndicator(
-                color: AppColors.primary,
+                color: AppColors.onPrimary,
                 strokeWidth: AppDimensions.loadingIndicatorStrokeWidth,
               ),
             )

@@ -24,64 +24,42 @@ class LoginButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: AppDimensions.loginButtonHeight,
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
-            borderRadius:
-            BorderRadius.circular(AppDimensions.loginButtonBorderRadius),
+            borderRadius: BorderRadius.circular(AppDimensions.loginButtonBorderRadius),
           ),
           elevation: 2,
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.loginButtonPadding),
         ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // 🔹 Centered Text
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: AppDimensions.loginButtonFontSize,
-              ),
-            ),
-
-            // 🔹 Left Circular Icon
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding:
-                const EdgeInsets.only(left: AppDimensions.loginButtonPadding),
-                child: _buildCircularIcon(),
-              ),
-            ),
-          ],
+        icon: _buildIcon(),
+        label: Text(
+          text,
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: AppDimensions.loginButtonFontSize,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildCircularIcon() {
-    final double iconSize = AppDimensions.loginButtonIconSize;
-
+  Widget _buildIcon() {
     return Container(
-      height: iconSize + 10,
-      width: iconSize + 10,
-      decoration: BoxDecoration(
-        color: Colors.white, // background color for circle
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white, // white border
-          width: 1.5,
-        ),
-      ),
-      child: Center(
-        child: iconPath.endsWith(".svg")
-            ? SvgPicture.asset(iconPath, height: iconSize, width: iconSize)
-            : Image.asset(iconPath, height: iconSize, width: iconSize),
+      padding: const EdgeInsets.all(AppDimensions.loginButtonIconPadding),
+      child: iconPath.endsWith(".svg")
+          ? SvgPicture.asset(
+        iconPath,
+        height: AppDimensions.loginButtonIconSize,
+        width: AppDimensions.loginButtonIconSize,
+      )
+          : Image.asset(
+        iconPath,
+        height: AppDimensions.loginButtonIconSize,
+        width: AppDimensions.loginButtonIconSize,
       ),
     );
   }
