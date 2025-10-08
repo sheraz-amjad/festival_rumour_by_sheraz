@@ -8,6 +8,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../core/utils/snackbar_util.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 
 class WelcomeView extends BaseView<WelcomeViewModel> {
@@ -105,13 +106,9 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
           ),
         ),
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('🔧 Google login is under development'),
-              backgroundColor: AppColors.onPrimary,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
-            ),
+          SnackbarUtil.showDevelopmentSnackBar(
+            context,
+            '🔧 Google login is under development',
           );
         },
         child: Row(
@@ -178,13 +175,9 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
           ),
         ),
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('🍎 Apple login is under development'),
-              backgroundColor: AppColors.onPrimary,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
-            ),
+          SnackbarUtil.showDevelopmentSnackBar(
+            context,
+            '🍎 Apple login is under development',
           );
         },
         child: Row(

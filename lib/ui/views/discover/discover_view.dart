@@ -9,6 +9,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../core/utils/snackbar_util.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 
 import '../homeview/home_viewmodel.dart';
@@ -30,9 +31,10 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
 
     return WillPopScope(
       onWillPop: () async {
+        print("🔙 Discover screen back button pressed");
         if (onBack != null) {
-          onBack!(); // navigate to home tab
-          return false; // prevent default back navigation
+          onBack!(); // Navigate to home tab
+          return false; // Prevent default back behavior
         }
         return true;
       },
@@ -67,10 +69,34 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                                 fontSize: AppDimensions.textXL),
                           ),
                           Row(
-                            children: const [
-                              Icon(Icons.favorite_border, color: AppColors.primary),
-                              SizedBox(width: AppDimensions.spaceM),
-                              Icon(Icons.ios_share_sharp, color: AppColors.primary),
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  viewModel.toggleFavorite();
+                                  // Show feedback snackbar
+                                  if (viewModel.isFavorited) {
+                                    SnackbarUtil.showSuccessSnackBar(
+                                      context,
+                                      '❤️ Added to favorites!',
+                                    );
+                                  } else {
+                                    SnackbarUtil.showInfoSnackBar(
+                                      context,
+                                      '💔 Removed from favorites',
+                                    );
+                                  }
+                                },
+                                child: Icon(
+                                  viewModel.isFavorited 
+                                    ? Icons.favorite 
+                                    : Icons.favorite_border,
+                                  color: viewModel.isFavorited 
+                                    ? Colors.red 
+                                    : AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: AppDimensions.spaceM),
+                              const Icon(Icons.ios_share_sharp, color: AppColors.primary),
                             ],
                           ),
                         ],

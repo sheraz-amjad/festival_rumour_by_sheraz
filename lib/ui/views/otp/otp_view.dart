@@ -99,6 +99,7 @@ class OtpView extends BaseView<OtpViewModel> {
     return PinCodeTextField(
       appContext: context,
       length: 4,
+      focusNode: viewModel.otpFocus,
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       animationType: AnimationType.fade,
@@ -123,7 +124,11 @@ class OtpView extends BaseView<OtpViewModel> {
       animationDuration: const Duration(milliseconds: 200),
       enableActiveFill: true,
       onChanged: viewModel.onCodeChanged,
-      onCompleted: (_) => viewModel.verifyCode(),
+      onCompleted: (_) {
+        // Dismiss keyboard when OTP is completed
+        viewModel.unfocusOtpField();
+        viewModel.verifyCode();
+      },
     );
   }
 
@@ -139,7 +144,11 @@ class OtpView extends BaseView<OtpViewModel> {
           ),
         ),
         onPressed: (viewModel.isOtpValid && !viewModel.isLoading)
-            ? viewModel.verifyCode
+            ? () {
+                // Dismiss keyboard when continue is clicked
+                viewModel.unfocusOtpField();
+                viewModel.verifyCode();
+              }
             : null,
         child: viewModel.isLoading
             ? const SizedBox(

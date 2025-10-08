@@ -20,7 +20,16 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        print("🔙 Profile screen back button pressed");
+        if (widget.onBack != null) {
+          widget.onBack!(); // Navigate to home tab
+          return false; // Prevent default back behavior
+        }
+        return true;
+      },
+      child: Scaffold(
       body: Stack(
         children: [
 
@@ -66,6 +75,7 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

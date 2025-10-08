@@ -41,10 +41,9 @@ class CustomNavBar extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   color: selected
-                      ? Colors.transparent
+                      ? AppColors.black.withOpacity(0.1) // Light black highlight for selected
                       : Colors.transparent,
-                  border: Border(
-                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -52,20 +51,21 @@ class CustomNavBar extends StatelessWidget {
                     Icon(
                       item["icon"] as IconData,
                       color: selected
-                          ? AppColors.onPrimary
-                          : AppColors.onSurfaceVariant,
-                      size: iconSize,
+                          ? AppColors.black // Black for selected
+                          : AppColors.lightBlack, // Light black for unselected
+                      size: selected ? iconSize + 2 : iconSize, // Slightly larger for selected
                     ),
                     const SizedBox(height: 4),
                     Text(
                       item["label"] as String,
                       style: TextStyle(
                         color: selected
-                            ? AppColors.onPrimary
-                            : AppColors.onSurface,
-                        fontWeight:
-                        selected ? FontWeight.bold : FontWeight.w500,
-                        fontSize: 12,
+                            ? AppColors.black // Black for selected
+                            : AppColors.lightBlack, // Light black for unselected
+                        fontWeight: selected 
+                            ? FontWeight.bold 
+                            : FontWeight.w400, // Lighter weight for unselected
+                        fontSize: selected ? 12 : 11, // Slightly smaller for unselected
                       ),
                     ),
                   ],

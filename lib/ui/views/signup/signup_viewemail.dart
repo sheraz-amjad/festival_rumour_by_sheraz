@@ -102,6 +102,8 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.emailController,
+      focusNode: viewModel.emailFocus,
+      autofocus: true, // Auto-focus on first field
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
         labelText: AppStrings.emailLabel,
@@ -124,6 +126,14 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       keyboardType: TextInputType.emailAddress,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.next,
+      onSubmitted: (_) => viewModel.handleEmailSubmitted(),
+      onChanged: (value) {
+        // Clear error when user starts typing
+        if (viewModel.emailError != null) {
+          viewModel.emailError = null;
+          viewModel.notifyListeners();
+        }
+      },
     );
   }
 
@@ -132,6 +142,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.passwordController,
+      focusNode: viewModel.passwordFocus,
       obscureText: !viewModel.isPasswordVisible, // 👁️ toggle state
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
@@ -161,8 +172,17 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           onPressed: viewModel.togglePasswordVisibility,
         ),
       ),
+      keyboardType: TextInputType.visiblePassword,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.next,
+      onSubmitted: (_) => viewModel.handlePasswordSubmitted(),
+      onChanged: (value) {
+        // Clear error when user starts typing
+        if (viewModel.passwordError != null) {
+          viewModel.passwordError = null;
+          viewModel.notifyListeners();
+        }
+      },
     );
   }
 
@@ -171,6 +191,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.confirmPasswordController,
+      focusNode: viewModel.confirmPasswordFocus,
       obscureText: !viewModel.isConfirmPasswordVisible, // 👁️ toggle state
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
@@ -200,8 +221,17 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           onPressed: viewModel.toggleConfirmPasswordVisibility,
         ),
       ),
+      keyboardType: TextInputType.visiblePassword,
       cursorColor: AppColors.primary,
       textInputAction: TextInputAction.done,
+      onSubmitted: (_) => viewModel.handleConfirmPasswordSubmitted(),
+      onChanged: (value) {
+        // Clear error when user starts typing
+        if (viewModel.confirmPasswordError != null) {
+          viewModel.confirmPasswordError = null;
+          viewModel.notifyListeners();
+        }
+      },
     );
   }
 
@@ -221,7 +251,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
         onPressed: viewModel.isLoading
             ? null
             : () {
-          FocusScope.of(context).unfocus();
+          viewModel.unfocusAll(); // Use viewModel method instead of FocusScope
           viewModel.goToOtp();
         },
         child: viewModel.isLoading

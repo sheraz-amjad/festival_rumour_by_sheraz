@@ -15,6 +15,15 @@ class SignupViewEmailModel extends BaseViewModel {
   String? passwordError;
   String? confirmPasswordError;
 
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _confirmPasswordFocus = FocusNode();
+
+  // Focus node getters
+  FocusNode get emailFocus => _emailFocus;
+  FocusNode get passwordFocus => _passwordFocus;
+  FocusNode get confirmPasswordFocus => _confirmPasswordFocus;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   bool isPasswordVisible = false;
@@ -80,6 +89,84 @@ class SignupViewEmailModel extends BaseViewModel {
     notifyListeners();
   }
 
+  /// Focus management methods
+  void focusEmail() {
+    _emailFocus.requestFocus();
+  }
+
+  void focusPassword() {
+    _passwordFocus.requestFocus();
+  }
+
+  void focusConfirmPassword() {
+    _confirmPasswordFocus.requestFocus();
+  }
+
+  void unfocusAll() {
+    _emailFocus.unfocus();
+    _passwordFocus.unfocus();
+    _confirmPasswordFocus.unfocus();
+  }
+
+  /// Handle text input actions
+  void handleEmailSubmitted() {
+    if (emailController.text.trim().isNotEmpty) {
+      focusPassword();
+    } else {
+      // If email is empty, show error and keep focus
+      emailError = "*Email is required";
+      notifyListeners();
+    }
+  }
+
+  void handlePasswordSubmitted() {
+    if (passwordController.text.isNotEmpty) {
+      focusConfirmPassword();
+    } else {
+      // If password is empty, show error and keep focus
+      passwordError = "*Password is required";
+      notifyListeners();
+    }
+  }
+
+  void handleConfirmPasswordSubmitted() {
+    if (confirmPasswordController.text.isNotEmpty) {
+      // Validate before submitting
+      if (validateFields()) {
+        goToOtp();
+      } else {
+        // If validation fails, focus on the first field with error
+        if (emailError != null) {
+          focusEmail();
+        } else if (passwordError != null) {
+          focusPassword();
+        } else if (confirmPasswordError != null) {
+          focusConfirmPassword();
+        }
+      }
+    } else {
+      // If confirm password is empty, show error and keep focus
+      confirmPasswordError = "*Please confirm your password";
+      notifyListeners();
+    }
+  }
+
+  /// Enhanced focus management with validation
+  void focusNextField() {
+    if (emailController.text.trim().isEmpty) {
+      focusEmail();
+    } else if (passwordController.text.isEmpty) {
+      focusPassword();
+    } else if (confirmPasswordController.text.isEmpty) {
+      focusConfirmPassword();
+    } else {
+      // All fields have content, validate and submit
+      if (validateFields()) {
+        goToOtp();
+      }
+    }
+  }
+
   /// ✅ Navigate if valid
   Future<void> goToOtp() async {
     if (!validateFields()) return;
@@ -89,5 +176,18 @@ class SignupViewEmailModel extends BaseViewModel {
     setLoading(false);
 
     _navigationService.navigateTo(AppRoutes.signup);
+  }
+
+  @override
+  void onDispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmPasswordFocus.dispose();
+
+    super.onDispose();
   }
 }

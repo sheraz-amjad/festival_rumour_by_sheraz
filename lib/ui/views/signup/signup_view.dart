@@ -144,6 +144,8 @@ class SignupView extends BaseView<SignupViewModel> {
         Expanded(
           child: TextField(
             controller: viewModel.phoneNumberController,
+            focusNode: viewModel.phoneFocus,
+            autofocus: true, // Auto-focus on first field
             style: const TextStyle(color: AppColors.white),
             decoration: InputDecoration(
               hintText: AppStrings.phoneHint,
@@ -163,7 +165,16 @@ class SignupView extends BaseView<SignupViewModel> {
             ),
             keyboardType: TextInputType.phone,
             cursorColor: AppColors.white,
-            onChanged: (_) => viewModel.validatePhone(),
+            textInputAction: TextInputAction.done,
+            onChanged: (value) {
+              viewModel.validatePhone();
+              // Clear error when user starts typing
+              if (viewModel.phoneNumberError != null) {
+                viewModel.phoneNumberError = null;
+                viewModel.notifyListeners();
+              }
+            },
+            onSubmitted: (_) => viewModel.goToOtp(),
           ),
         ),
       ],

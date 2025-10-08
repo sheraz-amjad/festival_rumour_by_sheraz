@@ -89,6 +89,8 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
 
   Widget _buildNameInput(BuildContext context, FirstNameViewModel viewModel) {
     return TextField(
+      focusNode: viewModel.nameFocus,
+      autofocus: true, // Auto-focus on first field
       decoration: InputDecoration(
         hintText: AppStrings.firstNameHint,
         hintStyle: const TextStyle(color: AppColors.grey400),
@@ -105,10 +107,18 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
         ),
       ),
       style: const TextStyle(color: AppColors.primary),
-      onChanged: viewModel.onNameChanged,
+      keyboardType: TextInputType.name,
+      cursorColor: AppColors.primary,
       textInputAction: TextInputAction.done,
+      onChanged: (value) {
+        viewModel.onNameChanged(value);
+        // Clear error when user starts typing
+        if (viewModel.nameError != null) {
+        //  viewModel.nameError = null;
+          viewModel.notifyListeners();
+        }
+      },
       onSubmitted: (_) {
-        FocusScope.of(context).unfocus();
         if (viewModel.isNameEntered && viewModel.nameError == null) {
           viewModel.onNextPressed();
         }
@@ -131,7 +141,6 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
         ),
         onPressed: viewModel.isNameEntered && !viewModel.isLoading
             ? () {
-          FocusScope.of(context).unfocus();
           viewModel.onNextPressed();
         }
             : null,
@@ -174,103 +183,113 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
     );
   }
 
-  Widget _buildWelcomeDialog(BuildContext context,
-      FirstNameViewModel viewModel) {
-    return Center(
-      child: ResponsiveContainer(
-        mobileMaxWidth: double.infinity,
-        tabletMaxWidth: double.infinity,
-        desktopMaxWidth: double.infinity,
-        child: Container(
-          margin: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.paddingL),
-          padding: const EdgeInsets.all(AppDimensions.paddingM),
-          decoration: BoxDecoration(
-            color: AppColors.onPrimary,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
+  Widget _buildWelcomeDialog(BuildContext context, FirstNameViewModel viewModel) {
+    return Stack(
+      children: [
+        // 🟤 Fullscreen black overlay
+        Container(
+          color: Colors.black54, // translucent background layer
+          width: double.infinity,
+          height: double.infinity,
+        ),
+
+        // 🟢 Centered dialog
+        Center(
+          child: ResponsiveContainer(
+            mobileMaxWidth: double.infinity,
+            tabletMaxWidth: double.infinity,
+            desktopMaxWidth: double.infinity,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
+              padding: const EdgeInsets.all(AppDimensions.paddingM),
+              decoration: BoxDecoration(
+                color: AppColors.onPrimary,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  const Text(
-                      "👋", style: TextStyle(fontSize: AppDimensions.textXXL)),
-                  const SizedBox(height: AppDimensions.spaceS),
-                  ResponsiveText(
-                    "${AppStrings.welcome} ${viewModel.firstName}",
-                    style: const TextStyle(
-                      fontSize: AppDimensions.textL,
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppDimensions.spaceS),
-                  const ResponsiveText(
-                    AppStrings.welcomeInfo,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.primary),
-                  ),
-                  const SizedBox(height: AppDimensions.paddingL),
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(
-                        width: AppDimensions.buttonWidth,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.accent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusXL),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: AppDimensions.paddingM,
-                            ),
-                          ),
-                          onPressed: viewModel.continueToNext,
-                          child: const Text(
-                            AppStrings.letsGo,
-                            style: TextStyle(color: AppColors.onPrimary),
-                          ),
+                      const Text("👋", style: TextStyle(fontSize: AppDimensions.textXXL)),
+                      const SizedBox(height: AppDimensions.spaceS),
+                      ResponsiveText(
+                        "${AppStrings.welcome} ${viewModel.firstName}",
+                        style: const TextStyle(
+                          fontSize: AppDimensions.textL,
+                          color: AppColors.accent,
+                          fontWeight: FontWeight.bold,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: AppDimensions.spaceS),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            elevation: 0,
+                      const ResponsiveText(
+                        AppStrings.welcomeInfo,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: AppColors.primary),
+                      ),
+                      const SizedBox(height: AppDimensions.paddingL),
+
+                      // Buttons
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: AppDimensions.buttonWidth,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.accent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: AppDimensions.paddingM,
+                                ),
+                              ),
+                              onPressed: viewModel.continueToNext,
+                              child: const Text(
+                                AppStrings.letsGo,
+                                style: TextStyle(color: AppColors.onPrimary),
+                              ),
+                            ),
                           ),
-                          onPressed: viewModel.onEditName,
-                          child: const Text(
-                            AppStrings.editName,
-                            style: TextStyle(color: AppColors.accent),
+                          const SizedBox(height: AppDimensions.spaceS),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
+                              ),
+                              onPressed: viewModel.onEditName,
+                              child: const Text(
+                                AppStrings.editName,
+                                style: TextStyle(color: AppColors.accent),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
-                  )
+                  ),
+
+                  // Positioned welcome image
+                  Positioned(
+                    bottom: -8,
+                    right: -8,
+                    child: Image.asset(
+                      AppAssets.welcomeback,
+                      height: 85,
+                      width: 100,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ],
               ),
-
-              // Positioned welcome image
-              Positioned(
-                bottom: -8,
-                right: -8,
-                child: Image.asset(
-                  AppAssets.welcomeback,
-                  height: 85,
-                  width: 100,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

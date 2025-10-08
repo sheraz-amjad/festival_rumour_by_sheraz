@@ -223,7 +223,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
           : null,
       trailing: Switch(
         value: value,
-        activeColor: AppColors.primary,
+        activeColor: Colors.black,
         onChanged: onChanged,
       ),
     );

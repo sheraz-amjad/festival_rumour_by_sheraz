@@ -27,34 +27,32 @@ class HomeView extends BaseView<HomeViewModel> {
 
   @override
   Widget buildView(BuildContext context, HomeViewModel viewModel) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.transparent, // makes background image visible
-        body: Stack(
-          children: [
-            // Background Image
-            Positioned.fill(
-              child: Image.asset(
-                AppAssets.bottomsheet, // from your constants
-                fit: BoxFit.cover,
-              ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          // Background Image - Full screen coverage
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.bottomsheet,
+              fit: BoxFit.cover,
             ),
+          ),
 
-            // Main Content
-            SafeArea(
-              child: Column(
-                children: [
-                  _buildAppBar(context, viewModel),
-                  _buildSearchBar(context),
-                  const SizedBox(height: AppDimensions.spaceS),
-                  Expanded(
-                    child: _buildFeedList(context, viewModel),
-                  ),
-                ],
-              ),
+          // Main Content
+          SafeArea(
+            child: Column(
+              children: [
+                _buildAppBar(context, viewModel),
+                _buildSearchBar(context),
+                const SizedBox(height: AppDimensions.spaceS),
+                Expanded(
+                  child: _buildFeedList(context, viewModel),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -118,6 +118,7 @@ dependencies:
 
   # Country Code Picker
   country_code_picker: ^3.0.0
+  change_app_package_name: ^1.5.0
 
 dev_dependencies:
   flutter_test:
@@ -137,7 +138,6 @@ dev_dependencies:
   
   # App Icon Generator
   flutter_launcher_icons: ^0.14.4
-  change_app_package_name: ^1.5.0
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

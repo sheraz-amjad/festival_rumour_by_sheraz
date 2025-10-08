@@ -1,4 +1,4 @@
-package com.example.festival_rumour;
+package com.festival_rumour;
 
 import io.flutter.embedding.android.FlutterActivity;
 

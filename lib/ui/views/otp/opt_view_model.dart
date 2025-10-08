@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -10,18 +11,55 @@ class OtpViewModel extends BaseViewModel {
   String _otpCode = "";
   String? _errorText;
   bool _isLoading = false;
+  final FocusNode _otpFocus = FocusNode();
+  bool _isFocusChanging = false;
 
   String get otpCode => _otpCode;
   String? get errorText => _errorText;
   bool get isLoading => _isLoading;
+  FocusNode get otpFocus => _otpFocus;
 
   bool get isOtpValid => _otpCode.length == 4;
+
+  /// Auto-focus OTP field when screen loads
+  void focusOtpField() {
+    if (!_isFocusChanging && !_otpFocus.hasFocus) {
+      _isFocusChanging = true;
+      _otpFocus.requestFocus();
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _isFocusChanging = false;
+      });
+    }
+  }
+
+  /// Unfocus OTP field
+  void unfocusOtpField() {
+    if (!_isFocusChanging && _otpFocus.hasFocus) {
+      _isFocusChanging = true;
+      _otpFocus.unfocus();
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _isFocusChanging = false;
+      });
+    }
+  }
+
+  @override
+  void init() {
+    super.init();
+    // Auto-focus OTP field when screen loads (only once)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_otpFocus.hasFocus) {
+        focusOtpField();
+      }
+    });
+  }
 
   /// 🔹 Called when OTP input changes
   void onCodeChanged(String value) {
     _otpCode = value;
     if (value.length == 4) {
       _errorText = null;
+      // Don't change focus here - let onCompleted handle it
     } else {
       _errorText = null; // clear any old error when typing
     }
@@ -43,14 +81,8 @@ class OtpViewModel extends BaseViewModel {
       // Simulate verification delay
       await Future.delayed(const Duration(seconds: 2));
 
-      // Example check
-      if (_otpCode != "1234") {
-        _errorText = AppStrings.otpMismatch;
-        _isLoading = false;
-        notifyListeners();
-        return;
-      }
-
+      // TODO: Replace with actual OTP verification API call
+      // For now, accept any 4-digit OTP
       _errorText = null;
       _isLoading = false;
       notifyListeners();
@@ -70,5 +102,11 @@ class OtpViewModel extends BaseViewModel {
       _isLoading = false;
       notifyListeners();
     }, errorMessage: AppStrings.resendCodeError);
+  }
+
+  @override
+  void onDispose() {
+    _otpFocus.dispose();
+    super.onDispose();
   }
 }

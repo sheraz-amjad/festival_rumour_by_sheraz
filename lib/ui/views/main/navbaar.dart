@@ -14,31 +14,11 @@ class NavBaar extends BaseView<NavBaarViewModel> {
 
   @override
   Widget buildView(BuildContext context, NavBaarViewModel viewModel) {
-    return WillPopScope(
-      onWillPop: () async {
-        final navigator = Navigator.of(context);
-
-        // Case 1: If can pop a route inside current tab
-        if (navigator.canPop()) {
-          navigator.pop();
-          return false;
-        }
-
-        // Case 2: If not on home tab, go to home tab instead
-        if (viewModel.currentIndex != 0) {
-          viewModel.setIndex(0);
-          return false;
-        }
-
-        // Case 3: Already on home tab, prevent exit
-        return false;
-      },
-      child: Scaffold(
-        body: _buildBody(viewModel),
-        bottomNavigationBar: CustomNavBar(
-          currentIndex: viewModel.currentIndex,
-          onTap: viewModel.setIndex,
-        ),
+    return Scaffold(
+      body: _buildBody(viewModel),
+      bottomNavigationBar: CustomNavBar(
+        currentIndex: viewModel.currentIndex,
+        onTap: viewModel.setIndex,
       ),
     );
   }

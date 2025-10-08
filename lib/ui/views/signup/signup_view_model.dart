@@ -10,6 +10,7 @@ class SignupViewModel extends BaseViewModel {
 
   /// 🔹 Controllers
   final TextEditingController phoneNumberController = TextEditingController();
+  final FocusNode _phoneFocus = FocusNode();
 
   /// 🔹 Validation error
   String? phoneNumberError;
@@ -18,9 +19,30 @@ class SignupViewModel extends BaseViewModel {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  /// Focus node getter
+  FocusNode get phoneFocus => _phoneFocus;
+
   void setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
+  }
+
+  /// Focus management methods
+  void focusPhone() {
+    _phoneFocus.requestFocus();
+  }
+
+  void unfocusPhone() {
+    _phoneFocus.unfocus();
+  }
+
+  @override
+  void init() {
+    super.init();
+    // Auto-focus phone field when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusPhone();
+    });
   }
 
   /// 🔹 Validate phone number
@@ -43,10 +65,20 @@ class SignupViewModel extends BaseViewModel {
   Future<void> goToOtp() async {
     if (!validatePhone()) return; // Stop if invalid
 
+    // Dismiss keyboard when continue is clicked
+    unfocusPhone();
+
     setLoading(true);
     await Future.delayed(const Duration(seconds: 1));
     setLoading(false);
 
     _navigationService.navigateTo(AppRoutes.otp);
+  }
+
+  @override
+  void onDispose() {
+    phoneNumberController.dispose();
+    _phoneFocus.dispose();
+    super.onDispose();
   }
 }

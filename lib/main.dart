@@ -43,17 +43,11 @@ class FestivalRumourApp extends StatelessWidget {
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       
-      // Theme Configuration
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+
       
       // Routing Configuration
       initialRoute: AppRoutes.splash,
       onGenerateRoute: onGenerateRoute,
-      
-
-
       
       // Navigation Configuration
       navigatorKey: locator<NavigationService>().navigatorKey,

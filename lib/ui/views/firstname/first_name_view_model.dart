@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -18,6 +19,28 @@ class FirstNameViewModel extends BaseViewModel {
   bool _showWelcome = false;
   bool get showWelcome => _showWelcome;
 
+  // Focus management
+  final FocusNode _nameFocus = FocusNode();
+  FocusNode get nameFocus => _nameFocus;
+
+  /// Focus management methods
+  void focusName() {
+    _nameFocus.requestFocus();
+  }
+
+  void unfocusName() {
+    _nameFocus.unfocus();
+  }
+
+  @override
+  void init() {
+    super.init();
+    // Auto-focus name field when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      focusName();
+    });
+  }
+
   /// ✅ Validate name on change
   void onNameChanged(String value) {
     _firstName = value;
@@ -35,6 +58,9 @@ class FirstNameViewModel extends BaseViewModel {
 
   Future<void> onNextPressed() async {
     if (_nameError != null || _firstName.trim().isEmpty) return;
+
+    // Dismiss keyboard when next is pressed
+    unfocusName();
 
     await handleAsync(() async {
       await Future.delayed(const Duration(seconds: 1));
@@ -58,5 +84,11 @@ class FirstNameViewModel extends BaseViewModel {
 
   void goBack() {
     _navigationService.pop();
+  }
+
+  @override
+  void onDispose() {
+    _nameFocus.dispose();
+    super.onDispose();
   }
 }

@@ -1,9 +1,15 @@
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/router/app_router.dart';
+import '../../../core/services/navigation_service.dart';
+import '../../../core/di/locator.dart';
 
 class SettingsViewModel extends BaseViewModel {
   /// 🔹 Switch states
   bool notifications = true;
   bool privacy = false;
+
+  /// 🔹 Navigation service
+  final NavigationService _navigationService = locator<NavigationService>();
 
   /// 🔹 Toggle methods
   void toggleNotifications(bool value) {
@@ -54,6 +60,6 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   void goToSubscription() {
-    // TODO: Navigate to Edit Account Details screen
+    _navigationService.navigateTo(AppRoutes.subscription);
   }
 }
