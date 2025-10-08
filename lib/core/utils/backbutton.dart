@@ -12,7 +12,7 @@ class CustomBackButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(6),
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Color(0xFFEFEFEF), // light gray circle background
@@ -20,7 +20,7 @@ class CustomBackButton extends StatelessWidget {
         child: const Icon(
           Icons.arrow_back,
           color: AppColors.onPrimary,
-          size: 25,
+          size: 22,
         ),
       ),
     );

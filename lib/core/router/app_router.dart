@@ -1,18 +1,20 @@
 import 'package:festival_rumour/ui/views/homeview/post_model.dart';
 import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
+import '../../ui/views/ProfileView/profile_list_view.dart';
 import '../../ui/views/Splash/SplashView.dart';
 import '../../ui/views/comment/comment_view.dart';
 import '../../ui/views/eventscreen/event_view.dart';
 import '../../ui/views/firstname/first_name_view.dart';
 import '../../ui/views/homeview/home_view.dart';
 import '../../ui/views/interestview/interests_view.dart';
+import '../../ui/views/job/festivals_job_view.dart';
+import '../../ui/views/main/navbaar.dart';
 import '../../ui/views/otp/otp_view.dart';
 import '../../ui/views/uploadphotos/upload_photos_view.dart';
 import '../../ui/views/welcome/welcome_view.dart';
 import '../../ui/views/signup/signup_view.dart';
 import '../../ui/views/signup/signup_viewemail.dart';
-import '../../ui/views/main/nav_view.dart';
 import '../../ui/views/chat/chat_list_view.dart';
 import '../../ui/views/tickets/tickets_view.dart';
 import '../../ui/views/map/map_view.dart';
@@ -37,7 +39,7 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String interest = '/interest';
   static const String home = '/home';
-  static const String main = '/main';
+  static const String navview = '/navbaar';
   static const String event = '/event';
   static const String subscription = '/subscription';
   static const String chatList = '/chat_list';
@@ -53,6 +55,9 @@ class AppRoutes {
   static const String leaderboard = '/leaderboard';
   static const String comments = '/comments';
   static const String username = '/username';
+  static const String profileList = '/profile_list';
+  static const String festivalsJob = '/festivals_job';
+
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -89,8 +94,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.home:
       return SmoothPageRoute(page: const HomeView());
 
-    case AppRoutes.main:
-      return SmoothPageRoute(page: const NavView());
+    case AppRoutes.navview:
+      return SmoothPageRoute(page: const NavBaar());
 
     case AppRoutes.subscription:
       return SmoothPageRoute(page: const SubscriptionView());
@@ -134,6 +139,13 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
       case AppRoutes.username:
         return SmoothPageRoute(page: const UsernameView());
+        case AppRoutes.festivalsJob:
+      return SmoothPageRoute(page: const FestivalsJobView());
+
+    case AppRoutes.profileList:
+      final args = settings.arguments as int? ?? 0;
+      return SmoothPageRoute(page: ProfileListView(initialTab: args,username: 'username',));
+
 
     default:
       return MaterialPageRoute(

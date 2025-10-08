@@ -17,6 +17,8 @@ class SignupViewEmailModel extends BaseViewModel {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
   void setLoading(bool value) {
     _isLoading = value;
@@ -58,7 +60,7 @@ class SignupViewEmailModel extends BaseViewModel {
       confirmPasswordError = "*Please confirm your password";
       isValid = false;
     } else if (password != confirmPassword) {
-      confirmPasswordError = "*Passwords do not match";
+      confirmPasswordError = "*Passwords did not match";
       isValid = false;
     } else {
       confirmPasswordError = null;
@@ -66,6 +68,16 @@ class SignupViewEmailModel extends BaseViewModel {
 
     notifyListeners();
     return isValid;
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible = !isPasswordVisible;
+    notifyListeners();
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordVisible = !isConfirmPasswordVisible;
+    notifyListeners();
   }
 
   /// ✅ Navigate if valid

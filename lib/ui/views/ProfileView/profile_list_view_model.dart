@@ -5,23 +5,41 @@ import '../../../core/constants/app_assets.dart';
 class ProfileListViewModel extends BaseViewModel {
   int _currentTab = 0;
   bool _showingList = false;
+  String _searchQuery = '';
 
   // Mock data - replace with actual data from repositories
-  final List<Map<String, String>> _followers = [
-    {'name': 'John Doe', 'username': '@johndoe', 'avatar': AppAssets.profile},
-    {'name': 'Jane Smith', 'username': '@janesmith', 'avatar': AppAssets.profile},
+  final List<Map<String, String>> _allFollowers = [
+    {'name': 'John Doe', 'username': 'johndoe', 'image': AppAssets.profile},
+    {'name': 'Jane Smith', 'username': 'janesmith', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
   ];
 
-  final List<Map<String, String>> _following = [
-    {'name': 'Mike Johnson', 'username': '@mikej', 'avatar': AppAssets.profile},
-    {'name': 'Sarah Wilson', 'username': '@sarahw', 'avatar': AppAssets.profile},
+  final List<Map<String, String>> _allFollowing = [
+    {'name': 'Mike Johnson', 'username': 'mikej', 'image': AppAssets.profile},
+    {'name': 'Sarah Wilson', 'username': 'sarahw', 'image': AppAssets.profile},
+    {'name': 'Ayesha Noor', 'username': 'ayeshan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+
   ];
 
-  final List<Map<String, String>> _festivals = [
+  final List<Map<String, String>> _allFestivals = [
     {'title': 'Coachella 2024', 'location': 'California'},
     {'title': 'Glastonbury', 'location': 'UK'},
     {'title': 'Burning Man', 'location': 'Nevada'},
+    {'title': 'Burning Man', 'location': 'Nevada'},
+    {'title': 'Burning Man', 'location': 'Nevada'},
   ];
+
+  // Filtered lists (used for search)
+  List<Map<String, String>> _followers = [];
+  List<Map<String, String>> _following = [];
+  List<Map<String, String>> _festivals = [];
 
   /// Current selected tab index
   int get currentTab => _currentTab;
@@ -56,6 +74,7 @@ class ProfileListViewModel extends BaseViewModel {
   void setTab(int tab) {
     if (_currentTab != tab) {
       _currentTab = tab;
+      _applySearchFilter();
       notifyListeners();
     }
   }
@@ -72,15 +91,59 @@ class ProfileListViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  /// Unfollow a user
+  /// 🔹 Unfollow a user
   void unfollowUser(Map<String, String> user) {
     _following.removeWhere((item) => item['username'] == user['username']);
     notifyListeners();
   }
 
+  /// 🔹 Refresh List (Reset search + reload all data)
+  void refreshList() {
+    _searchQuery = '';
+    _followers = List.from(_allFollowers);
+    _following = List.from(_allFollowing);
+    _festivals = List.from(_allFestivals);
+    notifyListeners();
+  }
+
+  /// 🔹 Search by username or name
+  void searchUser(String query) {
+    _searchQuery = query.toLowerCase();
+    _applySearchFilter();
+    notifyListeners();
+  }
+
+  /// Internal helper to apply search filters to all tabs
+  void _applySearchFilter() {
+    if (_searchQuery.isEmpty) {
+      _followers = List.from(_allFollowers);
+      _following = List.from(_allFollowing);
+      _festivals = List.from(_allFestivals);
+    } else {
+      _followers = _allFollowers
+          .where((item) =>
+      item['name']!.toLowerCase().contains(_searchQuery) ||
+          item['username']!.toLowerCase().contains(_searchQuery))
+          .toList();
+
+      _following = _allFollowing
+          .where((item) =>
+      item['name']!.toLowerCase().contains(_searchQuery) ||
+          item['username']!.toLowerCase().contains(_searchQuery))
+          .toList();
+
+      _festivals = _allFestivals
+          .where((item) =>
+      item['title']!.toLowerCase().contains(_searchQuery) ||
+          item['location']!.toLowerCase().contains(_searchQuery))
+          .toList();
+    }
+  }
+
   @override
   void init() {
     super.init();
+    refreshList(); // initialize data
     _showingList = true;
   }
 }

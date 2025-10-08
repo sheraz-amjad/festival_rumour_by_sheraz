@@ -105,7 +105,7 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
         const SizedBox(height: AppDimensions.spaceS),
 
         ResponsiveText(
-          AppStrings.uploadsubtitle,
+          AppStrings.uploadSubtitle,
           style: const TextStyle(
             fontSize: 14,
             color: AppColors.primary,
@@ -126,23 +126,25 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
         clipBehavior: Clip.none, // allow circle to be outside
         children: [
           Card(
+            color: AppColors.onPrimary.withOpacity(0.2),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppDimensions.radiusL),
             ),
             elevation: AppDimensions.elevationS,
             child: DottedBorder(
               color: AppColors.accent,
-              strokeWidth: 4,
+              strokeWidth: 5,
               borderType: BorderType.RRect,
               radius: Radius.circular(AppDimensions.radiusL),
               dashPattern: const [12, 3],
               child: Container(
+               // color: AppColors.onPrimary.withOpacity(0.3),
                 width: double.infinity,
                 height:
                     490, // ✅ fixed height (same whether empty or with image)
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-                   color: AppColors.lightBlack,
+                   color: AppColors.onPrimary.withOpacity(0.4),
                    // 🔥 light layer background
                   //color: Colors.black.withOpacity(0.9),
                 ),
@@ -213,14 +215,14 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                       width: AppDimensions.iconS,
                       height: AppDimensions.iconS,
                       child: CircularProgressIndicator(
-                        color: AppColors.onPrimary,
+                        color: AppColors.accent,
                         strokeWidth: 2,
                       ),
                     )
                     : const Text(
                       AppStrings.next,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: AppDimensions.textXL,
                         color: AppColors.onPrimary,
                       ),
                     ),

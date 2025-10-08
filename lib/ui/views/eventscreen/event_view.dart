@@ -25,48 +25,62 @@ class EventView extends BaseView<EventViewModel> {
   }
 
   @override
+  @override
   Widget buildView(BuildContext context, EventViewModel viewModel) {
     final pageController = viewModel.pageController;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppAssets.bottomsheet),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          /// 🖼 Background image
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppAssets.bottomsheet),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: _buildTopBar(context),
-              ),
-              const SizedBox(height: AppDimensions.paddingM),
-              SizedBox(
-                width: double.infinity,
-                child: _titleHeadline(context),
-              ),
-              const SizedBox(height: AppDimensions.paddingM),
-              Expanded(
-                child: SizedBox(
+
+          /// 🎨 Overlay layer (white or black tint)
+          Container(
+            color: AppColors.primary.withOpacity(0.3), // You can tweak opacity (0.1–0.4)
+          ),
+
+          /// 🧱 Foreground content
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
                   width: double.infinity,
-                  child: _buildEventSlider(context, viewModel, pageController),
+                  child: _buildTopBar(context),
                 ),
-              ),
-              const SizedBox(height: AppDimensions.paddingM),
-              SizedBox(
-                width: double.infinity,
-                child: _buildBottomIcon(context),
-              ),
-            ],
+                const SizedBox(height: AppDimensions.paddingM),
+                SizedBox(
+                  width: double.infinity,
+                  child: _titleHeadline(context),
+                ),
+                const SizedBox(height: AppDimensions.paddingM),
+                Expanded(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: _buildEventSlider(context, viewModel, pageController),
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.paddingM),
+                SizedBox(
+                  width: double.infinity,
+                  child: _buildBottomIcon(context),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
+
 
   Widget _buildTopBar(BuildContext context) {
     return Row(

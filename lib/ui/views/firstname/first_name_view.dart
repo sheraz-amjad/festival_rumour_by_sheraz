@@ -20,6 +20,8 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
   Widget buildView(BuildContext context, FirstNameViewModel viewModel) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
+
         body: Stack(
           children: [
             Positioned.fill(
@@ -87,12 +89,19 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
 
   Widget _buildNameInput(BuildContext context, FirstNameViewModel viewModel) {
     return TextField(
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: AppStrings.firstNameHint,
-        border: UnderlineInputBorder(),
-        hintStyle: TextStyle(color: AppColors.grey400),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onPrimary, width: 0),
+        hintStyle: const TextStyle(color: AppColors.grey400),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onPrimary, width: 1.5),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.onPrimary, width: 0.8),
+        ),
+        errorText: viewModel.nameError,
+        errorStyle: const TextStyle(
+          color: AppColors.accent,
+          fontWeight: FontWeight.w500,
         ),
       ),
       style: const TextStyle(color: AppColors.primary),
@@ -100,12 +109,13 @@ class FirstNameView extends BaseView<FirstNameViewModel> {
       textInputAction: TextInputAction.done,
       onSubmitted: (_) {
         FocusScope.of(context).unfocus();
-        if (viewModel.isNameEntered) {
+        if (viewModel.isNameEntered && viewModel.nameError == null) {
           viewModel.onNextPressed();
         }
       },
     );
   }
+
 
   Widget _buildNextButton(BuildContext context, FirstNameViewModel viewModel) {
     return SizedBox(

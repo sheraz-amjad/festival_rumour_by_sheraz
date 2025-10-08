@@ -85,31 +85,41 @@ class _CloseButton extends StatelessWidget {
 class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Align(
+    return Align(
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.diamond, color: Colors.white, size: 40),
-              SizedBox(width: 8),
-              Text(
-                AppStrings.upgradetoprimium,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: AppDimensions.textDisplay,
-                  fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16), // prevents edge overflow
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.diamond, color: Colors.white, size: 40),
+                const SizedBox(width: 8),
+
+                /// ✅ Wrap long text safely
+                Flexible(
+                  child: Text(
+                    AppStrings.upgradetoprimium,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: AppDimensions.textDisplay,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
 
 /// Bottom Section
 class _BottomSection extends StatelessWidget {

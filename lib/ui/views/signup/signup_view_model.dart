@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -7,41 +8,45 @@ import '../../../core/constants/app_strings.dart';
 class SignupViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
 
+  /// 🔹 Controllers
+  final TextEditingController phoneNumberController = TextEditingController();
+
+  /// 🔹 Validation error
+  String? phoneNumberError;
+
+  /// 🔹 Loading state
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  /// 🔹 Validate phone number
+  bool validatePhone() {
+    final phone = phoneNumberController.text.trim();
+
+    if (phone.isEmpty) {
+      phoneNumberError = "*Phone number is required";
+    } else if (!RegExp(r'^[0-9]{10,15}$').hasMatch(phone)) {
+      phoneNumberError = "Enter a valid phone number";
+    } else {
+      phoneNumberError = null;
+    }
+
+    notifyListeners();
+    return phoneNumberError == null;
+  }
+
   /// 🔹 Continue to OTP screen
-  void goToOtp() {
+  Future<void> goToOtp() async {
+    if (!validatePhone()) return; // Stop if invalid
+
+    setLoading(true);
+    await Future.delayed(const Duration(seconds: 1));
+    setLoading(false);
+
     _navigationService.navigateTo(AppRoutes.otp);
-  }
-
-  /// 🔹 Sign in with Google
-  Future<void> loginWithGoogle() async {
-    await handleAsync(
-          () async {
-        // TODO: Implement Google login logic here
-        await Future.delayed(const Duration(seconds: 2));
-      },
-      errorMessage: AppStrings.failedtosignwithgoogle,
-    );
-  }
-
-  /// 🔹 Sign in with Email
-  Future<void> loginWithEmail() async {
-    await handleAsync(
-          () async {
-        // TODO: Implement Email login logic here
-        await Future.delayed(const Duration(seconds: 2));
-      },
-      errorMessage: AppStrings.faildtosignwithmail,
-    );
-  }
-
-  /// 🔹 Sign in with Apple
-  Future<void> loginWithApple() async {
-    await handleAsync(
-          () async {
-        // TODO: Implement Apple login logic here
-        await Future.delayed(const Duration(seconds: 2));
-      },
-      errorMessage: AppStrings.appleLoginError,
-    );
   }
 }

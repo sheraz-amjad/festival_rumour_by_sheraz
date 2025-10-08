@@ -1,14 +1,11 @@
 import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/welcome/welcome_view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/constants/group_image.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -22,6 +19,8 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
   @override
   Widget buildView(BuildContext context, WelcomeViewModel viewModel) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       body: Stack(
         children: [
           /// Background
@@ -67,11 +66,11 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      _buildGoogleLogin(viewModel),
+                      _buildGoogleLogin(viewModel,context),
                       const SizedBox(height: 20),
                       _buildEmailLogin(viewModel),
                       const SizedBox(height: 20),
-                      _buildAppleLogin(viewModel),
+                      _buildAppleLogin(viewModel,context),
                       const SizedBox(height: 20),
                       _buildSignupText(viewModel),
                       const SizedBox(height: 25),
@@ -94,7 +93,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
     );
   }
 
-  Widget _buildGoogleLogin(WelcomeViewModel viewModel) {
+  Widget _buildGoogleLogin(WelcomeViewModel viewModel, BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: AppDimensions.buttonHeightXL,
@@ -105,17 +104,26 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
             borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           ),
         ),
-        onPressed: viewModel.loginWithGoogle,
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('🔧 Google login is under development'),
+              backgroundColor: AppColors.onPrimary,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start, // keep icon left
-          crossAxisAlignment: CrossAxisAlignment.center, // vertical alignment
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: _buildCircleIcon(AppAssets.googleIcon),
             ),
             const SizedBox(width: 55),
-            Expanded( // makes text use remaining space
+            Expanded(
               child: Text(
                 AppStrings.loginWithGoogle,
                 style: const TextStyle(color: Colors.white),
@@ -158,7 +166,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
     );
   }
 
-  Widget _buildAppleLogin(WelcomeViewModel viewModel) {
+  Widget _buildAppleLogin(WelcomeViewModel viewModel, BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: AppDimensions.buttonHeightXL,
@@ -169,7 +177,16 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
             borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           ),
         ),
-        onPressed: viewModel.loginWithApple,
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('🍎 Apple login is under development'),
+              backgroundColor: AppColors.onPrimary,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

@@ -62,7 +62,7 @@ class HomeView extends BaseView<HomeViewModel> {
   Widget _buildAppBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsivePadding(
       mobilePadding: const EdgeInsets.symmetric(
-       // horizontal: AppDimensions.appBarHorizontalMobile,
+        horizontal: AppDimensions.appBarHorizontalMobile,
         vertical: AppDimensions.appBarVerticalMobile,
       ),
       tabletPadding: const EdgeInsets.symmetric(
@@ -81,13 +81,13 @@ class HomeView extends BaseView<HomeViewModel> {
             width: AppDimensions.iconXXL,
             height: AppDimensions.iconXXL,
           ),
-          const SizedBox(width: AppDimensions.spaceL),
+          const SizedBox(width: AppDimensions.spaceM),
           ResponsiveText(
             AppStrings.lunaFest2025,
 
             style: const TextStyle(
               color: AppColors.primary,
-              fontSize: AppDimensions.textXXL,
+              fontSize: AppDimensions.textXL,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -97,10 +97,10 @@ class HomeView extends BaseView<HomeViewModel> {
             icon: SvgPicture.asset(
               AppAssets.jobicon,
              // color: AppColors.primary,
-              width: 24,
-              height: 24,
+              width: 25,
+              height: 25,
             ),
-            onPressed: () {},
+            onPressed: () => _showPostBottomSheet(context),
           ),
           const SizedBox(width: AppDimensions.spaceL),
           GestureDetector(
@@ -128,6 +128,8 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
     );
   }
+
+
   Widget _buildSearchBar(BuildContext context) {
     String selectedFilter = AppStrings.allFilter;
 
@@ -138,7 +140,7 @@ class HomeView extends BaseView<HomeViewModel> {
       child: StatefulBuilder(
         builder: (context, setState) {
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
+            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             decoration: BoxDecoration(
               color: AppColors.onPrimary,
@@ -160,7 +162,13 @@ class HomeView extends BaseView<HomeViewModel> {
                         fontSize: AppDimensions.textM,
                       ),
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
                       isDense: true,
+                      filled: false, // <-- Disable any background fill
+                      fillColor: Colors.transparent,
                       contentPadding: EdgeInsets.zero,
                     ),
                     style: TextStyle(
@@ -265,6 +273,123 @@ class HomeView extends BaseView<HomeViewModel> {
           ],
         );
       },
+    );
+  }
+
+
+  void _showPostBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.onPrimary.withOpacity(0.4),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    "POST JOB",
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              _buildJobTile(
+                image: AppAssets.job1,
+                title: "Festival Gizza Job",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.festivalsJob);
+                  // Navigate to add job screen if needed
+                },
+              ),
+              const Divider(color: Colors.yellow, thickness: 1),
+              const SizedBox(height: 8),
+              _buildJobTile(
+                image: AppAssets.job2,
+                title: "FestieHeros Job",
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.festivalsJob);
+                  // Navigate to another add post screen if needed
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildJobTile({
+    required String image,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          // color: Colors.white.withOpacity(0.1),
+          // borderRadius: BorderRadius.circular(10),
+          // border: Border.all(color: Colors.yellow, width: 1),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            /// Left side (Image + Text)
+            Expanded(
+              child: Row(
+                children: [
+
+                  /// Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      image,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  /// Text — flexible and ellipsis
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// Chevron icon (outside Expanded)
+            const Icon(Icons.chevron_right, color: Colors.yellow),
+          ],
+        ),
+      ),
     );
   }
 }

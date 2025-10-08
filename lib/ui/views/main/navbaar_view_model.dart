@@ -11,6 +11,10 @@ class NavBaarViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  void goToHome() {
+    setIndex(0);
+  }
+
   @override
   void init() {
     super.init();

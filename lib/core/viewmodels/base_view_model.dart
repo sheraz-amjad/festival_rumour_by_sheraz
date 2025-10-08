@@ -101,6 +101,8 @@ abstract class BaseViewModel extends ChangeNotifier {
     // Override in subclasses
   }
 
+
+
   @override
   void dispose() {
     _isDisposed = true;

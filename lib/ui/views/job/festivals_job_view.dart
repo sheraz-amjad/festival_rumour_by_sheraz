@@ -1,0 +1,98 @@
+import 'package:festival_rumour/core/constants/app_assets.dart';
+import 'package:flutter/material.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/base_view.dart';
+import 'festivals_job_viewmodel.dart';
+
+class FestivalsJobView extends BaseView<FestivalsJobViewModel> {
+  const FestivalsJobView({super.key});
+
+  @override
+  FestivalsJobViewModel createViewModel() => FestivalsJobViewModel();
+
+  @override
+  Widget buildView(BuildContext context, FestivalsJobViewModel viewModel) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+     // backgroundColor: AppColors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "Festivals Gizza Job",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              AppAssets.bottomsheet, // replace with your asset path
+              fit: BoxFit.cover,
+            ),
+          ),
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: viewModel.jobs.length,
+          itemBuilder: (context, index) {
+            final job = viewModel.jobs[index];
+            return _JobCard(job: job);
+          },
+        ),
+      ),
+    ]
+    ),
+    );
+  }
+}
+
+class _JobCard extends StatelessWidget {
+  final Job job;
+  const _JobCard({required this.job});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.yellow, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            job.title,
+            style: const TextStyle(
+              color: Colors.yellow,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            job.description,
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Text(
+              "more",
+              style: TextStyle(color: Colors.yellow.shade600, fontSize: 14),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

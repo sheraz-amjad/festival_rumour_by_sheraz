@@ -79,7 +79,7 @@ class EventViewModel extends BaseViewModel {
   }
 
   void navigateToHome() {
-    _navigationService.navigateTo(AppRoutes.main);
+    _navigationService.navigateTo(AppRoutes.navview);
   }
 
   void goBack() {

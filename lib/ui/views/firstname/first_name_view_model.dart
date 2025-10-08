@@ -10,30 +10,39 @@ class FirstNameViewModel extends BaseViewModel {
   String _firstName = "";
   String get firstName => _firstName;
 
+  String? _nameError;
+  String? get nameError => _nameError;
+
   bool get isNameEntered => _firstName.trim().isNotEmpty;
 
   bool _showWelcome = false;
   bool get showWelcome => _showWelcome;
 
+  /// ✅ Validate name on change
   void onNameChanged(String value) {
     _firstName = value;
+    if (_firstName.trim().isEmpty) {
+      _nameError = AppStrings.nameEmptyError;
+    } else if (_firstName.trim().length < 4) {
+      _nameError = AppStrings.nameTooShortError;
+    } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(_firstName)) {
+      _nameError = AppStrings.nameInvalidError;
+    } else {
+      _nameError = null;
+    }
     notifyListeners();
   }
 
   Future<void> onNextPressed() async {
-    if (isNameEntered) {
-      await handleAsync(() async {
-        // Simulate API call to save first name
-        await Future.delayed(const Duration(seconds: 1));
+    if (_nameError != null || _firstName.trim().isEmpty) return;
 
-        _showWelcome = true;
-        notifyListeners();
+    await handleAsync(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      _showWelcome = true;
+      notifyListeners();
 
-        // Navigate to next screen after showing welcome
-        await Future.delayed(const Duration(seconds: 2));
-        // _navigationService.navigateTo(AppRoutes.uploadphotos);
-      }, errorMessage: AppStrings.saveNameError);
-    }
+      await Future.delayed(const Duration(seconds: 2));
+    }, errorMessage: AppStrings.saveNameError);
   }
 
   void onEditName() {

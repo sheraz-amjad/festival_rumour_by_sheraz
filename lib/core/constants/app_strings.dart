@@ -50,6 +50,15 @@ class AppStrings {
 
 
   //Button
+// -------------------------
+// 🔹 OTP Validation Strings
+// -------------------------
+  static const String invalidOtpError = "Please enter the 4-digit OTP code.";
+  static const String otpMismatch = "The entered OTP is incorrect. Please try again.";
+  static const String resendCodeError = "Failed to resend OTP. Please check your connection.";
+  static const String nameEmptyError = "Please enter your name.";
+  static const String nameTooShortError = "Name must be at least 4 characters long.";
+  static const String nameInvalidError = "Name can only contain letters.";
 
   // Authentication
   static const String signIn = 'Sign In';
@@ -284,7 +293,7 @@ class AppStrings {
   static const String selectsourse = 'Select Source';
 
   // Social
-  static const String username = 'Sheraz';
+  static const String username = 'Username';
   //static const String followers = 'Followers';
   //  static const String following = 'Following';
   static const String followedFestivals = 'Followed Festivals';

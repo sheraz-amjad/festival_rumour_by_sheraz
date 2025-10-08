@@ -21,6 +21,7 @@ class SignupView extends BaseView<SignupViewModel> {
   @override
   Widget buildView(BuildContext context, SignupViewModel viewModel) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           /// 🔹 Background
@@ -55,7 +56,7 @@ class SignupView extends BaseView<SignupViewModel> {
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(AppDimensions.radiusL),
+                    top: Radius.circular(AppDimensions.radiusXXL),
                   ),
                 ),
                 child: SingleChildScrollView(
@@ -111,8 +112,8 @@ class SignupView extends BaseView<SignupViewModel> {
         SizedBox(
           width: AppDimensions.countryPickerWidth,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.paddingS),
+            padding:
+            const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
             height: AppDimensions.buttonHeightM,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppDimensions.radiusS),
@@ -142,23 +143,33 @@ class SignupView extends BaseView<SignupViewModel> {
         const SizedBox(width: AppDimensions.spaceM),
         Expanded(
           child: TextField(
+            controller: viewModel.phoneNumberController,
             style: const TextStyle(color: AppColors.white),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: AppStrings.phoneHint,
-              hintStyle: TextStyle(color: AppColors.white),
-              enabledBorder: UnderlineInputBorder(),
-              focusedBorder: UnderlineInputBorder(
-                borderSide:
-                BorderSide(color: AppColors.primary, width: 2),
+              hintStyle: const TextStyle(color: AppColors.white),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.white),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary, width: 2),
+              ),
+              errorText: viewModel.phoneNumberError,
+              errorStyle: const TextStyle(
+                color: AppColors.accent,
+                fontSize: AppDimensions.textS,
+                fontWeight: FontWeight.w500,
               ),
             ),
             keyboardType: TextInputType.phone,
             cursorColor: AppColors.white,
+            onChanged: (_) => viewModel.validatePhone(),
           ),
         ),
       ],
     );
   }
+
 
   Widget _buildDescription(BuildContext context) {
     return Text(
@@ -189,7 +200,7 @@ class SignupView extends BaseView<SignupViewModel> {
           width: AppDimensions.iconS,
           height: AppDimensions.iconS,
           child: CircularProgressIndicator(
-            color: AppColors.onPrimary,
+            color: AppColors.accent,
             strokeWidth: 2,
           ),
         )

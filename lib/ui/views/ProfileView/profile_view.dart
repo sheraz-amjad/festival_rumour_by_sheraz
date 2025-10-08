@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/utils/backbutton.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+  final VoidCallback? onBack;
+  const ProfileView({super.key, this.onBack});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -21,6 +23,7 @@ class _ProfileViewState extends State<ProfileView> {
     return Scaffold(
       body: Stack(
         children: [
+
           /// 🔹 Fullscreen background image
           Positioned.fill(
             child: Image.asset(
@@ -37,27 +40,30 @@ class _ProfileViewState extends State<ProfileView> {
           /// 🔹 Main content
           SafeArea(
             child: SingleChildScrollView(
-          child: ConstrainedBox(
-    constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
-    child: Column(
-                children: [
-                  _profileTopBarWidget(),
-                  const Divider(color: AppColors.white, thickness: 0.5),
-                  const SizedBox(height: 10),
-                  _profileHeaderSection(),
-                  const SizedBox(height: 30),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: MediaQuery
+                    .of(context)
+                    .size
+                    .height),
+                child: Column(
+                  children: [
+                    _profileTopBarWidget(),
+                    const Divider(color: AppColors.white, thickness: 0.5),
+                    const SizedBox(height: 10),
+                    _profileHeaderSection(),
+                    const SizedBox(height: 30),
 
 
-                  _profileTabs(),
+                    _profileTabs(),
 
-                  /// Dynamic section
-                  if (selectedTab == 0) _profileGridWidget(),
-                  if (selectedTab == 1) _profileReelsWidget(),
-                  if (selectedTab == 2) _profileRepostsWidget(),
-                ],
+                    /// Dynamic section
+                    if (selectedTab == 0) _profileGridWidget(),
+                    if (selectedTab == 1) _profileReelsWidget(),
+                    if (selectedTab == 2) _profileRepostsWidget(),
+                  ],
+                ),
               ),
             ),
-          ),
           ),
         ],
       ),
@@ -71,6 +77,7 @@ class _ProfileViewState extends State<ProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           /// Profile info (Username & followers left — Picture right)
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +86,7 @@ class _ProfileViewState extends State<ProfileView> {
                 radius: 45,
                 backgroundImage: AssetImage(AppAssets.profile),
               ),
-              const SizedBox(width: 25), // smaller spacing for better layout
+              const SizedBox(width: 20), // smaller spacing for better layout
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,13 +103,24 @@ class _ProfileViewState extends State<ProfileView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _buildStat("120", "Posts"),
+                        _buildClickableStat("120", "Posts", () {
+                          // Example: you can open a posts grid or do nothing for now
+                        }),
                         const SizedBox(width: 16),
-                        _buildStat("5.4K", "Followers"),
+                        _buildClickableStat("5.4K", "Followers", () {
+                          Navigator.pushNamed(context, AppRoutes.profileList,
+                              arguments: 0);
+                        }),
                         const SizedBox(width: 16),
-                        _buildStat("340", "Following"),
+                        _buildClickableStat("340", "Following", () {
+                          Navigator.pushNamed(context, AppRoutes.profileList,
+                              arguments: 1);
+                        }),
                         const SizedBox(width: 16),
-                        _buildStat("3", "Festivals"),
+                        _buildClickableStat("3", "Festivals", () {
+                          Navigator.pushNamed(context, AppRoutes.profileList,
+                              arguments: 2);
+                        }),
                       ],
                     ),
                   ],
@@ -139,8 +157,11 @@ class _ProfileViewState extends State<ProfileView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
           /// Back button
-          CustomBackButton(onTap: () => context.pop()),
+          CustomBackButton(
+            onTap: widget.onBack ?? () {},
+          ),
 
           const Text(
             "Profile",
@@ -155,20 +176,26 @@ class _ProfileViewState extends State<ProfileView> {
           Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => _showPostBottomSheet(context),
                 icon: const Icon(Icons.add_box_outlined,
                     color: AppColors.white, size: 26),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes
+                      .news); // Replace with actual notifications screen route
+                },
                 icon: const Icon(Icons.notifications_none,
                     color: AppColors.white, size: 26),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.settings);
+                },
                 icon: const Icon(Icons.settings,
                     color: AppColors.white, size: 26),
               ),
+
             ],
           ),
         ],
@@ -243,6 +270,14 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
+  Widget _buildClickableStat(String count, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: _buildStat(count, label),
+    );
+  }
+
+
   Widget _buildMiniStat(String count, String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,28 +318,146 @@ class _ProfileViewState extends State<ProfileView> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => Scaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            children: [
-              Center(
-                child: InteractiveViewer(
-                  child: Image.asset(imagePath, fit: BoxFit.contain),
-                ),
+        builder: (_) =>
+            Scaffold(
+              backgroundColor: Colors.black,
+              body: Stack(
+                children: [
+                  Center(
+                    child: InteractiveViewer(
+                      child: Image.asset(imagePath, fit: BoxFit.contain),
+                    ),
+                  ),
+                  Positioned(
+                    top: 40,
+                    left: 20,
+                    child: IconButton(
+                      icon: const Icon(
+                          Icons.close, color: Colors.white, size: 30),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                top: 40,
-                left: 20,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
       ),
     );
   }
 
+
+  void _showPostBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.onPrimary.withOpacity(0.4),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    "POST JOB",
+                    style: TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              _buildJobTile(
+                image: AppAssets.job1,
+                title: "Festival Gizza Job",
+                onTap: () {
+                  Navigator.pop(context);
+                  // Navigate to add job screen if needed
+                },
+              ),
+              const Divider(color: Colors.yellow, thickness: 1),
+              const SizedBox(height: 8),
+              _buildJobTile(
+                image: AppAssets.job2,
+                title: "FestieHeros Job",
+                onTap: () {
+                  Navigator.pop(context);
+                  // Navigate to another add post screen if needed
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildJobTile({
+    required String image,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+         // color: Colors.white.withOpacity(0.1),
+         // borderRadius: BorderRadius.circular(10),
+         // border: Border.all(color: Colors.yellow, width: 1),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            /// Left side (Image + Text)
+            Expanded(
+              child: Row(
+                children: [
+
+                  /// Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      image,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  /// Text — flexible and ellipsis
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// Chevron icon (outside Expanded)
+            const Icon(Icons.chevron_right, color: Colors.yellow),
+          ],
+        ),
+      ),
+    );
+  }
 }
