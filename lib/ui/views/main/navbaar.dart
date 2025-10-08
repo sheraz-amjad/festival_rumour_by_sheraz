@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/utils/custom_navbar.dart';
 import '../homeview/home_view.dart';
@@ -14,11 +15,22 @@ class NavBaar extends BaseView<NavBaarViewModel> {
 
   @override
   Widget buildView(BuildContext context, NavBaarViewModel viewModel) {
-    return Scaffold(
-      body: _buildBody(viewModel),
-      bottomNavigationBar: CustomNavBar(
-        currentIndex: viewModel.currentIndex,
-        onTap: viewModel.setIndex,
+    return WillPopScope(
+      onWillPop: () async {
+        // If user is on home screen (index 0), exit the app
+        if (viewModel.currentIndex == 0) {
+          SystemNavigator.pop();
+          return false; // Prevent default back behavior
+        }
+        // For other screens, allow normal back navigation
+        return true;
+      },
+      child: Scaffold(
+        body: _buildBody(viewModel),
+        bottomNavigationBar: CustomNavBar(
+          currentIndex: viewModel.currentIndex,
+          onTap: viewModel.setIndex,
+        ),
       ),
     );
   }
