@@ -1,17 +1,11 @@
 
-import '../../../core/services/dummy_services.dart';
+
 import '../../../core/viewmodels/base_view_model.dart';
 
 class LeaderboardViewModel extends BaseViewModel {
-  final DummyService _service = DummyService();
-  List<Map<String, dynamic>> items = [];
-
-  LeaderboardViewModel() {
-    load();
-  }
-
-  void load() {
-    items = _service.getLeaderboard();
-    notifyListeners();
-  }
+  final List<Map<String, dynamic>> leaders = [
+    {"rank": 1, "name": "Patrick", "badge": "Top Rumour Spotter"},
+    {"rank": 2, "name": "James", "badge": "Media Master"},
+    {"rank": 3, "name": "Micheal", "badge": "Crowd Favourite"},
+  ];
 }

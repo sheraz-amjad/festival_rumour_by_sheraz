@@ -97,7 +97,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
               title: "Badges",
               trailing: const Icon(Icons.arrow_forward_ios,
                   size: 18, color: AppColors.grey600),
-              onTap: viewModel.openBadges,
+              onTap: () => _showBadgesDialog(context),
             ),
             _buildTile(
               icon: Icons.leaderboard_outlined,
@@ -228,4 +228,112 @@ class SettingsView extends BaseView<SettingsViewModel> {
       ),
     );
   }
+  void _showBadgesDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.4),
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 8,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Badges",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: AppColors.onPrimary,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // 🏅 Each badge item
+                _buildBadgeItem(
+                  icon: Icons.emoji_events,
+                  title: "1  Top Rumour Spotter",
+                  subtitle: "          For viral or trending posts",
+                  color: Colors.orangeAccent,
+                ),
+                _buildBadgeItem(
+                  icon: Icons.workspace_premium,
+                  title: "2  Media Master",
+                  subtitle: "          For contributing quality photos/videos",
+                  color: Colors.purpleAccent,
+                ),
+                _buildBadgeItem(
+                  icon: Icons.star,
+                  title: "3  Crowd Favourite",
+                  subtitle: "          For most liked/reacted content",
+                  color: Colors.amber,
+                ),
+
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.onPrimary,
+                  ),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Widget _buildBadgeItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // 👈 text left-aligned
+        children: [
+          Center( // 👈 icon stays centered
+            child: CircleAvatar(
+              radius: 26,
+              backgroundColor: color.withOpacity(0.15),
+              child: Icon(icon, color: color, size: 50),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 25,
+              color: AppColors.grey900,
+            ),
+          ),
+          Text(
+            subtitle,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.grey600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }

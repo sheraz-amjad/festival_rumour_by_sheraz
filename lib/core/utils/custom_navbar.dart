@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
+import '../../shared/extensions/context_extensions.dart';
 
 class CustomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -22,7 +23,11 @@ class CustomNavBar extends StatelessWidget {
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double containerWidth = screenWidth / items.length;
-    final double iconSize = AppDimensions.iconM;
+    final double iconSize = context.isLargeScreen 
+      ? AppDimensions.iconL 
+      : context.isMediumScreen 
+        ? AppDimensions.iconM + 2 
+        : AppDimensions.iconM;
 
     return SafeArea(
       top: false,
@@ -38,7 +43,10 @@ class CustomNavBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 width: containerWidth,
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  vertical: context.isLargeScreen ? 12 : context.isMediumScreen ? 11 : 10,
+                  horizontal: context.isLargeScreen ? 8 : 4,
+                ),
                 decoration: BoxDecoration(
                   color: selected
                       ? AppColors.black.withOpacity(0.1) // Light black highlight for selected
@@ -65,7 +73,11 @@ class CustomNavBar extends StatelessWidget {
                         fontWeight: selected 
                             ? FontWeight.bold 
                             : FontWeight.w400, // Lighter weight for unselected
-                        fontSize: selected ? 12 : 11, // Slightly smaller for unselected
+                        fontSize: context.isLargeScreen 
+                          ? (selected ? 14 : 13)
+                          : context.isMediumScreen 
+                            ? (selected ? 13 : 12)
+                            : (selected ? 12 : 11),
                       ),
                     ),
                   ],

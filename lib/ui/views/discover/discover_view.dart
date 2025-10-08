@@ -49,9 +49,15 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
               ),
             ),
             SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.paddingM),
+              child: ResponsiveContainer(
+                mobileMaxWidth: double.infinity,
+                tabletMaxWidth: AppDimensions.tabletWidth,
+                desktopMaxWidth: AppDimensions.desktopWidth,
+                child: SingleChildScrollView(
+                  child: ResponsivePadding(
+                    mobilePadding: const EdgeInsets.all(AppDimensions.paddingM),
+                    tabletPadding: const EdgeInsets.all(AppDimensions.paddingL),
+                    desktopPadding: const EdgeInsets.all(AppDimensions.paddingXL),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -136,12 +142,12 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
       
                       /// Grid Options
                       GridView.count(
-                        crossAxisCount: screenWidth < 600 ? 2 : 3,
+                        crossAxisCount: context.isLargeScreen ? 4 : context.isMediumScreen ? 3 : 2,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: AppDimensions.spaceM,
-                        crossAxisSpacing: AppDimensions.spaceM,
-                        childAspectRatio: 1.2,
+                        mainAxisSpacing: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceM,
+                        crossAxisSpacing: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceM,
+                        childAspectRatio: context.isLargeScreen ? 1.3 : context.isMediumScreen ? 1.2 : 1.1,
                         children: const [
                           GridOption(title: "LOCATION", icon: AppAssets.mapicon),
                           GridOption(title: "CHAT ROOMS", icon: AppAssets.chaticon),
@@ -150,6 +156,7 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                         ],
                       ),
                     ],
+                  ),
                   ),
                 ),
               ),

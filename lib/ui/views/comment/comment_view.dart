@@ -4,6 +4,7 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import 'comment_viewmodel.dart';
 
 class CommentView extends BaseView<CommentViewModel> {
@@ -42,8 +43,8 @@ class CommentView extends BaseView<CommentViewModel> {
                       color: Colors.black.withOpacity(0.5),
                       child: GridView.builder(
                         padding: const EdgeInsets.all(AppDimensions.paddingS),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 8,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: context.isLargeScreen ? 10 : context.isMediumScreen ? 8 : 6,
                           mainAxisSpacing: AppDimensions.paddingS,
                           crossAxisSpacing: AppDimensions.paddingS,
                         ),

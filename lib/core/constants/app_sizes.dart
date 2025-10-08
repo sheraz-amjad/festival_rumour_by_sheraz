@@ -63,7 +63,7 @@ class AppDimensions {
   static const double appBarVerticalTablet = 12.0;
   static const double appBarVerticalDesktop = 16.0;
 
-  static const double appBarHorizontalMobile = 16.0;
+  static const double appBarHorizontalMobile = 20.0;
   static const double appBarHorizontalTablet = 24.0;
   static const double appBarHorizontalDesktop = 32.0;
 

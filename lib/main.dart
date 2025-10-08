@@ -5,6 +5,7 @@ import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/di/locator.dart';
 import 'core/services/navigation_service.dart';
+import 'core/services/responsive_text_service.dart';
 
 /// Main entry point of the Festival Rumour application
 void main() async {

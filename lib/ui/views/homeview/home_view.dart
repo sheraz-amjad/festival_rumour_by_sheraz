@@ -6,9 +6,9 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/base_view.dart';
-import '../../../core/utils/custom_navbar.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/responsive_widget.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'home_viewmodel.dart';
@@ -29,6 +29,7 @@ class HomeView extends BaseView<HomeViewModel> {
   Widget buildView(BuildContext context, HomeViewModel viewModel) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           // Background Image - Full screen coverage
@@ -73,51 +74,64 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
       child: Row(
         children: [
+          // Logo
           SvgPicture.asset(
             AppAssets.logo,
             color: AppColors.primary,
-            width: AppDimensions.iconXXL,
-            height: AppDimensions.iconXXL,
+            width: context.isLargeScreen ? AppDimensions.iconXXL : 
+                   context.isMediumScreen ? AppDimensions.iconXL : AppDimensions.iconXL,
+            height: context.isLargeScreen ? AppDimensions.iconXXL : 
+                    context.isMediumScreen ? AppDimensions.iconXL : AppDimensions.iconXL,
           ),
-          const SizedBox(width: AppDimensions.spaceM),
-          ResponsiveText(
-            AppStrings.lunaFest2025,
-
-            style: const TextStyle(
+          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceXL : AppDimensions.spaceL),
+          
+          // Title - Flexible to prevent overflow
+          Expanded(
+            child: ResponsiveTextWidget(
+              AppStrings.lunaFest2025,
+              textType: TextType.heading,
               color: AppColors.primary,
-              fontSize: AppDimensions.textXL,
+              baseFontSize: context.isLargeScreen ? AppDimensions.textXL : 
+                           context.isMediumScreen ? AppDimensions.textL : AppDimensions.textS,
               fontWeight: FontWeight.bold,
+              maxLines: 1,
+              // overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: AppDimensions.spaceL),
+          
+          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceXXL),
 
+          // Job Icon Button
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-             // color: AppColors.primary,
-              width: 25,
-              height: 25,
+              width: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
+              height: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
-          const SizedBox(width: AppDimensions.spaceL),
-          GestureDetector(
-            onTap: viewModel.goToSubscription,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.paddingS,
-                vertical: 2,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.proLabelBackground,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-              ),
-              child: const Text(
-                AppStrings.proLabel,
-                style: TextStyle(
+          
+          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceL),
+          
+          // Pro Label - Flexible container
+          Flexible(
+            child: GestureDetector(
+              onTap: viewModel.goToSubscription,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.isLargeScreen ? AppDimensions.paddingM : AppDimensions.paddingS,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.proLabelBackground,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                ),
+                child: ResponsiveTextWidget(
+                  AppStrings.proLabel,
+                  textType: TextType.label,
                   color: AppColors.proLabelText,
                   fontWeight: FontWeight.bold,
-                  fontSize: AppDimensions.textS,
+                  baseFontSize: context.isLargeScreen ? AppDimensions.textM : AppDimensions.textS,
                 ),
               ),
             ),
@@ -246,13 +260,12 @@ class HomeView extends BaseView<HomeViewModel> {
     }
 
     if (viewModel.posts.isEmpty) {
-      return const Center(
-        child: Text(
+      return Center(
+        child: ResponsiveTextWidget(
           AppStrings.noPostsAvailable,
-          style: TextStyle(
-            fontSize: AppDimensions.textM,
-            color: AppColors.onPrimary,
-          ),
+          textType: TextType.body,
+          color: AppColors.onPrimary,
+          baseFontSize: AppDimensions.textM,
         ),
       );
     }
@@ -292,13 +305,12 @@ class HomeView extends BaseView<HomeViewModel> {
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
+                  child: ResponsiveTextWidget(
                     "POST JOB",
-                    style: TextStyle(
-                      color: Colors.yellow,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textType: TextType.title,
+                    color: Colors.yellow,
+                    baseFontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -368,15 +380,14 @@ class HomeView extends BaseView<HomeViewModel> {
 
                   /// Text — flexible and ellipsis
                   Expanded(
-                    child: Text(
+                    child: ResponsiveTextWidget(
                       title,
+                      textType: TextType.body,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      baseFontSize: 16,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
                     ),
                   ),
                 ],

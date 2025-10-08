@@ -5,10 +5,78 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_assets.dart';
+import '../../../../shared/extensions/context_extensions.dart';
+import '../../../../shared/widgets/responsive_widget.dart';
 import 'username_view_model.dart';
 
-class UsernameView extends StatelessWidget {
+class UsernameView extends StatefulWidget {
   const UsernameView({super.key});
+
+  @override
+  State<UsernameView> createState() => _UsernameViewState();
+}
+
+class _UsernameViewState extends State<UsernameView> {
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _usernameFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  /// Handle focus management
+  void _handleFocusChange(bool hasFocus) {
+    if (hasFocus) {
+      // Focus gained - ensure proper layout
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    } else {
+      // Focus lost - hide keyboard if needed
+      FocusScope.of(context).unfocus();
+    }
+  }
+
+  /// Auto-focus next field
+  void _focusNextField() {
+    if (_usernameFocusNode.hasFocus) {
+      _passwordFocusNode.requestFocus();
+    }
+  }
+
+  /// Clear all focus
+  void _clearAllFocus() {
+    _usernameFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Add focus change listeners
+    _usernameFocusNode.addListener(() {
+      if (!_usernameFocusNode.hasFocus) {
+        // Username field lost focus
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    });
+    
+    _passwordFocusNode.addListener(() {
+      if (!_passwordFocusNode.hasFocus) {
+        // Password field lost focus
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +86,15 @@ class UsernameView extends StatelessWidget {
         builder: (context, viewModel, _) {
           final screenHeight = MediaQuery.of(context).size.height;
           final screenWidth = MediaQuery.of(context).size.width;
-          final isTablet = screenWidth > 600;
           final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
+            body: GestureDetector(
+              onTap: _clearAllFocus,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
                 /// 🔹 Background
                 Image.asset(AppAssets.usernameback, fit: BoxFit.cover),
 
@@ -38,18 +107,35 @@ class UsernameView extends StatelessWidget {
                   curve: Curves.easeOut,
                   padding: EdgeInsets.only(bottom: keyboardHeight * 0.6),
                   child: Center(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? screenWidth * 0.2 : 20,
-                        vertical: screenHeight * 0.02,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
+                    child: ResponsiveContainer(
+                      mobileMaxWidth: double.infinity,
+                      tabletMaxWidth: AppDimensions.tabletWidth,
+                      desktopMaxWidth: AppDimensions.desktopWidth,
+                      child: ResponsivePadding(
+                        mobilePadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth *0.04,
+                          vertical: screenHeight * 0.02,
+                        ),
+                        tabletPadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.2,
+                          vertical: screenHeight * 0.02,
+                        ),
+                        desktopPadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.25,
+                          vertical: screenHeight * 0.02,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                           /// Logo
                           SvgPicture.asset(
                             AppAssets.logo,
-                            height: screenHeight * 0.18,
+                            height: context.isLargeScreen 
+                              ? screenHeight * 0.22
+                              : context.isMediumScreen 
+                                ? screenHeight * 0.20
+                                : screenHeight * 0.18,
                             color: AppColors.primary,
                           ),
                           SizedBox(height: screenHeight * 0.04),
@@ -83,15 +169,30 @@ class UsernameView extends StatelessWidget {
                                 const SizedBox(height: AppDimensions.spaceS),
 
                                 /// Username Field
-                                Focus(
-                                  onFocusChange: viewModel.onUsernameFocusChange,
-                                  child: TextField(
-                                    controller: viewModel.emailController,
-                                    cursorColor: Colors.white,
-
-                                    onChanged: viewModel.onUsernameChanged,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
+                                TextField(
+                                  controller: viewModel.emailController,
+                                  focusNode: _usernameFocusNode,
+                                  cursorColor: Colors.white,
+                                  textInputAction: TextInputAction.next,
+                                  onChanged: (value) {
+                                    viewModel.onUsernameChanged(value);
+                                    // Auto-focus password field when username is complete
+                                    if (value.length >= 3) {
+                                      Future.delayed(const Duration(milliseconds: 300), () {
+                                        _passwordFocusNode.requestFocus();
+                                      });
+                                    }
+                                  },
+                                  onSubmitted: (value) {
+                                    if (value.isNotEmpty) {
+                                      _passwordFocusNode.requestFocus();
+                                    }
+                                  },
+                                  onTap: () {
+                                    viewModel.onUsernameFocusChange(true);
+                                  },
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
                                       hintText: "Enter your email",
@@ -114,7 +215,6 @@ class UsernameView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                ),
 
                                 const SizedBox(height: AppDimensions.spaceM),
 
@@ -137,15 +237,26 @@ class UsernameView extends StatelessWidget {
                                 const SizedBox(height: AppDimensions.spaceS),
 
                                 /// Password Field
-                                Focus(
-                                  onFocusChange: viewModel.onPasswordFocusChange,
-                                  child: TextField(
-                                    controller: viewModel.passwordController,
-                                    obscureText: !viewModel.isPasswordVisible,
-                                    cursorColor: Colors.white,
-                                    onChanged: viewModel.onPasswordChanged,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
+                                TextField(
+                                  controller: viewModel.passwordController,
+                                  focusNode: _passwordFocusNode,
+                                  obscureText: !viewModel.isPasswordVisible,
+                                  cursorColor: Colors.white,
+                                  textInputAction: TextInputAction.done,
+                                  onChanged: (value) {
+                                    viewModel.onPasswordChanged(value);
+                                  },
+                                  onSubmitted: (value) {
+                                    if (value.isNotEmpty) {
+                                      _passwordFocusNode.unfocus();
+                                      viewModel.validateAndLogin(context);
+                                    }
+                                  },
+                                  onTap: () {
+                                    viewModel.onPasswordFocusChange(true);
+                                  },
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
                                       hintText: "********",
@@ -178,7 +289,6 @@ class UsernameView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                ),
 
                                 const SizedBox(height: AppDimensions.spaceS),
 
@@ -191,11 +301,11 @@ class UsernameView extends StatelessWidget {
                                         Checkbox(
                                           value: viewModel.rememberMe,
                                           onChanged: viewModel.toggleRememberMe,
-                                          activeColor: AppColors.primary,
+                                          activeColor: AppColors.onPrimary,
                                         ),
                                         const Text(
                                           AppStrings.rememberMe,
-                                          style: TextStyle(color: AppColors.grey300),
+                                          style: TextStyle(color: AppColors.primary),
                                         ),
                                       ],
                                     ),
@@ -222,7 +332,7 @@ class UsernameView extends StatelessWidget {
                                       : () => viewModel.validateAndLogin(context),
                                   child: viewModel.isLoading
                                       ? const CircularProgressIndicator(
-                                    color: AppColors.onPrimary,
+                                    color: AppColors.accent,
                                   )
                                       : const Text(
                                     AppStrings.login,
@@ -261,13 +371,16 @@ class UsernameView extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+          )
           );
         },
       ),

@@ -1,5 +1,6 @@
 import 'package:festival_rumour/shared/extensions/context_extensions.dart';
-import 'package:festival_rumour/shared/extensions/context_extensions.dart';
+import 'package:festival_rumour/shared/widgets/responsive_widget.dart';
+import 'package:festival_rumour/shared/widgets/responsive_text_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
@@ -48,28 +49,33 @@ class _ProfileViewState extends State<ProfileView> {
 
           /// 🔹 Main content
           SafeArea(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: MediaQuery
-                    .of(context)
-                    .size
-                    .height),
-                child: Column(
-                  children: [
-                    _profileTopBarWidget(),
-                    const Divider(color: AppColors.white, thickness: 0.5),
-                    const SizedBox(height: 10),
-                    _profileHeaderSection(),
-                    const SizedBox(height: 30),
+            child: ResponsiveContainer(
+              mobileMaxWidth: double.infinity,
+              tabletMaxWidth: AppDimensions.tabletWidth,
+              desktopMaxWidth: AppDimensions.desktopWidth,
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: MediaQuery
+                      .of(context)
+                      .size
+                      .height),
+                  child: Column(
+                    children: [
+                      _profileTopBarWidget(),
+                      const Divider(color: AppColors.white, thickness: 0.5),
+                      SizedBox(height: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 10),
+                      _profileHeaderSection(),
+                      SizedBox(height: context.isLargeScreen ? 40 : context.isMediumScreen ? 35 : 30),
 
 
-                    _profileTabs(),
+                      _profileTabs(),
 
-                    /// Dynamic section
-                    if (selectedTab == 0) _profileGridWidget(),
-                    if (selectedTab == 1) _profileReelsWidget(),
-                    if (selectedTab == 2) _profileRepostsWidget(),
-                  ],
+                      /// Dynamic section
+                      if (selectedTab == 0) _profileGridWidget(),
+                      if (selectedTab == 1) _profileReelsWidget(),
+                      if (selectedTab == 2) _profileRepostsWidget(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -82,8 +88,10 @@ class _ProfileViewState extends State<ProfileView> {
 
   /// ---------------- PROFILE HEADER ----------------
   Widget _profileHeaderSection() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.paddingM),
+    return ResponsivePadding(
+      mobilePadding: const EdgeInsets.all(AppDimensions.paddingM),
+      tabletPadding: const EdgeInsets.all(AppDimensions.paddingL),
+      desktopPadding: const EdgeInsets.all(AppDimensions.paddingXL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -92,41 +100,40 @@ class _ProfileViewState extends State<ProfileView> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
-                radius: 45,
-                backgroundImage: AssetImage(AppAssets.profile),
+              CircleAvatar(
+                radius: context.isLargeScreen ? 55 : context.isMediumScreen ? 50 : 45,
+                backgroundImage: const AssetImage(AppAssets.profile),
               ),
-              const SizedBox(width: 20), // smaller spacing for better layout
+              SizedBox(width: context.isLargeScreen ? 24 : context.isMediumScreen ? 22 : 20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    ResponsiveTextWidget(
                       "Sheraz Amjad",
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                      textType: TextType.title,
+                      color: AppColors.white,
+                      fontWeight: FontWeight.bold,
+                      baseFontSize: 18,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         _buildClickableStat("120", "Posts", () {
                           // Example: you can open a posts grid or do nothing for now
                         }),
-                        const SizedBox(width: 16),
+                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("5.4K", "Followers", () {
                           Navigator.pushNamed(context, AppRoutes.profileList,
                               arguments: 0);
                         }),
-                        const SizedBox(width: 16),
+                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("340", "Following", () {
                           Navigator.pushNamed(context, AppRoutes.profileList,
                               arguments: 1);
                         }),
-                        const SizedBox(width: 16),
+                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("3", "Festivals", () {
                           Navigator.pushNamed(context, AppRoutes.profileList,
                               arguments: 2);
@@ -140,17 +147,15 @@ class _ProfileViewState extends State<ProfileView> {
           ),
 
 
-          const SizedBox(height: 16),
+          SizedBox(height: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
 
           /// Bio / Description below profile picture
-          const Text(
+          ResponsiveTextWidget(
             "Bringing people together through music, color, and culture!",
+            textType: TextType.body,
+            color: AppColors.white,
+            baseFontSize: 16,
             textAlign: TextAlign.left,
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: 16,
-              height: 1.5,
-            ),
           ),
         ],
       ),
@@ -173,13 +178,12 @@ class _ProfileViewState extends State<ProfileView> {
             onTap: widget.onBack ?? () {},
           ),
 
-          const Text(
+          ResponsiveTextWidget(
             "Profile",
-            style: TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+            textType: TextType.title,
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
+            baseFontSize: 20,
           ),
 
           /// Right-side icons
@@ -220,10 +224,10 @@ class _ProfileViewState extends State<ProfileView> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: context.isLargeScreen ? 4 : context.isMediumScreen ? 3 : 3,
+        mainAxisSpacing: context.isLargeScreen ? 4 : 2,
+        crossAxisSpacing: context.isLargeScreen ? 4 : 2,
       ),
       itemCount: images.length,
       itemBuilder: (context, index) {
@@ -237,24 +241,28 @@ class _ProfileViewState extends State<ProfileView> {
 
 
   Widget _profileReelsWidget() {
-    return const Padding(
-      padding: EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Center(
-        child: Text(
+        child: ResponsiveTextWidget(
           "Reels Section",
-          style: TextStyle(color: AppColors.white, fontSize: 16),
+          textType: TextType.body,
+          color: AppColors.white,
+          baseFontSize: 16,
         ),
       ),
     );
   }
 
   Widget _profileRepostsWidget() {
-    return const Padding(
-      padding: EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Center(
-        child: Text(
+        child: ResponsiveTextWidget(
           "Reposts Section",
-          style: TextStyle(color: AppColors.white, fontSize: 16),
+          textType: TextType.body,
+          color: AppColors.white,
+          baseFontSize: 16,
         ),
       ),
     );
@@ -264,17 +272,18 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildStat(String count, String label) {
     return Column(
       children: [
-        Text(
+        ResponsiveTextWidget(
           count,
-          style: const TextStyle(
-            color: AppColors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          textType: TextType.title,
+          color: AppColors.white,
+          fontWeight: FontWeight.bold,
+          baseFontSize: 16,
         ),
-        Text(
+        ResponsiveTextWidget(
           label,
-          style: const TextStyle(color: AppColors.white, fontSize: 12),
+          textType: TextType.caption,
+          color: AppColors.white,
+          baseFontSize: 12,
         ),
       ],
     );

@@ -10,6 +10,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import 'event_view_model.dart';
 
 class EventView extends BaseView<EventViewModel> {
@@ -30,6 +31,7 @@ class EventView extends BaseView<EventViewModel> {
     final pageController = viewModel.pageController;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           /// 🖼 Background image
@@ -49,7 +51,11 @@ class EventView extends BaseView<EventViewModel> {
 
           /// 🧱 Foreground content
           SafeArea(
-            child: Column(
+            child: ResponsiveContainer(
+              mobileMaxWidth: double.infinity,
+              tabletMaxWidth: AppDimensions.tabletWidth,
+              desktopMaxWidth: AppDimensions.desktopWidth,
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
@@ -74,6 +80,7 @@ class EventView extends BaseView<EventViewModel> {
                   child: _buildBottomIcon(context),
                 ),
               ],
+              ),
             ),
           ),
         ],
@@ -85,6 +92,7 @@ class EventView extends BaseView<EventViewModel> {
   Widget _buildTopBar(BuildContext context) {
     return Row(
       children: [
+        const SizedBox(width: AppDimensions.paddingL),
         Container(
           height: AppDimensions.iconXXL,
           width: AppDimensions.iconXXL,
@@ -105,7 +113,7 @@ class EventView extends BaseView<EventViewModel> {
               color: AppColors.onPrimary,
               borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
             child: Row(
               children: [
                 const Icon(Icons.search, color: AppColors.primary, size: AppDimensions.iconM),
@@ -157,6 +165,7 @@ class EventView extends BaseView<EventViewModel> {
             ),
           ),
         ),
+        const SizedBox(width: AppDimensions.paddingL),
       ],
     );
   }

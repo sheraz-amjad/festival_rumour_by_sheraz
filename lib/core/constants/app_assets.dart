@@ -49,6 +49,7 @@ class AppAssets {
   static const String post5 = 'assets/images/post5.png';
   static const String post4 = 'assets/images/detailicon.png';
   static const String eventimage = 'assets/images/post.png';
+  static const String leaderboard = 'assets/images/leaderboardback.png';
 
 
   static const String proback = 'assets/images/proback.png';

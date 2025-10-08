@@ -3,6 +3,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../shared/extensions/context_extensions.dart';
 import '../post_model.dart';
 class PostWidget extends StatefulWidget {
   final PostModel post;
@@ -28,7 +29,11 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     final post = widget.post;
     return Container(
-      height: MediaQuery.of(context).size.height * 0.45,
+      height: context.isLargeScreen 
+        ? MediaQuery.of(context).size.height * 0.5
+        : context.isMediumScreen 
+          ? MediaQuery.of(context).size.height * 0.45
+          : MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
         color: AppColors.postBackground.withOpacity(0.7),
         borderRadius: const BorderRadius.only(
@@ -99,8 +104,9 @@ class _PostWidgetState extends State<PostWidget> {
                             child: Row(
                               children: [
                                 _selectedReaction == null
-                                    ? const Icon(Icons.thumb_up,
-                                    color: Colors.white, size: 20) // default white like
+                                    ? Icon(Icons.thumb_up,
+                                    color: Colors.white, 
+                                    size: context.isLargeScreen ? 24 : context.isMediumScreen ? 22 : 20)
                                     : Text(
                                   _selectedReaction!,
                                   style: TextStyle(
@@ -134,8 +140,9 @@ class _PostWidgetState extends State<PostWidget> {
                             },
                           child: Row(
                             children: [
-                              const Icon(Icons.comment_outlined,
-                                  color: Colors.white, size: 18),
+                              Icon(Icons.comment_outlined,
+                                  color: Colors.white, 
+                                  size: context.isLargeScreen ? 22 : context.isMediumScreen ? 20 : 18),
                               const SizedBox(width: 4),
                               Text("${post.comments}",
                                   style: const TextStyle(color: Colors.white)),
@@ -188,17 +195,21 @@ class _PostWidgetState extends State<PostWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.favorite,
+              Icon(Icons.favorite,
                   color: AppColors.reactionLike,
-                  size: AppDimensions.reactionIconSize),
+                  size: context.isLargeScreen ? AppDimensions.reactionIconSize + 4 : context.isMediumScreen ? AppDimensions.reactionIconSize + 2 : AppDimensions.reactionIconSize),
               const SizedBox(width: AppDimensions.reactionIconSpacing),
-              const Icon(Icons.thumb_up,
+              Icon(Icons.thumb_up,
                   color: AppColors.reactionLove,
-                  size: AppDimensions.reactionIconSize),
+                  size: context.isLargeScreen ? AppDimensions.reactionIconSize + 4 : context.isMediumScreen ? AppDimensions.reactionIconSize + 2 : AppDimensions.reactionIconSize),
               const SizedBox(width: AppDimensions.reactionIconSpacing),
               Text("${post.likes}",style: TextStyle(color: AppColors.white),),
 
-               SizedBox(width: MediaQuery.of(context).size.width * 0.3),
+               SizedBox(width: context.isLargeScreen 
+                 ? MediaQuery.of(context).size.width * 0.4
+                 : context.isMediumScreen 
+                   ? MediaQuery.of(context).size.width * 0.35
+                   : MediaQuery.of(context).size.width * 0.3),
 
               Text("${post.comments} ",style: TextStyle(color: AppColors.white),),
               const SizedBox(width: AppDimensions.reactionIconSpacing),

@@ -84,13 +84,13 @@ class UsernameViewModel extends ChangeNotifier {
     await Future.delayed(const Duration(seconds: 1)); // simulate API delay
 
     // Dummy login credentials
-    if (email == "" && password == "") {
+    if (email.isNotEmpty && password.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("✅ Login Successful")),
       );
 
       // Navigate to Home Screen
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
+      Navigator.pushReplacementNamed(context, AppRoutes.event);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("❌ Invalid email or password")),

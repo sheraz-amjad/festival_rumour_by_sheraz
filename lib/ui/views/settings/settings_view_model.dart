@@ -33,6 +33,7 @@ class SettingsViewModel extends BaseViewModel {
 
   void openLeaderboard() {
     // TODO: Navigate to Leaderboard screen
+    _navigationService.navigateTo(AppRoutes.leaderboard);
   }
 
   void openHelp() {
@@ -56,7 +57,14 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   void logout() {
-    // TODO: Handle logout process
+    _navigationService.navigateTo(
+      AppRoutes.welcome,
+      arguments: null,
+      // Replace all routes before navigating
+    );
+
+    // Ensure all previous routes are removed
+    _navigationService.popUntil((route) => route.isFirst);
   }
 
   void goToSubscription() {
