@@ -88,7 +88,7 @@ class OtpViewModel extends BaseViewModel {
       notifyListeners();
 
       // ✅ Navigate to next screen
-      _navigationService.navigateTo(AppRoutes.firstname);
+      _navigationService.navigateTo(AppRoutes.name);
     }, errorMessage: AppStrings.otpVerificationError);
   }
 

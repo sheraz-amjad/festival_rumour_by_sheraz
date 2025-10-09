@@ -1,13 +1,10 @@
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/utils/snackbar_util.dart';
-import 'app_festivals.dart';
 
 class DiscoverViewModel extends BaseViewModel {
   String selected = AppStrings.live;
   bool _isFavorited = false;
-
-  List<Map<String, String>> festivals = AppFestivals.festivals;
+  //List<Map<String, String>> festivals = AppFestivals.festivals;
 
   bool get isFavorited => _isFavorited;
 

@@ -133,7 +133,7 @@ class AppDimensions {
   static const double textXS = 10.0;
   static const double textS = 12.0;
   static const double textM = 14.0;
-  static const double textL = 20.0;
+  static const double textL = 18.0;
   static const double textXL = 26.0;
   static const double textXXL = 35.0;
   static const double textTitle = 22.0;

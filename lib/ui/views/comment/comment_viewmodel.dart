@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/services/navigation_service.dart';
+import '../../../core/di/locator.dart';
 
 class CommentViewModel extends BaseViewModel {
+  final NavigationService _navigationService = locator<NavigationService>();
   TextEditingController commentController = TextEditingController();
   bool _showEmojiGrid = false;
 
@@ -36,8 +39,8 @@ class CommentViewModel extends BaseViewModel {
   }
 
   void closeCommentView() {
-    // Logic to close view
-    print("Comment view closed");
+    // Close the comment view and return to previous screen
+    _navigationService.pop();
   }
 
   @override

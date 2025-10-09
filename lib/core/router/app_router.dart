@@ -1,63 +1,67 @@
-import 'package:festival_rumour/ui/views/homeview/post_model.dart';
 import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
-import '../../ui/views/ProfileView/profile_list_view.dart';
+import '../../ui/views/Profile/profile_view.dart';
+import '../../ui/views/Profile/profilelist/profile_list_view.dart';
 import '../../ui/views/Splash/SplashView.dart';
+import '../../ui/views/chat/chat_view.dart';
 import '../../ui/views/comment/comment_view.dart';
-import '../../ui/views/eventscreen/event_view.dart';
-import '../../ui/views/firstname/first_name_view.dart';
+import '../../ui/views/detail/detail_view.dart';
+import '../../ui/views/discover/discover_view.dart';
+import '../../ui/views/event/event_view.dart';
+import '../../ui/views/festival/festival_view.dart';
 import '../../ui/views/homeview/home_view.dart';
-import '../../ui/views/interestview/interests_view.dart';
+import '../../ui/views/interest/interests_view.dart';
 import '../../ui/views/job/festivals_job_view.dart';
-import '../../ui/views/main/navbaar.dart';
+import '../../ui/views/name/name_view.dart';
+import '../../ui/views/navbar/navbaar.dart';
+import '../../ui/views/news/news_view.dart';
+import '../../ui/views/notification/notification_view.dart';
 import '../../ui/views/otp/otp_view.dart';
+import '../../ui/views/performance/performance_view.dart';
+import '../../ui/views/toilet/toilet_view.dart';
 import '../../ui/views/uploadphotos/upload_photos_view.dart';
 import '../../ui/views/welcome/welcome_view.dart';
 import '../../ui/views/signup/signup_view.dart';
 import '../../ui/views/signup/signup_viewemail.dart';
-import '../../ui/views/chat/chat_list_view.dart';
-import '../../ui/views/tickets/tickets_view.dart';
 import '../../ui/views/map/map_view.dart';
-import '../../ui/views/gallery/gallery_view.dart';
-import '../../ui/views/news/news_view.dart';
-import '../../ui/views/eventdetail/event_detail_view.dart';
-import '../../ui/views/wallet/wallet_view.dart';
-import '../../ui/views/menu/menu_view.dart';
-import '../../ui/views/compose/compose_view.dart';
 import '../../ui/views/subscription/subscription_view.dart';
 import '../../ui/views/settings/settings_view.dart';
 import '../../ui/views/leaderboard/leaderboard_view.dart';
-import '../utils/transition.dart'; // Import the helper we made
+import '../../ui/views/posts/posts_view.dart';
+import '../../ui/views/chat/chat_room_view.dart';
+import '../utils/transition.dart';
 
 class AppRoutes {
   static const String welcome = '/welcome';
   static const String signup = '/signup';
   static const String signupEmail = '/signup_email';
   static const String uploadphotos = '/uploadphotos';
-  static const String firstname = '/firstname';
+  static const String name = '/name';
   static const String otp = '/otp';
   static const String splash = '/splash';
   static const String interest = '/interest';
   static const String home = '/home';
-  static const String navview = '/navbaar';
-  static const String event = '/event';
+  static const String navbaar = '/navbaar';
+  static const String festivals = '/festivals';
   static const String subscription = '/subscription';
-  static const String chatList = '/chat_list';
-  static const String tickets = '/tickets';
+  static const String chat = '/chat';
   static const String map = '/map';
-  static const String gallery = '/gallery';
-  static const String news = '/news';
-  static const String eventDetail = '/event_detail';
-  static const String wallet = '/wallet';
-  static const String menu = '/menu';
-  static const String compose = '/compose';
+  static const String notification = '/notification';
   static const String settings = '/settings';
   static const String leaderboard = '/leaderboard';
   static const String comments = '/comments';
+  static const String profileList = '/profileList';
   static const String username = '/username';
-  static const String profileList = '/profile_list';
+  static const String profile = '/profile';
   static const String festivalsJob = '/festivals_job';
-
+  static const String discover = '/discover';
+  static const String posts = '/posts';
+  static const String detail = '/detail';
+  static const String chatRoom = '/chat_room';
+  static const String toilets = '/toilets';
+  static const String performance = '/performance';
+  static const String event = '/event';
+  static const String news = '/news';
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -78,55 +82,38 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.uploadphotos:
       return SmoothPageRoute(page: const UploadPhotosViews());
 
-    case AppRoutes.firstname:
-      return SmoothPageRoute(page: const FirstNameView());
+    case AppRoutes.name:
+      return SmoothPageRoute(page: const NameView());
 
-      case AppRoutes.event:
+      case AppRoutes.festivals:
        // final args = settings.arguments as List<dynamic>;
-        return SmoothPageRoute(page: const EventView());
+        return SmoothPageRoute(page: const FestivalView());
 
 
     case AppRoutes.otp:
       return SmoothPageRoute(page: const OtpView());
+
     case AppRoutes.interest:
       return SmoothPageRoute(page: const InterestsView());
 
     case AppRoutes.home:
       return SmoothPageRoute(page: const HomeView());
 
-    case AppRoutes.navview:
+    case AppRoutes.navbaar:
       return SmoothPageRoute(page: const NavBaar());
 
     case AppRoutes.subscription:
       return SmoothPageRoute(page: const SubscriptionView());
 
-    case AppRoutes.chatList:
-      return SmoothPageRoute(page: const ChatListView());
-
-    case AppRoutes.tickets:
-      return SmoothPageRoute(page: const TicketsView());
+    case AppRoutes.chat:
+      return SmoothPageRoute(page: const ChatView());
 
 
     case AppRoutes.map:
       return SmoothPageRoute(page: const MapView());
 
-    case AppRoutes.gallery:
-      return SmoothPageRoute(page: const GalleryView());
-
-    case AppRoutes.news:
-      return SmoothPageRoute(page: const NewsView());
-
-    case AppRoutes.eventDetail:
-      return SmoothPageRoute(page: const EventDetailView());
-
-    case AppRoutes.wallet:
-      return SmoothPageRoute(page: const WalletView());
-
-    case AppRoutes.menu:
-      return SmoothPageRoute(page: const MenuView());
-
-    case AppRoutes.compose:
-      return SmoothPageRoute(page: const ComposeView());
+    case AppRoutes.notification:
+      return SmoothPageRoute(page: const NotificationView());
 
     case AppRoutes.settings:
       return SmoothPageRoute(page: const SettingsView());
@@ -137,15 +124,40 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       case AppRoutes.comments:
       return SmoothPageRoute(page: const CommentView());
 
+    case AppRoutes.discover:
+      return SmoothPageRoute(page: const DiscoverView());
       case AppRoutes.username:
         return SmoothPageRoute(page: const UsernameView());
         case AppRoutes.festivalsJob:
       return SmoothPageRoute(page: const FestivalsJobView());
 
-    case AppRoutes.profileList:
-      final args = settings.arguments as int? ?? 0;
-      return SmoothPageRoute(page: ProfileListView(initialTab: args,username: 'username',));
+    case AppRoutes.profile:
+      return SmoothPageRoute(page: ProfileView());
 
+      case AppRoutes.profileList:
+        final args = settings.arguments as int? ?? 0;
+            return SmoothPageRoute(page: ProfileListView(initialTab: args,username: 'username',));
+
+    case AppRoutes.posts:
+      return SmoothPageRoute(page: const PostsView());
+
+      case AppRoutes.detail:
+      return SmoothPageRoute(page: const DetailView());
+
+    case AppRoutes.chatRoom:
+      return SmoothPageRoute(page: const ChatRoomView());
+
+      case AppRoutes.toilets:
+      return SmoothPageRoute(page: const ToiletView());
+
+      case AppRoutes.performance:
+      return SmoothPageRoute(page: const PerformanceView());
+
+      case AppRoutes.event:
+      return SmoothPageRoute(page: const EventView());
+
+      case AppRoutes.news:
+      return SmoothPageRoute(page: const NewsView());
 
     default:
       return MaterialPageRoute(

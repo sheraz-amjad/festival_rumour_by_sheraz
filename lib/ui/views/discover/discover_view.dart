@@ -1,9 +1,6 @@
 import 'package:festival_rumour/core/utils/backbutton.dart';
 import 'package:festival_rumour/shared/extensions/context_extensions.dart';
-import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -11,12 +8,12 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/utils/snackbar_util.dart';
 import '../../../shared/widgets/responsive_widget.dart';
-
-import '../homeview/home_viewmodel.dart';
 import 'discover_viewmodel.dart';
 import 'widgets/event_header_card.dart';
 import 'widgets/action_tile.dart';
 import 'widgets/grid_option.dart';
+
+
 class DiscoverView extends BaseView<DiscoverViewModel> {
   final VoidCallback? onBack;
   const DiscoverView({super.key, this.onBack});

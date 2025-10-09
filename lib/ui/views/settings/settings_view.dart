@@ -1,9 +1,7 @@
-import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/utils/backbutton.dart';
 import '../../../core/utils/base_view.dart';
 import 'settings_view_model.dart';
 

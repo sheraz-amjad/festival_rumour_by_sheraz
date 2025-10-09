@@ -1,8 +1,7 @@
 import 'package:festival_rumour/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/base_view.dart';
-import 'festivals_job_viewmodel.dart';
+import 'festivals_job_view_model.dart';
 
 class FestivalsJobView extends BaseView<FestivalsJobViewModel> {
   const FestivalsJobView({super.key});

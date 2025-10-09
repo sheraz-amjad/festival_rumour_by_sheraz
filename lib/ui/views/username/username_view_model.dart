@@ -90,7 +90,7 @@ class UsernameViewModel extends ChangeNotifier {
       );
 
       // Navigate to Home Screen
-      Navigator.pushReplacementNamed(context, AppRoutes.event);
+      Navigator.pushReplacementNamed(context, AppRoutes.festivals);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("❌ Invalid email or password")),

@@ -155,18 +155,18 @@ class AppStrings {
   static const String allFilter = "";
   static const String usersFilter = "Users";
   static const String postsFilter = "Posts";
-  static const String eventsFilter = "Events";
-  static const String loadingEvents = "Loading events...";
-  static const String noEventsAvailable = "No events available";
-  static const String exploreText = "Explore Events";
-  static const String failedToLoadEvents = "Failed to load events";
+  static const String festivalsFilter = "Festivals";
+  static const String loadingfestivals = "Loading festivals...";
+  static const String noFestivalsAvailable = "No Festivals available";
+  static const String exploreText = "Explore Festivals";
+  static const String failedToLoadFestivals = "Failed to load festival";
   static const String commentHint = "Ask a question, gather people or share your thoughts";
   // Event titles
-  static const String eventTitle = "Music Fest";
+  static const String festivalTitle = "Music Fest";
   // Locations
-  static const String eventlocation = "Lahore";
+  static const String festivallocation = "Lahore";
   // Dates
-  static const String eventdate = "Oct 28, 2025";
+  static const String festivaldate = "Oct 28, 2025";
 
 
   static const String upgradeToPremium = "Upgrade to Premium";
@@ -187,9 +187,7 @@ class AppStrings {
 
   // Festival Related
   static const String festivals = 'Festivals';
-  static const String events = 'Events';
   static const String rumors = 'Rumors';
-  static const String news = 'News';
   static const String featured = 'Featured';
   static const String popular = 'Popular';
   static const String upcoming = 'Upcoming';
@@ -354,16 +352,14 @@ class AppStrings {
 
   // Additional UI strings
   static const String discover = 'Discover';
-  static const String compose = 'Compose';
   static const String menu = 'Menu';
-  static const String eventDetail = 'Event Detail';
+  static const String festivalDetail = 'Festival Detail';
   static const String map = 'Map';
   static const String wallet = 'Wallet';
   static const String tickets = 'Tickets';
   static const String subscribeNow = 'Subscribe Now';
   static const String selectFestivalsBy = 'Select Festivals by...';
   static const String live = 'Live';
-  static const String sufyanCh = 'Sufyan Ch';
   static const String monNom = 'MonNom';
   static const String profileDescription = 'La description de mon profil';
   static const String posts100 = '100';

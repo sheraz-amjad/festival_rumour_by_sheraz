@@ -26,6 +26,8 @@ class AppAssets {
   static const String jobicon = 'assets/icons/jobicon.svg';
   static const String job1 = 'assets/images/job1.png';
   static const String job2 = 'assets/images/job2.png';
+  static const String public = 'assets/icons/publicicon.png';
+  static const String private = 'assets/icons/privateicon.png';
 
 
 
@@ -48,8 +50,20 @@ class AppAssets {
   static const String post3 = 'assets/images/post3.png';
   static const String post5 = 'assets/images/post5.png';
   static const String post4 = 'assets/images/detailicon.png';
-  static const String eventimage = 'assets/images/post.png';
+  static const String festivalimage = 'assets/images/post.png';
   static const String leaderboard = 'assets/images/leaderboardback.png';
+  static const String publicbackground = 'assets/images/chatroompublic.png';
+  static const String privatebackground = 'assets/images/chatroomprivate.png';
+  static const String toilet1 = 'assets/images/toilet1.png';
+  static const String toilet2 = 'assets/images/toilet2.png';
+  static const String toilet3 = 'assets/images/toilet3.png';
+  static const String toilet4 = 'assets/images/toilet4.png';
+  static const String toiletdetail = 'assets/images/toiletdetail.png';
+  static const String assignmentIcon = 'assets/images/assignmenticon.png';
+  static const String news = 'assets/images/news.png';
+  static const String toilet = 'assets/images/toilet.png';
+  static const String news1 = 'assets/images/news1.png';
+  static const String performance = 'assets/images/performance.png';
 
 
   static const String proback = 'assets/images/proback.png';
