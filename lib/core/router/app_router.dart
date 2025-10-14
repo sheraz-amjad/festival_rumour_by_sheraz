@@ -1,5 +1,7 @@
 import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
+import '../../ui/views/signup/signupphone/signup_view.dart';
+import '../constants/app_strings.dart';
 import '../../ui/views/Profile/profile_view.dart';
 import '../../ui/views/Profile/profilelist/profile_list_view.dart';
 import '../../ui/views/Splash/SplashView.dart';
@@ -21,14 +23,14 @@ import '../../ui/views/performance/performance_view.dart';
 import '../../ui/views/toilet/toilet_view.dart';
 import '../../ui/views/uploadphotos/upload_photos_view.dart';
 import '../../ui/views/welcome/welcome_view.dart';
-import '../../ui/views/signup/signup_view.dart';
-import '../../ui/views/signup/signup_viewemail.dart';
+import '../../ui/views/signup/signupemail/signup_viewemail.dart';
 import '../../ui/views/map/map_view.dart';
 import '../../ui/views/subscription/subscription_view.dart';
 import '../../ui/views/settings/settings_view.dart';
 import '../../ui/views/leaderboard/leaderboard_view.dart';
 import '../../ui/views/posts/posts_view.dart';
 import '../../ui/views/chat/chat_room_view.dart';
+import '../../ui/views/chat/create_chat_room_view.dart';
 import '../utils/transition.dart';
 
 class AppRoutes {
@@ -58,6 +60,7 @@ class AppRoutes {
   static const String posts = '/posts';
   static const String detail = '/detail';
   static const String chatRoom = '/chat_room';
+  static const String createChatRoom = '/create_chat_room';
   static const String toilets = '/toilets';
   static const String performance = '/performance';
   static const String event = '/event';
@@ -147,6 +150,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.chatRoom:
       return SmoothPageRoute(page: const ChatRoomView());
 
+    case AppRoutes.createChatRoom:
+      return SmoothPageRoute(page: const CreateChatRoomView());
+
       case AppRoutes.toilets:
       return SmoothPageRoute(page: const ToiletView());
 
@@ -162,7 +168,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     default:
       return MaterialPageRoute(
         builder: (_) => const Scaffold(
-          body: Center(child: Text("Page not found")),
+          body: Center(child: Text(AppStrings.pageNotFound)),
         ),
       );
   }

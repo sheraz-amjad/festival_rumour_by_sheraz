@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_sizes.dart';
+import '../constants/app_strings.dart';
 import '../../shared/extensions/context_extensions.dart';
 
 class CustomNavBar extends StatelessWidget {
@@ -16,23 +17,25 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {"icon": Icons.home_outlined, "label": "Home"},
-      {"icon": Icons.explore_outlined, "label": "Discover"},
-      {"icon": Icons.person_outline, "label": "Profile"},
+      {"icon": Icons.home_outlined, "label": AppStrings.home},
+      {"icon": Icons.explore_outlined, "label": AppStrings.discover},
+      {"icon": Icons.person_outline, "label": AppStrings.profile},
     ];
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double containerWidth = screenWidth / items.length;
-    final double iconSize = context.isLargeScreen 
-      ? AppDimensions.iconL 
-      : context.isMediumScreen 
-        ? AppDimensions.iconM + 2 
-        : AppDimensions.iconM;
+    final double iconSize = 24.0;
 
     return SafeArea(
       top: false,
       child: Container(
-        color: Colors.transparent,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
         child: Row(
           children: List.generate(items.length, (index) {
             final bool selected = currentIndex == index;
@@ -43,49 +46,47 @@ class CustomNavBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 width: containerWidth,
-                padding: EdgeInsets.symmetric(
-                  vertical: context.isLargeScreen ? 12 : context.isMediumScreen ? 11 : 10,
-                  horizontal: context.isLargeScreen ? 8 : 4,
-                ),
-                decoration: BoxDecoration(
-                  color: selected
-                      ? AppColors.black.withOpacity(0.1) // Light black highlight for selected
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      item["icon"] as IconData,
-                      color: selected
-                          ? AppColors.black // Black for selected
-                          : AppColors.lightBlack, // Light black for unselected
-                      size: selected ? iconSize + 2 : iconSize, // Slightly larger for selected
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      item["label"] as String,
-                      style: TextStyle(
-                        color: selected
-                            ? AppColors.black // Black for selected
-                            : AppColors.lightBlack, // Light black for unselected
-                        fontWeight: selected 
-                            ? FontWeight.bold 
-                            : FontWeight.w400, // Lighter weight for unselected
-                        fontSize: context.isLargeScreen 
-                          ? (selected ? 14 : 13)
-                          : context.isMediumScreen 
-                            ? (selected ? 13 : 12)
-                            : (selected ? 12 : 11),
-                      ),
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                child: _buildButton(item, selected, iconSize),
               ),
             );
           }),
         ),
+      ),
+    );
+  }
+
+  Widget _buildButton(Map<String, dynamic> item, bool selected, double iconSize) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: selected 
+            ? AppColors.accent // Use app accent color for selected
+            : Colors.transparent, // Transparent for unselected
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            item["icon"] as IconData,
+            color: selected 
+                ? AppColors.black // Black for selected (contrasts well with accent)
+                : const Color(0xFF9E9E9E), // Light gray for unselected
+            size: iconSize,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            item["label"] as String,
+            style: TextStyle(
+              color: selected 
+                  ? AppColors.black // Black for selected (contrasts well with accent)
+                  : const Color(0xFF9E9E9E), // Light gray for unselected
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }

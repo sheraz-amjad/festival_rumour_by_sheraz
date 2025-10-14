@@ -39,6 +39,8 @@ dependencies:
   # State Management
   provider: ^6.1.1
 
+  share_plus: ^7.2.2
+
   # HTTP Client
   dio: ^5.4.0
 
@@ -119,6 +121,9 @@ dependencies:
   # Country Code Picker
   country_code_picker: ^3.0.0
   change_app_package_name: ^1.5.0
+
+  # Contacts
+  flutter_contacts: ^1.1.7
 
 dev_dependencies:
   flutter_test:

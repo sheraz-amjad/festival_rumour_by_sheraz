@@ -3,6 +3,7 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/constants/app_strings.dart';
 import 'chat_room_view_model.dart';
 
 class ChatRoomView extends BaseView<ChatRoomViewModel> {
@@ -59,7 +60,7 @@ class ChatRoomView extends BaseView<ChatRoomViewModel> {
           ),
           Expanded(
             child: Text(
-              'Luna community room',
+              AppStrings.lunaCommunityRoom,
               style: const TextStyle(
                 color: AppColors.white,
                 fontSize: 16,
@@ -169,7 +170,7 @@ class ChatRoomView extends BaseView<ChatRoomViewModel> {
                     ),
                     child: const Center(
                       child: Text(
-                        'INVITE YOUR FRIENDS',
+                        AppStrings.inviteYourFriends,
                         style: TextStyle(
                           color: AppColors.primary,
                           fontSize: 14,
@@ -223,7 +224,7 @@ class ChatRoomView extends BaseView<ChatRoomViewModel> {
                   child: TextField(
                     controller: viewModel.messageController,
                     decoration: const InputDecoration(
-                      hintText: 'Type something',
+                      hintText: AppStrings.typeSomething,
                       hintStyle: TextStyle(color: AppColors.grey600),
                       border: InputBorder.none,
                     ),

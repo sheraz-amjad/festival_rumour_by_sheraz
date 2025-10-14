@@ -1,15 +1,15 @@
+import 'package:festival_rumour/ui/views/signup/signupemail/signup_viewemail_model.dart';
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_assets.dart';
-import '../../../core/utils/base_view.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_sizes.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../core/utils/auth_background.dart';
-import '../../../core/utils/backbutton.dart';
-import '../../../shared/widgets/responsive_widget.dart';
-import '../../../shared/widgets/loading_widget.dart';
-import '../../../shared/extensions/context_extensions.dart';
-import 'signup_viewemail_model.dart';
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/utils/base_view.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/auth_background.dart';
+import '../../../../core/utils/backbutton.dart';
+import '../../../../shared/widgets/responsive_widget.dart';
+import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../shared/extensions/context_extensions.dart';
 
 class SignupViewEmail extends BaseView<SignupViewEmailModel> {
   const SignupViewEmail({super.key});

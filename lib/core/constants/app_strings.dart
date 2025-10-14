@@ -39,6 +39,7 @@ class AppStrings {
   // Navigation
   static const String home = 'Home';
   static const String profile = 'Profile';
+  static const String discover = 'Discover';
   static const String settings = 'Settings';
   static const String about = 'About';
   static const String help = 'Help';
@@ -219,6 +220,130 @@ class AppStrings {
   static const String failtouploadimage = 'Failed to pick image from gallery. Please try again.';
   static const String failedtotakephoto = 'Failed to take photo. Please try again.';
   static const String faildtocontiue = 'Failed to continue. Please try again.';
+  static const String contactsPermissionDenied = 'Contacts permission denied. Please enable contacts access in settings.';
+  static const String failedToLoadContacts = 'Failed to load contacts';
+  static const String pleaseEnterChatRoomTitle = 'Please enter a chat room title';
+  static const String pleaseSelectAtLeastOneContact = 'Please select at least one contact';
+  
+  // Events Related
+  static const String events = 'Events';
+  static const String toilets = 'Toilets';
+  static const String viewAll = 'View All';
+  static const String viewDetail = 'View Detail';
+  static const String newEventPreview = 'New Event Preview';
+  static const String newEventInformation = 'New Event Information';
+  static const String festivalName = 'Festival Name';
+  static const String magicShow = 'Magic show';
+  static const String title = 'Title';
+  static const String abcde = 'Abcde';
+  static const String content = 'Content';
+  static const String crowdCapacity = 'Crowd Capacity';
+  static const String pricePerPerson = 'Price Per Person';
+  static const String totalAmount = 'Total Amount';
+  static const String tax = 'Tax';
+  static const String startTime = 'Start Time';
+  static const String endTime = 'End Time';
+  
+  // Performance Related
+  static const String stageRunningOrder = 'Stage Running Order';
+  static const String performance = 'Performance';
+  static const String performancePreview = 'Performance Preview';
+  static const String performanceInformation = 'Performance Information';
+  static const String selectEvent = 'Select Event';
+  static const String startDate = 'Start Date';
+  static const String endDate = 'End Date';
+  static const String performanceTitle = 'Performance Title';
+  static const String band = 'Band';
+  static const String artist = 'Artist';
+  static const String specialGuests = 'Special Guests';
+  static const String participantName = 'Participant Name';
+  static const String notes = 'Notes';
+  
+  // News Related
+  static const String bulletinManagement = 'Bulletin Management';
+  static const String bulletin = 'Bulletin';
+  static const String bulletinPreview = 'Bulletin Preview';
+  static const String bulletinInformation = 'Bulletin Information';
+  static const String titleName = 'Title Name';
+  static const String scheduleOptions = 'Schedule Options';
+  static const String publishNow = 'Publish Now';
+  static const String scheduleForLater = 'Schedule For Later';
+  static const String time = 'Time';
+  static const String date = 'Date';
+  static const String newBulletin = 'New Bulletin';
+  static const String latestFestivalUpdates = 'Latest Festival Updates';
+  
+  // Festival Names
+  static const String glastonburyFestival = 'Glastonbury Festival';
+  static const String musicAndArtsFestival = 'Music and Arts Festival';
+  static const String readingAndLeedsFestival = 'Reading And Leeds Festival';
+  static const String rockAndAlternativeMusicFestival = 'Rock and Alternative Music Festival';
+  static const String downloadFestival = 'Download Festival';
+  static const String rockAndMetalMusicFestival = 'Rock and Metal Music Festival';
+  
+  // Toilet Related
+  static const String toiletDetail = 'Toilet Detail';
+  static const String festivalInformation = 'Festival Information';
+  
+  // Leaderboard Related
+  static const String leaderBoard = 'Leader board';
+  static const String pro = 'PRO';
+  
+  // Subscription Related
+  static const String monthly = 'Monthly';
+  static const String yearly = 'Yearly';
+  static const String lifetime = 'Lifetime';
+  static const String postsAndCommentsAnonymous = "• Posts and comments will show as 'Anonymous'\n";
+  static const String byContinuingYouAgree = 'By continuing you agree with the ';
+  
+  // Username Related
+  static const String enterYourEmail = 'Enter your email';
+  static const String asterisk = ' *';
+  
+  // Mock Contact Names
+  static const String robertFox = 'Robert Fox';
+  static const String darrellSteward = 'Darrell Steward';
+  static const String ronaldRichards = 'Ronald Richards';
+  static const String marvinMcKinney = 'Marvin McKinney';
+  static const String jeromeBell = 'Jerome Bell';
+  static const String kathrynMurphy = 'Kathryn Murphy';
+  static const String luna = 'Luna';
+  static const String luna2 = 'Luna 2';
+  
+  // Phone Numbers
+  static const String phone0123456789 = '0123456789';
+  static const String phone0123456790 = '0123456790';
+  static const String phone0123456791 = '0123456791';
+  static const String phone0123456792 = '0123456792';
+  static const String phone0123456887 = '0123456887';
+  static const String phone0123456987 = '0123456987';
+  
+  // Timestamps
+  static const String timestamp2108 = '21:08';
+  static const String timestamp2045 = '20:45';
+  static const String timestamp0000 = '00:00';
+  
+  // Error Messages
+  static const String pageNotFound = 'Page not found';
+  static const String joiningRoom = 'Joining room: ';
+  static const String invitingFriendsToChatRoom = 'Inviting friends to chat room';
+  static const String sendingMessage = 'Sending message: ';
+  static const String invitingToJoinLunaFest = 'Inviting {contactName} ({phoneNumber}) to join Luna Fest';
+  static const String creatingChatRoom = 'Creating chat room: ';
+  static const String selectedContacts = 'Selected contacts: ';
+  
+  // Discover Screen Strings
+  static const String getReady = 'GET READY';
+  static const String countMeInCatchYaAtLunaFest = 'Count me in, catch ya at Luna Fest';
+  static const String inviteYourFestieBestie = 'Invite your festie bestie';
+  static const String location = 'LOCATION';
+  static const String chatRooms = 'CHAT ROOMS';
+  static const String detail = 'DETAIL';
+  static const String addedToFavorites = '❤️ Added to favorites!';
+  static const String removedFromFavorites = '💔 Removed from favorites';
+  
+  // Event Header Strings
+  static const String saturdayOct11RevelstorkUk = 'SATURDAY  OCT 11 \nREVELSTORK, UK\n2:00 PM - 2:00';
 
   // Success Messages
   static const String success = 'Success';
@@ -260,16 +385,11 @@ class AppStrings {
   static const String finish = 'Finish';
 
   // Date and Time
-  static const String date = 'Date';
-  static const String time = 'Time';
+
   static const String duration = 'Duration';
-  static const String startDate = 'Start Date';
-  static const String endDate = 'End Date';
-  static const String startTime = 'Start Time';
-  static const String endTime = 'End Time';
+
 
   // Location
-  static const String location = 'Location';
   static const String address = 'Address';
   static const String city = 'City';
   static const String state = 'State';
@@ -284,7 +404,6 @@ class AppStrings {
   static const String document = 'Document';
   static const String gallery = 'Gallery';
   static const String camera = 'Camera';
-  static const String takePhoto = 'Take Photo';
   static const String chooseFromGallery = 'Choose from Gallery';
   static const String picupload = 'Add your recent picture';
   static const String recordVideo = 'Record Video';
@@ -300,7 +419,35 @@ class AppStrings {
   static const String leaderboard = 'Leader board';
   static const String upgradetoprimium = 'Pro \n Upgrade To Premium';
   static const String chat = 'Chat';
+  static const String createChatRoom = 'Create Chat Room';
+  static const String addTitle = 'Add Title';
+  static const String peopleFromContacts = 'People from your contacts attending Luna Fest.';
+  static const String iAmUsingLuna = 'I am using Luna';
+  static const String invite = 'INVITE';
+  static const String privateChats = 'Private Chats';
   static const String post = 'POST';
+  
+  // Chat Room Related
+  static const String public = 'Public';
+  static const String private = 'Private';
+  static const String communityRoom = 'Community room';
+  static const String privateRoom = 'Private room';
+  static const String lunaFest = 'Luna fest';
+  static const String musicFestival = 'Music Festival';
+  static const String artCulture = 'Art & Culture';
+  static const String foodDrinks = 'Food & Drinks';
+  static const String photography = 'Photography';
+  static const String lunaCommunityRoom = 'Luna community room';
+  static const String inviteYourFriends = 'INVITE YOUR FRIENDS';
+  static const String typeSomething = 'Type something';
+  static const String chatName = 'Chat Name';
+  static const String noMessages = 'No messages';
+  static const String chatCreated = 'Chat created';
+  static const String lunaNews = 'LUNA NEWS';
+  static const String chuturCongratulations = 'Chutur congratulations';
+  static const String tarunSendMeCssNotes = 'tarun: send me css notes';
+  static const String unknown = 'Unknown';
+  static const String mobile = 'mobile';
 
   static const String like = 'Like';
   static const String unlike = 'Unlike';
@@ -351,7 +498,6 @@ class AppStrings {
   static const String confirmPasswordHint = "Enter your confirm password";
 
   // Additional UI strings
-  static const String discover = 'Discover';
   static const String menu = 'Menu';
   static const String festivalDetail = 'Festival Detail';
   static const String map = 'Map';
@@ -367,10 +513,7 @@ class AppStrings {
   static const String following109 = '109';
   static const String festivals3 = '3';
   
-  // Subscription plans
-  static const String monthly = 'Monthly';
-  static const String yearly = 'Yearly';
-  static const String lifetime = 'Lifetime';
+
   
   // Pricing
   static const String price999 = '\$9.99';

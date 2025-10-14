@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/constants/app_strings.dart';
 
 class EventHeaderCard extends StatelessWidget {
   const EventHeaderCard({super.key});
@@ -21,7 +22,7 @@ class EventHeaderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Luna Fest 2025",
+                  AppStrings.lunaFest2025,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: AppDimensions.textXL,
@@ -30,7 +31,7 @@ class EventHeaderCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  "SATURDAY  OCT 11 \nREVELSTORK, UK\n2:00 PM - 2:00",
+                  AppStrings.saturdayOct11RevelstorkUk,
                   style: TextStyle(
                     color: AppColors.grey400,
                     fontSize: AppDimensions.textS,

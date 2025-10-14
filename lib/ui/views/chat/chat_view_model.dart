@@ -1,5 +1,6 @@
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_strings.dart';
 
 class ChatViewModel extends BaseViewModel {
   int _selectedTab = 0; // 0 = Public, 1 = Private
@@ -14,32 +15,32 @@ class ChatViewModel extends BaseViewModel {
   // Mock chat rooms data
   final List<Map<String, dynamic>> _chatRooms = [
     {
-      'title': 'Luna fest',
-      'subtitle': 'Community room',
+      'title': AppStrings.lunaFest,
+      'subtitle': AppStrings.communityRoom,
       'image': AppAssets.post,
       'members': 156,
     },
     {
-      'title': 'Music Festival',
-      'subtitle': 'Private room',
+      'title': AppStrings.musicFestival,
+      'subtitle': AppStrings.privateRoom,
       'image': AppAssets.post1,
       'members': 89,
     },
     {
-      'title': 'Art & Culture',
-      'subtitle': 'Community room',
+      'title': AppStrings.artCulture,
+      'subtitle': AppStrings.communityRoom,
       'image': AppAssets.post2,
       'members': 234,
     },
     {
-      'title': 'Food & Drinks',
-      'subtitle': 'Community room',
+      'title': AppStrings.foodDrinks,
+      'subtitle': AppStrings.communityRoom,
       'image': AppAssets.post3,
       'members': 178,
     },
     {
-      'title': 'Photography',
-      'subtitle': 'Private room',
+      'title': AppStrings.photography,
+      'subtitle': AppStrings.privateRoom,
       'image': AppAssets.post5,
       'members': 67,
     },
@@ -48,53 +49,29 @@ class ChatViewModel extends BaseViewModel {
   List<Map<String, dynamic>> get chatRooms {
     if (_selectedTab == 0) {
       // Public rooms
-      return _chatRooms.where((room) => room['subtitle'].contains('Community')).toList();
+      return _chatRooms.where((room) => room['subtitle'].contains(AppStrings.communityRoom)).toList();
     } else {
       // Private rooms
-      return _chatRooms.where((room) => room['subtitle'].contains('Private')).toList();
+      return _chatRooms.where((room) => room['subtitle'].contains(AppStrings.privateRoom)).toList();
     }
   }
 
   // Private chat conversations
   final List<Map<String, dynamic>> _privateChats = [
     {
-      'name': 'Luna',
+      'name': AppStrings.luna,
       'avatar': AppAssets.profile,
-      'lastMessage': 'Chutur congratulations',
-      'timestamp': '21:08',
+      'lastMessage': AppStrings.chuturCongratulations,
+      'timestamp': AppStrings.timestamp2108,
       'unreadCount': 4,
       'isActive': true,
     },
     {
-      'name': 'Luna 2',
+      'name': AppStrings.luna2,
       'avatar': AppAssets.profile,
-      'lastMessage': 'tarun: send me css notes',
-      'timestamp': '20:45',
+      'lastMessage': AppStrings.tarunSendMeCssNotes,
+      'timestamp': AppStrings.timestamp2045,
       'unreadCount': 0,
-      'isActive': true,
-    },
-    {
-      'name': 'Music Group',
-      'avatar': AppAssets.profile,
-      'lastMessage': 'Great performance tonight!',
-      'timestamp': '19:30',
-      'unreadCount': 2,
-      'isActive': false,
-    },
-    {
-      'name': 'Festival Crew',
-      'avatar': AppAssets.profile,
-      'lastMessage': 'Meeting at 3 PM tomorrow',
-      'timestamp': '18:15',
-      'unreadCount': 0,
-      'isActive': false,
-    },
-    {
-      'name': 'Art Community',
-      'avatar': AppAssets.profile,
-      'lastMessage': 'New exhibition opening next week',
-      'timestamp': '17:45',
-      'unreadCount': 1,
       'isActive': true,
     },
   ];
@@ -103,6 +80,26 @@ class ChatViewModel extends BaseViewModel {
 
   void joinRoom(Map<String, dynamic> room) {
     // Handle join room action
-    print("Joining room: ${room['title']}");
+    print("${AppStrings.joiningRoom}${room['title']}");
+  }
+
+  void addPrivateChat(String title, List<String> participants) {
+    // Add new private chat to the list
+    final newChat = {
+      'name': title,
+      'avatar': AppAssets.profile,
+      'lastMessage': AppStrings.chatCreated,
+      'timestamp': _getCurrentTime(),
+      'unreadCount': 0,
+      'isActive': true,
+    };
+    
+    _privateChats.insert(0, newChat);
+    notifyListeners();
+  }
+
+  String _getCurrentTime() {
+    final now = DateTime.now();
+    return '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
   }
 }

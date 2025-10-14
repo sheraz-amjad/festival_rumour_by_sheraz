@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/constants/app_strings.dart';
 
 class ChatRoomViewModel extends BaseViewModel {
   TextEditingController messageController = TextEditingController();
@@ -13,7 +14,7 @@ class ChatRoomViewModel extends BaseViewModel {
   void sendMessage() {
     if (messageController.text.isNotEmpty) {
       // Handle sending message
-      print("Sending message: ${messageController.text}");
+      print("${AppStrings.sendingMessage}${messageController.text}");
       messageController.clear();
       notifyListeners();
     }
@@ -21,6 +22,6 @@ class ChatRoomViewModel extends BaseViewModel {
 
   void inviteFriends() {
     // Handle invite friends action
-    print("Inviting friends to chat room");
+    print(AppStrings.invitingFriendsToChatRoom);
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/viewmodels/base_view_model.dart';
-import '../../../core/di/locator.dart';
-import '../../../core/services/navigation_service.dart';
-import '../../../core/router/app_router.dart';
-import '../../../core/constants/app_strings.dart';
+import '../../../../core/di/locator.dart';
+import '../../../../core/router/app_router.dart';
+import '../../../../core/services/navigation_service.dart';
+import '../../../../core/viewmodels/base_view_model.dart';
 
 class SignupViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();

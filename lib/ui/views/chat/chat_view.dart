@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/router/app_router.dart';
@@ -57,6 +56,18 @@ class ChatView extends BaseView<ChatViewModel> {
           ),
         ],
       ),
+      floatingActionButton: viewModel.selectedTab == 1 
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.createChatRoom);
+              },
+              backgroundColor: AppColors.accent,
+              child: const Icon(
+                Icons.chat,
+                color: AppColors.black,
+              ),
+            )
+          : null,
     );
   }
 
@@ -83,7 +94,7 @@ class ChatView extends BaseView<ChatViewModel> {
             ),
             Expanded(
               child: Text(
-                'Chat Rooms',
+                AppStrings.chatRooms,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: AppColors.white,
@@ -91,12 +102,6 @@ class ChatView extends BaseView<ChatViewModel> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.share, color: AppColors.white),
-              onPressed: () {
-                // Handle share action
-              },
             ),
           ],
         ),
@@ -133,7 +138,7 @@ class ChatView extends BaseView<ChatViewModel> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Public',
+                      AppStrings.public,
                       style: TextStyle(
                         color: viewModel.selectedTab == 0 ? AppColors.black : AppColors.white,
                         fontWeight: FontWeight.w600,
@@ -165,7 +170,7 @@ class ChatView extends BaseView<ChatViewModel> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Private',
+                      AppStrings.private,
                       style: TextStyle(
                         color: viewModel.selectedTab == 1 ? AppColors.black : AppColors.white,
                         fontWeight: FontWeight.w600,
@@ -204,7 +209,6 @@ class ChatView extends BaseView<ChatViewModel> {
   Widget _buildPrivateChatList(BuildContext context, ChatViewModel viewModel) {
     return Container(
       width: double.infinity,
-     // margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.onPrimary.withOpacity(0.5),
@@ -214,15 +218,24 @@ class ChatView extends BaseView<ChatViewModel> {
           width: 1,
         ),
       ),
-      child: ListView.builder(
-        itemCount: viewModel.privateChats.length,
-        itemBuilder: (context, index) {
-          final chat = viewModel.privateChats[index];
-          return _buildPrivateChatItem(context, chat);
-        },
+      child: Column(
+        children: [
+          //const SizedBox(height: 10),
+          // Chat list
+          Expanded(
+            child: ListView.builder(
+              itemCount: viewModel.privateChats.length,
+              itemBuilder: (context, index) {
+                final chat = viewModel.privateChats[index];
+                return _buildPrivateChatItem(context, chat);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _buildPrivateChatItem(BuildContext context, Map<String, dynamic> chat) {
     return Container(
@@ -270,7 +283,7 @@ class ChatView extends BaseView<ChatViewModel> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  chat['name'] ?? 'Chat Name',
+                  chat['name'] ?? AppStrings.chatName,
                   style: const TextStyle(
                     color: AppColors.white,
                     fontSize: 16,
@@ -279,7 +292,7 @@ class ChatView extends BaseView<ChatViewModel> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  chat['lastMessage'] ?? 'No messages',
+                  chat['lastMessage'] ?? AppStrings.noMessages,
                   style: const TextStyle(
                     color: AppColors.grey600,
                     fontSize: 14,
@@ -296,7 +309,7 @@ class ChatView extends BaseView<ChatViewModel> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                chat['timestamp'] ?? '00:00',
+                chat['timestamp'] ?? AppStrings.timestamp0000,
                 style: const TextStyle(
                   color: AppColors.white,
                   fontSize: 12,
@@ -330,7 +343,7 @@ class ChatView extends BaseView<ChatViewModel> {
               Expanded(
                 child: _buildCard(
                   context,
-                  'LUNA NEWS',
+                  AppStrings.lunaNews,
                   AppAssets.news,
                   onTap: () => Navigator.pushNamed(context, AppRoutes.news),
                 ),
