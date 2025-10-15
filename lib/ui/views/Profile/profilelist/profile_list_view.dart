@@ -12,11 +12,13 @@ import 'profile_list_view_model.dart';
 class ProfileListView extends BaseView<ProfileListViewModel> {
   final int initialTab; // 0 = Followers, 1 = Following, 2 = Festivals
   final String username;
+  final VoidCallback? onBack;
 
   const ProfileListView({
     super.key,
     required this.initialTab,
     required this.username,
+    this.onBack,
   });
 
   @override
@@ -52,7 +54,13 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomBackButton(onTap: () => Navigator.pop(context)),
+                      CustomBackButton(onTap: () {
+                        if (onBack != null) {
+                          onBack!();
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      }),
                       Text(
                         username,
                         style: const TextStyle(

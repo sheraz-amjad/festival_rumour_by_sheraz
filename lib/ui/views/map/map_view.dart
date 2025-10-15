@@ -10,7 +10,8 @@ import '../../../core/utils/backbutton.dart';
 import 'map_view_model.dart';
 
 class MapView extends BaseView<MapViewModel> {
-  const MapView({super.key});
+  final VoidCallback? onBack;
+  const MapView({super.key, this.onBack});
 
   @override
   MapViewModel createViewModel() => MapViewModel();
@@ -75,7 +76,7 @@ class MapView extends BaseView<MapViewModel> {
       child: Row(
         children: [
           CustomBackButton(
-            onTap: () => Navigator.pop(context),
+            onTap: onBack ?? () => Navigator.pop(context),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const Text(

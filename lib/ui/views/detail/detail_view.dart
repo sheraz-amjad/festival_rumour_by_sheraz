@@ -5,11 +5,14 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../core/utils/custom_navbar.dart';
 import '../../../core/router/app_router.dart';
 import 'detail_view_model.dart';
 
 class DetailView extends BaseView<DetailViewModel> {
-  const DetailView({super.key});
+  final VoidCallback? onBack;
+  final Function(String)? onNavigateToSub;
+  const DetailView({super.key, this.onBack, this.onNavigateToSub});
 
   @override
   DetailViewModel createViewModel() => DetailViewModel();
@@ -59,7 +62,7 @@ class DetailView extends BaseView<DetailViewModel> {
       child: Row(
         children: [
           CustomBackButton(
-            onTap: () => Navigator.pop(context),
+            onTap: onBack ?? () => Navigator.pop(context),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const Text(
@@ -76,7 +79,7 @@ class DetailView extends BaseView<DetailViewModel> {
   }
 
   Widget _buildContentCards(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
       child: Column(
         children: [
@@ -97,7 +100,13 @@ class DetailView extends BaseView<DetailViewModel> {
                   context,
                   'TOILET',
                   AppAssets.toilet,
-                  onTap: () => Navigator.pushNamed(context, AppRoutes.toilets),
+                  onTap: () {
+                    if (onNavigateToSub != null) {
+                      onNavigateToSub!('toilets');
+                    } else {
+                      Navigator.pushNamed(context, AppRoutes.toilets);
+                    }
+                  },
                 ),
               ),
             ],

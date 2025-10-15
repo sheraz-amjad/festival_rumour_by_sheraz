@@ -45,7 +45,7 @@ class CommentView extends BaseView<CommentViewModel> {
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.grey800,
+                color: AppColors.onPrimary.withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
@@ -76,8 +76,8 @@ class CommentView extends BaseView<CommentViewModel> {
           Container(
             height: 60,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: const BoxDecoration(
-              color: AppColors.grey800,
+            decoration: BoxDecoration(
+              color: AppColors.onPrimary.withOpacity(0.3),
               border: Border(
                 top: BorderSide(color: AppColors.grey700, width: 0.5),
               ),
@@ -101,91 +101,91 @@ class CommentView extends BaseView<CommentViewModel> {
           ),
           
           // Keyboard toolbar
-          Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: const BoxDecoration(
-              color: AppColors.grey800,
-              border: Border(
-                top: BorderSide(color: AppColors.grey700, width: 0.5),
-              ),
-            ),
-            child: Row(
-              children: [
-                _buildToolbarIcon(Icons.grid_on, () {}),
-                const SizedBox(width: 16),
-                _buildToolbarIcon(Icons.attach_file, () {}),
-                const SizedBox(width: 16),
-                _buildToolbarText("GIF", () {}),
-                const SizedBox(width: 16),
-                _buildToolbarIcon(Icons.emoji_emotions, () {}),
-                const SizedBox(width: 16),
-                _buildToolbarIcon(Icons.photo_library, () {}),
-                const SizedBox(width: 16),
-                _buildToolbarIcon(Icons.mic, () {}),
-              ],
-            ),
-          ),
+          // Container(
+          //   height: 50,
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   decoration: const BoxDecoration(
+          //     color: AppColors.grey800,
+          //     border: Border(
+          //       top: BorderSide(color: AppColors.grey700, width: 0.5),
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       _buildToolbarIcon(Icons.grid_on, () {}),
+          //       const SizedBox(width: 16),
+          //       _buildToolbarIcon(Icons.attach_file, () {}),
+          //       const SizedBox(width: 16),
+          //       _buildToolbarText("GIF", () {}),
+          //       const SizedBox(width: 16),
+          //       _buildToolbarIcon(Icons.emoji_emotions, () {}),
+          //       const SizedBox(width: 16),
+          //       _buildToolbarIcon(Icons.photo_library, () {}),
+          //       const SizedBox(width: 16),
+          //       _buildToolbarIcon(Icons.mic, () {}),
+          //     ],
+          //   ),
+          // ),
           
           // Bottom input bar
-          Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: const BoxDecoration(
-              color: AppColors.grey800,
-              border: Border(
-                top: BorderSide(color: AppColors.grey700, width: 0.5),
-              ),
-            ),
-            child: Row(
-              children: [
-                _buildBottomButton("!?123", () {}),
-                const SizedBox(width: 8),
-                _buildBottomButton("😊", () {}),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.grey700,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TextField(
-                      controller: viewModel.commentController,
-                      decoration: const InputDecoration(
-                        hintText: "Type a message...",
-                        hintStyle: TextStyle(color: AppColors.grey600),
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(color: AppColors.white),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                _buildBottomButton("@", () {}),
-                const SizedBox(width: 8),
-                _buildBottomButton("-", () {}),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: viewModel.postComment,
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      color: AppColors.accent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      color: AppColors.black,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   height: 60,
+          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //   decoration: const BoxDecoration(
+          //     color: AppColors.grey800,
+          //     border: Border(
+          //       top: BorderSide(color: AppColors.grey700, width: 0.5),
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       _buildBottomButton("!?123", () {}),
+          //       const SizedBox(width: 8),
+          //       _buildBottomButton("😊", () {}),
+          //       const SizedBox(width: 8),
+          //       Expanded(
+          //         child: Container(
+          //           height: 40,
+          //           padding: const EdgeInsets.symmetric(horizontal: 12),
+          //           decoration: BoxDecoration(
+          //             color: AppColors.grey700,
+          //             borderRadius: BorderRadius.circular(20),
+          //           ),
+          //           child: TextField(
+          //             controller: viewModel.commentController,
+          //             decoration: const InputDecoration(
+          //               hintText: "Type a message...",
+          //               hintStyle: TextStyle(color: AppColors.grey600),
+          //               border: InputBorder.none,
+          //             ),
+          //             style: const TextStyle(color: AppColors.white),
+          //           ),
+          //         ),
+          //       ),
+          //       const SizedBox(width: 8),
+          //       _buildBottomButton("@", () {}),
+          //       const SizedBox(width: 8),
+          //       _buildBottomButton("-", () {}),
+          //       const SizedBox(width: 8),
+          //       GestureDetector(
+          //         onTap: viewModel.postComment,
+          //         child: Container(
+          //           width: 40,
+          //           height: 40,
+          //           decoration: const BoxDecoration(
+          //             color: AppColors.accent,
+          //             shape: BoxShape.circle,
+          //           ),
+          //           child: const Icon(
+          //             Icons.arrow_forward,
+          //             color: AppColors.black,
+          //             size: 20,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
                     ],
                   ),
                 ),

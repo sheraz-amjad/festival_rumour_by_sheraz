@@ -8,21 +8,30 @@ import '../../../../core/services/navigation_service.dart'; // Make sure locator
 class GridOption extends StatelessWidget {
   final String title;
   final String icon; // Image path
+  final Function(String)? onNavigateToSub;
+  final VoidCallback? onTap;
 
   const GridOption({
     super.key,
     required this.title,
     required this.icon,
+    this.onNavigateToSub,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final navigationService = locator<NavigationService>();
     double screenHeight = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () {
-        _handleNavigation(title, navigationService);
+        // Call the passed callback first (if provided)
+        if (onTap != null) {
+          onTap!();
+        } else {
+          // Otherwise, use your internal navigation handler
+          _handleNavigation(title);
+        }
       },
       child: Container(
         height: screenHeight * 0.2,
@@ -67,23 +76,22 @@ class GridOption extends StatelessWidget {
   }
 
   /// 🔹 Handles navigation based on title
-  void _handleNavigation(String title, NavigationService navigationService) {
-    switch (title.toUpperCase()) {
-      case 'CHAT ROOMS':
-        navigationService.navigateTo(AppRoutes.chat);
-        break;
-      case 'LOCATION':
-        navigationService.navigateTo(AppRoutes.map);
-        break;
-      case 'DETAIL':
-        navigationService.navigateTo(AppRoutes.detail);
-        break;
-      case 'RUMORS':
-        navigationService.navigateTo(AppRoutes.home);
-        break;
-      default:
-        navigationService.navigateTo(AppRoutes.home);
-        break;
+  void _handleNavigation(String title) {
+    if (onNavigateToSub != null) {
+      switch (title.toUpperCase()) {
+        case 'CHAT ROOMS':
+          onNavigateToSub!('chat');
+          break;
+        case 'LOCATION':
+          onNavigateToSub!('map');
+          break;
+        case 'DETAIL':
+          onNavigateToSub!('detail');
+          break;
+        default:
+          // Do nothing for unknown titles
+          break;
+      }
     }
   }
 }

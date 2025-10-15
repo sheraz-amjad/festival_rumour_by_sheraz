@@ -1,5 +1,7 @@
 import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
+import '../../ui/views/jobdetail/festivals_job_view.dart';
+import '../../ui/views/jobpost/festivals_job_post_view.dart';
 import '../../ui/views/signup/signupphone/signup_view.dart';
 import '../constants/app_strings.dart';
 import '../../ui/views/Profile/profile_view.dart';
@@ -13,7 +15,6 @@ import '../../ui/views/event/event_view.dart';
 import '../../ui/views/festival/festival_view.dart';
 import '../../ui/views/homeview/home_view.dart';
 import '../../ui/views/interest/interests_view.dart';
-import '../../ui/views/job/festivals_job_view.dart';
 import '../../ui/views/name/name_view.dart';
 import '../../ui/views/navbar/navbaar.dart';
 import '../../ui/views/news/news_view.dart';
@@ -31,6 +32,7 @@ import '../../ui/views/leaderboard/leaderboard_view.dart';
 import '../../ui/views/posts/posts_view.dart';
 import '../../ui/views/chat/chat_room_view.dart';
 import '../../ui/views/chat/create_chat_room_view.dart';
+import '../../ui/views/rumors/rumors_view.dart';
 import '../utils/transition.dart';
 
 class AppRoutes {
@@ -65,6 +67,8 @@ class AppRoutes {
   static const String performance = '/performance';
   static const String event = '/event';
   static const String news = '/news';
+  static const String rumors = '/rumors';
+  static const String jobpost = '/jobpost';
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -134,6 +138,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         case AppRoutes.festivalsJob:
       return SmoothPageRoute(page: const FestivalsJobView());
 
+    case AppRoutes.jobpost:
+      return SmoothPageRoute(page: const FestivalsJobPostView());
+
     case AppRoutes.profile:
       return SmoothPageRoute(page: ProfileView());
 
@@ -164,6 +171,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
       case AppRoutes.news:
       return SmoothPageRoute(page: const NewsView());
+
+    case AppRoutes.rumors:
+      return SmoothPageRoute(page: const RumorsView());
 
     default:
       return MaterialPageRoute(

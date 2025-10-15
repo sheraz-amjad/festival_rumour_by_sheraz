@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:festival_rumour/core/router/app_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/discover/widgets/action_tile.dart';
@@ -19,7 +20,8 @@ import 'discover_viewmodel.dart';
 
 class DiscoverView extends BaseView<DiscoverViewModel> {
   final VoidCallback? onBack;
-  const DiscoverView({super.key, this.onBack});
+  final Function(String)? onNavigateToSub;
+  const DiscoverView({super.key, this.onBack, this.onNavigateToSub});
 
   @override
   DiscoverViewModel createViewModel() => DiscoverViewModel();
@@ -174,19 +176,24 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                               : context.isMediumScreen
                               ? 1.2
                               : 1.1,
-                          children: const [
+                          children: [
                             GridOption(
                                 title: AppStrings.location,
-                                icon: AppAssets.mapicon),
+                                icon: AppAssets.mapicon,
+                                onNavigateToSub: onNavigateToSub),
                             GridOption(
                                 title: AppStrings.chatRooms,
-                                icon: AppAssets.chaticon),
+                                icon: AppAssets.chaticon,
+                                onNavigateToSub: onNavigateToSub),
                             GridOption(
                                 title: AppStrings.rumors,
-                                icon: AppAssets.rumors),
+                                icon: AppAssets.rumors,
+                              onTap: () => viewModel.goToRumors(context),
+                            ),
                             GridOption(
                                 title: AppStrings.detail,
-                                icon: AppAssets.detailicon),
+                                icon: AppAssets.detailicon,
+                                onNavigateToSub: onNavigateToSub),
                           ],
                         ),
                       ],

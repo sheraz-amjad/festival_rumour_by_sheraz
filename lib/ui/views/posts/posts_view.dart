@@ -7,7 +7,8 @@ import '../../../core/utils/base_view.dart';
 import 'posts_view_model.dart';
 
 class PostsView extends BaseView<PostsViewModel> {
-  const PostsView({super.key});
+  final VoidCallback? onBack;
+  const PostsView({super.key, this.onBack});
 
   @override
   PostsViewModel createViewModel() => PostsViewModel();
@@ -59,7 +60,13 @@ class PostsView extends BaseView<PostsViewModel> {
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: AppColors.white),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          if (onBack != null) {
+            onBack!();
+          } else {
+            Navigator.pop(context);
+          }
+        },
       ),
       title: const Text(
         'Posts',

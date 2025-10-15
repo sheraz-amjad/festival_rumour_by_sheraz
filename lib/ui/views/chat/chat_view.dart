@@ -8,7 +8,8 @@ import '../../../core/router/app_router.dart';
 import 'chat_view_model.dart';
 
 class ChatView extends BaseView<ChatViewModel> {
-  const ChatView({super.key});
+  final VoidCallback? onBack;
+  const ChatView({super.key, this.onBack});
 
   @override
   ChatViewModel createViewModel() => ChatViewModel();
@@ -90,7 +91,7 @@ class ChatView extends BaseView<ChatViewModel> {
           children: [
             IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.white),
-              onPressed: () => Navigator.pop(context),
+              onPressed: onBack ?? () => Navigator.pop(context),
             ),
             Expanded(
               child: Text(

@@ -5,6 +5,7 @@ class PostModel {
   final String imagePath;
   final int likes;
   final int comments;
+  final String status; // 'live', 'past', 'upcoming'
 
   PostModel({
     required this.username,
@@ -13,6 +14,7 @@ class PostModel {
     required this.imagePath,
     required this.likes,
     required this.comments,
+    required this.status,
   });
 
   PostModel copyWith({
@@ -22,6 +24,7 @@ class PostModel {
     String? imagePath,
     int? likes,
     int? comments,
+    String? status,
   }) {
     return PostModel(
       username: username ?? this.username,
@@ -30,6 +33,7 @@ class PostModel {
       imagePath: imagePath ?? this.imagePath,
       likes: likes ?? this.likes,
       comments: comments ?? this.comments,
+      status: status ?? this.status,
     );
   }
 
@@ -42,7 +46,8 @@ class PostModel {
         other.content == content &&
         other.imagePath == imagePath &&
         other.likes == likes &&
-        other.comments == comments;
+        other.comments == comments &&
+        other.status == status;
   }
 
   @override
@@ -52,11 +57,12 @@ class PostModel {
     content.hashCode ^
     imagePath.hashCode ^
     likes.hashCode ^
-    comments.hashCode;
+    comments.hashCode ^
+    status.hashCode;
   }
 
   @override
   String toString() {
-    return 'PostModel(username: $username, timeAgo: $timeAgo, content: $content, imagePath: $imagePath, likes: $likes, comments: $comments)';
+    return 'PostModel(username: $username, timeAgo: $timeAgo, content: $content, imagePath: $imagePath, likes: $likes, comments: $comments, status: $status)';
   }
 }

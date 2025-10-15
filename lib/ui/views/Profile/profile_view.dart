@@ -11,7 +11,8 @@ import '../../../core/utils/backbutton.dart';
 
 class ProfileView extends StatefulWidget {
   final VoidCallback? onBack;
-  const ProfileView({super.key, this.onBack});
+  final Function(String)? onNavigateToSub;
+  const ProfileView({super.key, this.onBack, this.onNavigateToSub});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -122,22 +123,38 @@ class _ProfileViewState extends State<ProfileView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         _buildClickableStat("120", "Posts", () {
-                          Navigator.pushNamed(context, AppRoutes.posts);
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('posts');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.posts);
+                          }
                         }),
                         SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("5.4K", "Followers", () {
-                          Navigator.pushNamed(context, AppRoutes.profileList,
-                              arguments: 0);
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('followers');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 0);
+                          }
                         }),
                         SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("340", "Following", () {
-                          Navigator.pushNamed(context, AppRoutes.profileList,
-                              arguments: 1);
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('following');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 1);
+                          }
                         }),
                         SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
                         _buildClickableStat("3", "Festivals", () {
-                          Navigator.pushNamed(context, AppRoutes.profileList,
-                              arguments: 2);
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('festivals');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 2);
+                          }
                         }),
                       ],
                     ),
@@ -197,8 +214,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes
-                      .notification); // Replace with actual notifications screen route
+                  Navigator.pushNamed(context, AppRoutes.notification);
                 },
                 icon: const Icon(Icons.notifications_none,
                     color: AppColors.white, size: 26),
@@ -233,7 +249,13 @@ class _ProfileViewState extends State<ProfileView> {
       itemCount: images.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () => Navigator.pushNamed(context, AppRoutes.posts),
+          onTap: () {
+            if (widget.onNavigateToSub != null) {
+              widget.onNavigateToSub!('posts');
+            } else {
+              Navigator.pushNamed(context, AppRoutes.posts);
+            }
+          },
           child: Image.asset(images[index], fit: BoxFit.cover),
         );
       },
@@ -396,7 +418,7 @@ class _ProfileViewState extends State<ProfileView> {
                 image: AppAssets.job1,
                 title: "Festival Gizza Job",
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRoutes.jobpost);
                   // Navigate to add job screen if needed
                 },
               ),
@@ -406,8 +428,8 @@ class _ProfileViewState extends State<ProfileView> {
                 image: AppAssets.job2,
                 title: "FestieHeros Job",
                 onTap: () {
-                  Navigator.pop(context);
-                  // Navigate to another add post screen if needed
+                  Navigator.pushNamed(context, AppRoutes.jobpost);
+                  //d post screen if needed
                 },
               ),
               const SizedBox(height: 12),

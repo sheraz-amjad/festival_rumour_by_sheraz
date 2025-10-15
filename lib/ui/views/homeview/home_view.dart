@@ -27,10 +27,15 @@ class HomeView extends BaseView<HomeViewModel> {
 
   @override
   Widget buildView(BuildContext context, HomeViewModel viewModel) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
+    return GestureDetector(
+      onTap: () {
+        // Dismiss keyboard when tapping outside
+        viewModel.unfocusSearch();
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        body: Stack(
         children: [
           // Background Image - Full screen coverage
           Positioned.fill(
@@ -45,7 +50,7 @@ class HomeView extends BaseView<HomeViewModel> {
             child: Column(
               children: [
                 _buildAppBar(context, viewModel),
-                _buildSearchBar(context),
+                _buildSearchBar(context, viewModel),
                 const SizedBox(height: AppDimensions.spaceS),
                 Expanded(
                   child: _buildFeedList(context, viewModel),
@@ -54,6 +59,7 @@ class HomeView extends BaseView<HomeViewModel> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -142,33 +148,32 @@ class HomeView extends BaseView<HomeViewModel> {
   }
 
 
-  Widget _buildSearchBar(BuildContext context) {
-    String selectedFilter = AppStrings.allFilter;
-
+  Widget _buildSearchBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsiveContainer(
       mobileMaxWidth: double.infinity,
       tabletMaxWidth: double.infinity,
       desktopMaxWidth: double.infinity,
-      child: StatefulBuilder(
-        builder: (context, setState) {
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-            decoration: BoxDecoration(
-              color: AppColors.onPrimary,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
-                const SizedBox(width: AppDimensions.spaceS),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+        decoration: BoxDecoration(
+          color: AppColors.onPrimary,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
+            const SizedBox(width: AppDimensions.spaceS),
 
-                /// 🔹 Search Field
-                const Expanded(
-                  child: TextField(
+            /// 🔹 Search Field
+            Expanded(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return TextField(
+                    focusNode: viewModel.searchFocusNode,
                     decoration: InputDecoration(
                       hintText: AppStrings.searchHint,
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: AppDimensions.textM,
@@ -179,77 +184,176 @@ class HomeView extends BaseView<HomeViewModel> {
                       disabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
                       isDense: true,
-                      filled: false, // <-- Disable any background fill
+                      filled: false,
                       fillColor: Colors.transparent,
                       contentPadding: EdgeInsets.zero,
+                      suffixIcon: viewModel.currentSearchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, color: AppColors.primary, size: 20),
+                              onPressed: () {
+                                viewModel.clearSearch();
+                                setState(() {}); // Update the UI
+                              },
+                            )
+                          : null,
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                       fontSize: AppDimensions.textM,
                     ),
-                  ),
-                ),
-
-                /// 🔹 Dropdown Filter
-                DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                   // value: selectedFilter == AppStrings.allFilter ? AppStrings.live : selectedFilter,
-                    dropdownColor: AppColors.onPrimary,
-                    isExpanded: false,
-                    menuMaxHeight: MediaQuery.of(context).size.height * 0.35,
-                    icon: Container(
-                      padding: const EdgeInsets.all(AppDimensions.paddingXS),
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.arrow_drop_down, color: AppColors.onPrimary),
-                    ),
-                    items: const [
-                      DropdownMenuItem(
-                        value: AppStrings.live,
-                        child: Row(
-                          children: [
-                            Icon(Icons.wifi_tethering, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
-                            Text(AppStrings.live, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: AppStrings.upcoming,
-                        child: Row(
-                          children: [
-                            Icon(Icons.schedule, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
-                            Text(AppStrings.upcoming, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: AppStrings.past,
-                        child: Row(
-                          children: [
-                            Icon(Icons.history, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
-                            Text(AppStrings.past, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                    ],
                     onChanged: (value) {
-                      if (value != null) {
-                        setState(() => selectedFilter = value);
-                        debugPrint("Selected Filter: $value");
-                      }
+                      viewModel.setSearchQuery(value);
                     },
-                  ),
-                ),
-              ],
+                    onSubmitted: (value) {
+                      viewModel.unfocusSearch();
+                    },
+                    textInputAction: TextInputAction.search,
+                  );
+                },
+              ),
             ),
-          );
-        },
+
+            /// 🔹 Dropdown Filter
+            DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: viewModel.currentFilter,
+                dropdownColor: AppColors.onPrimary.withOpacity(0.5), // Dark gray background
+                isExpanded: false,
+                menuWidth: double.infinity,
+                menuMaxHeight: MediaQuery.of(context).size.height * 0.30,
+                icon: Container(
+                  padding: const EdgeInsets.all(AppDimensions.paddingXS),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.keyboard_arrow_up, color: AppColors.onPrimary, size: 16),
+                ),
+                items: [
+                  DropdownMenuItem(
+                    value: 'all',
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == 'all' ? AppColors.accent : Colors.grey,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.grid_view,
+                            color: viewModel.currentFilter == 'all' ? Colors.black : Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'All Posts',
+                          style: TextStyle(
+                            color: viewModel.currentFilter == 'all' ? AppColors.accent : Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: AppStrings.live,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == AppStrings.live ? Colors.yellow : Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.live_tv,
+                            color: viewModel.currentFilter == AppStrings.live ? Colors.black : Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppStrings.live,
+                          style: TextStyle(
+                            color: viewModel.currentFilter == AppStrings.live ? Colors.yellow : Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: AppStrings.upcoming,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.yellow : Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.schedule,
+                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.black : Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppStrings.upcoming,
+                          style: TextStyle(
+                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.yellow : Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: AppStrings.past,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == AppStrings.past ? Colors.yellow : Colors.white,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.history,
+                            color: viewModel.currentFilter == AppStrings.past ? Colors.black : Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppStrings.past,
+                          style: TextStyle(
+                            color: viewModel.currentFilter == AppStrings.past ? Colors.yellow : Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    viewModel.setFilter(value);
+                    debugPrint("Selected Filter: $value");
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -306,7 +410,7 @@ class HomeView extends BaseView<HomeViewModel> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: ResponsiveTextWidget(
-                    "POST JOB",
+                    "JOB Details",
                     textType: TextType.title,
                     color: Colors.yellow,
                     baseFontSize: 16,

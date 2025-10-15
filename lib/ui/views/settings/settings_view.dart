@@ -6,7 +6,8 @@ import '../../../core/utils/base_view.dart';
 import 'settings_view_model.dart';
 
 class SettingsView extends BaseView<SettingsViewModel> {
-  const SettingsView({super.key});
+  final VoidCallback? onBack;
+  const SettingsView({super.key, this.onBack});
 
   @override
   SettingsViewModel createViewModel() => SettingsViewModel();
@@ -19,6 +20,16 @@ class SettingsView extends BaseView<SettingsViewModel> {
         elevation: 0,
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: AppColors.onPrimary),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.onPrimary),
+          onPressed: () {
+            if (onBack != null) {
+              onBack!();
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
         title: const Text(
           AppStrings.settings,
           style: TextStyle(

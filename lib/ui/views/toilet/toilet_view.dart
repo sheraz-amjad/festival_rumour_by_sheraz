@@ -7,7 +7,8 @@ import '../../../core/utils/backbutton.dart';
 import 'toilet_view_model.dart';
 
 class ToiletView extends BaseView<ToiletViewModel> {
-  const ToiletView({super.key});
+  final VoidCallback? onBack;
+  const ToiletView({super.key, this.onBack});
 
   @override
   ToiletViewModel createViewModel() => ToiletViewModel();
@@ -60,7 +61,13 @@ class ToiletView extends BaseView<ToiletViewModel> {
       child: Row(
         children: [
           CustomBackButton(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              if (onBack != null) {
+                onBack!();
+              } else {
+                Navigator.pop(context);
+              }
+            },
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const Text(

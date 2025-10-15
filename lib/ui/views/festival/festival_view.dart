@@ -24,11 +24,15 @@ class FestivalView extends BaseView<FestivalViewModel> {
   }
 
   @override
-  @override
   Widget buildView(BuildContext context, FestivalViewModel viewModel) {
     final pageController = viewModel.pageController;
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        // Dismiss keyboard when tapping outside
+        viewModel.unfocusSearch();
+      },
+      child: Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -56,41 +60,32 @@ class FestivalView extends BaseView<FestivalViewModel> {
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: _buildTopBar(context),
-                ),
-                const SizedBox(height: AppDimensions.paddingM),
-                SizedBox(
-                  width: double.infinity,
-                  child: _titleHeadline(context),
-                ),
-                const SizedBox(height: AppDimensions.paddingM),
+                _buildTopBarWithSearch(context, viewModel),
+                const SizedBox(height: AppDimensions.paddingS),
+                _titleHeadline(context),
+                const SizedBox(height: AppDimensions.paddingS),
                 Expanded(
-                  child: SizedBox(
-                    width: double.infinity,
                     child: _buildFestivalsSlider(context, viewModel, pageController),
-                  ),
                 ),
-                const SizedBox(height: AppDimensions.paddingM),
-                SizedBox(
-                  width: double.infinity,
-                  child: _buildBottomIcon(context),
-                ),
+                const SizedBox(height: AppDimensions.paddingS),
+                _buildBottomIcon(context),
               ],
               ),
             ),
           ),
         ],
       ),
+      ),
     );
   }
 
 
-  Widget _buildTopBar(BuildContext context) {
-    return Row(
+  Widget _buildTopBarWithSearch(BuildContext context, FestivalViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
+      child: Row(
       children: [
-        const SizedBox(width: AppDimensions.paddingL),
+          // Logo
         Container(
           height: AppDimensions.iconXXL,
           width: AppDimensions.iconXXL,
@@ -104,67 +99,213 @@ class FestivalView extends BaseView<FestivalViewModel> {
           ),
         ),
         const SizedBox(width: AppDimensions.paddingM),
+          
+          // Search Bar (same design as home view)
         Expanded(
           child: Container(
-            height: AppDimensions.buttonHeightM,
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             decoration: BoxDecoration(
               color: AppColors.onPrimary,
               borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
             child: Row(
               children: [
-                const Icon(Icons.search, color: AppColors.primary, size: AppDimensions.iconM),
-                const SizedBox(width: AppDimensions.paddingS),
+                  const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
+                  const SizedBox(width: AppDimensions.spaceS),
+
+                  /// 🔹 Search Field
                 Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: AppStrings.searchHint,
-                      hintStyle: TextStyle(
+                    child: StatefulBuilder(
+                      builder: (context, setState) {
+                        return TextField(
+                          focusNode: viewModel.searchFocusNode,
+                          decoration: InputDecoration(
+                            hintText: "Search festivals...",
+                            hintStyle: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: AppDimensions.textM,
                       ),
                       border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
                       isDense: true,
+                            filled: false,
+                            fillColor: Colors.transparent,
                       contentPadding: EdgeInsets.zero,
-                      filled: false,
+                            suffixIcon: viewModel.currentSearchQuery.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, color: AppColors.primary, size: 20),
+                                    onPressed: () {
+                                      viewModel.clearSearch();
+                                      setState(() {}); // Update the UI
+                                    },
+                                  )
+                                : null,
                     ),
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                       fontSize: AppDimensions.textM,
+                          ),
+                          onChanged: (value) {
+                            viewModel.setSearchQuery(value);
+                          },
+                          onSubmitted: (value) {
+                            viewModel.unfocusSearch();
+                          },
+                          textInputAction: TextInputAction.search,
+                        );
+                      },
                     ),
                   ),
-                ),
-                DropdownButton<String>(
-                  value: AppStrings.allFilter,
-                  underline: const SizedBox(),
-                  dropdownColor: AppColors.onPrimary,
+
+                  /// 🔹 Dropdown Filter (same as home view)
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: 'all',
+                      dropdownColor: AppColors.onPrimary.withOpacity(0.5),
+                      isExpanded: false,
+                      menuWidth: double.infinity,
+                      menuMaxHeight: MediaQuery.of(context).size.height * 0.30,
                   icon: Container(
                     padding: const EdgeInsets.all(AppDimensions.paddingXS),
                     decoration: const BoxDecoration(
                       color: AppColors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.arrow_drop_down, color: AppColors.onPrimary),
-                  ),
-                  items: const [
-                    DropdownMenuItem(value: AppStrings.allFilter, child: SizedBox()),
-                    DropdownMenuItem(value: AppStrings.live, child: Text(AppStrings.live,style: TextStyle(color: AppColors.primary))),
-                    DropdownMenuItem(value: AppStrings.upcoming, child: Text(AppStrings.upcoming,style: TextStyle(color: AppColors.primary))),
-                    DropdownMenuItem(value: AppStrings.past, child: Text(AppStrings.past,style: TextStyle(color: AppColors.primary))),
+                        child: const Icon(Icons.keyboard_arrow_up, color: AppColors.onPrimary, size: 16),
+                      ),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'all',
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.grid_view,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'All Festivals',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'live',
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.live_tv,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Live',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'upcoming',
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.schedule,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Upcoming',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'past',
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Icon(
+                                  Icons.history,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Past',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                   ],
                   onChanged: (value) {
-                    debugPrint("Selected: $value");
+                        if (value != null) {
+                          // Handle filter change
+                          debugPrint("Selected Filter: $value");
+                        }
                   },
+                    ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(width: AppDimensions.paddingL),
       ],
+      ),
     );
   }
 
@@ -173,11 +314,41 @@ class FestivalView extends BaseView<FestivalViewModel> {
       return LoadingWidget(message: AppStrings.loadingfestivals);
     }
 
-    if (viewModel.festivals.isEmpty) {
-      return const Center(
-        child: Text(
-          AppStrings.noFestivalsAvailable,
-          style: TextStyle(fontSize: AppDimensions.textM, color: AppColors.onSurfaceVariant),
+    // Show filtered festivals if there's a search query, otherwise show all festivals
+    final festivalsToShow = viewModel.searchQuery.isNotEmpty ? viewModel.filteredFestivals : viewModel.festivals;
+
+    if (festivalsToShow.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.search_off,
+              size: 64,
+              color: AppColors.onSurfaceVariant,
+            ),
+            const SizedBox(height: AppDimensions.spaceM),
+            Text(
+              viewModel.searchQuery.isNotEmpty 
+                ? "No festivals found for '${viewModel.searchQuery}'"
+                : AppStrings.noFestivalsAvailable,
+              style: const TextStyle(
+                fontSize: AppDimensions.textM, 
+                color: AppColors.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (viewModel.searchQuery.isNotEmpty) ...[
+              const SizedBox(height: AppDimensions.spaceS),
+              TextButton(
+                onPressed: () => viewModel.clearSearch(),
+                child: const Text(
+                  "Clear search",
+                  style: TextStyle(color: AppColors.primary),
+                ),
+              ),
+            ],
+          ],
         ),
       );
     }
@@ -189,7 +360,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
         viewModel.setPage(page);
       },
       itemBuilder: (context, index) {
-        final festival = viewModel.festivals[index % viewModel.festivals.length];
+        final festival = festivalsToShow[index % festivalsToShow.length];
         return SizedBox(
           width: double.infinity,
           child: ResponsivePadding(
@@ -209,9 +380,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
   }
 
   Widget _buildBottomIcon(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Center(
+    return Center(
         child: Container(
           height: AppDimensions.buttonHeightXL,
           width: AppDimensions.buttonHeightXL,
@@ -220,7 +389,6 @@ class FestivalView extends BaseView<FestivalViewModel> {
             width: AppDimensions.iconM,
             height: AppDimensions.iconM,
             color: AppColors.primary,
-          ),
         ),
       ),
     );
@@ -228,7 +396,6 @@ class FestivalView extends BaseView<FestivalViewModel> {
 
   Widget _titleHeadline(BuildContext context) {
     return Container(
-      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
       decoration: BoxDecoration(
         color: AppColors.headlineBackground,

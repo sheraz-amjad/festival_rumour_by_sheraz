@@ -9,7 +9,8 @@ import '../../../core/utils/snackbar_util.dart';
 import 'notification_view_model.dart';
 
 class NotificationView extends BaseView<NotificationViewModel> {
-  const NotificationView({super.key});
+  final VoidCallback? onBack;
+  const NotificationView({super.key, this.onBack});
 
   @override
   NotificationViewModel createViewModel() => NotificationViewModel();
@@ -55,7 +56,13 @@ class NotificationView extends BaseView<NotificationViewModel> {
         children: [
           /// Back Button
           CustomBackButton(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              if (onBack != null) {
+                onBack!();
+              } else {
+                Navigator.pop(context);
+              }
+            },
           ),
           
           /// Title

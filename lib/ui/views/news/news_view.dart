@@ -8,7 +8,8 @@ import '../../../core/utils/backbutton.dart';
 import 'news_view_model.dart';
 
 class NewsView extends BaseView<NewsViewModel> {
-  const NewsView({super.key});
+  final VoidCallback? onBack;
+  const NewsView({super.key, this.onBack});
 
   @override
   NewsViewModel createViewModel() => NewsViewModel();
@@ -62,7 +63,7 @@ class NewsView extends BaseView<NewsViewModel> {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: onBack ?? () => Navigator.pop(context),
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
