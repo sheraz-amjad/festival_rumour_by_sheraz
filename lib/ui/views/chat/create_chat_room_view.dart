@@ -95,6 +95,7 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
           Expanded(
             child: _buildContactsList(context, viewModel),
           ),
+          const SizedBox(height: 20),
           _buildSaveButton(context, viewModel),
           const SizedBox(height: 20),
         ],
@@ -306,14 +307,14 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(6),
+          // color: Colors.black.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.error),
         ),
         child: const Text(
           AppStrings.invite,
           style: TextStyle(
-            color: AppColors.error,
+            color: AppColors.primary,
             fontSize: 12,
             fontWeight: FontWeight.bold,
             fontFamily: 'Montserrat',

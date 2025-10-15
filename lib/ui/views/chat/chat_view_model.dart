@@ -1,11 +1,16 @@
+import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_strings.dart';
 
 class ChatViewModel extends BaseViewModel {
   int _selectedTab = 0; // 0 = Public, 1 = Private
+  bool _isInChatRoom = false;
+  Map<String, dynamic>? _currentChatRoom;
 
   int get selectedTab => _selectedTab;
+  bool get isInChatRoom => _isInChatRoom;
+  Map<String, dynamic>? get currentChatRoom => _currentChatRoom;
 
   void setSelectedTab(int tab) {
     _selectedTab = tab;
@@ -101,5 +106,48 @@ class ChatViewModel extends BaseViewModel {
   String _getCurrentTime() {
     final now = DateTime.now();
     return '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+  }
+
+  List<Map<String, dynamic>> chatRooms1 = [
+    {
+      'name': 'Luna Festival Community',
+      'image': AppAssets.post1,
+    },
+  ];
+
+  // Chat room functionality
+  TextEditingController messageController = TextEditingController();
+
+  void enterChatRoom(Map<String, dynamic> room) {
+    _currentChatRoom = room;
+    _isInChatRoom = true;
+    notifyListeners();
+  }
+
+  void exitChatRoom() {
+    _isInChatRoom = false;
+    _currentChatRoom = null;
+    messageController.clear();
+    notifyListeners();
+  }
+
+  void sendMessage() {
+    if (messageController.text.isNotEmpty) {
+      // Handle sending message
+      print("${AppStrings.sendingMessage}${messageController.text}");
+      messageController.clear();
+      notifyListeners();
+    }
+  }
+
+  void inviteFriends() {
+    // Handle invite friends action
+    print(AppStrings.invitingFriendsToChatRoom);
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
   }
 }

@@ -3,6 +3,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/utils/base_view.dart';
 import 'posts_view_model.dart';
 
@@ -108,8 +109,13 @@ class PostsView extends BaseView<PostsViewModel> {
         }
 
         void _handleComment() {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.comments, // 👈 Define this route
+            arguments: post,    // optional: pass the post if needed
+          );
           // Navigate to comments or handle comment action
-          debugPrint("Comment button tapped for post $index");
+
         }
 
         void _handleReaction(String emoji) {

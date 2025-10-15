@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/constants/app_assets.dart';
@@ -29,8 +30,8 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
             children: [
           ResponsiveContainer(
           mobileMaxWidth: double.infinity,
-          tabletMaxWidth: 600,
-          desktopMaxWidth: 800,
+          tabletMaxWidth: double.infinity,
+          desktopMaxWidth: double.infinity,
           child: Container(
             padding:
                 context.isLargeScreen
@@ -154,12 +155,19 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                           borderRadius: BorderRadius.circular(
                             AppDimensions.radiusL,
                           ),
-                          child: Image.file(
-                            File(viewModel.selectedImage!.path),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
+                          child: kIsWeb
+                              ? Image.network(
+                                  viewModel.selectedImage!.path,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                )
+                              : Image.file(
+                                  File(viewModel.selectedImage!.path),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
                         )
                         : null, // no shrink, just background stays
               ),

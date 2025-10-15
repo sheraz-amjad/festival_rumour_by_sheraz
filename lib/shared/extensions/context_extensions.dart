@@ -12,10 +12,10 @@ extension ContextExtensions on BuildContext {
   TextTheme get textTheme => theme.textTheme;
 
   /// Get media query data
-  MediaQueryData get mediaQuery => MediaQuery.of(this);
+  MediaQueryData? get mediaQuery => MediaQuery.maybeOf(this);
 
   /// Get screen size
-  Size get screenSize => mediaQuery.size;
+  Size get screenSize => mediaQuery?.size ?? const Size(0, 0);
 
   /// Get screen width
   double get screenWidth => screenSize.width;
@@ -24,25 +24,25 @@ extension ContextExtensions on BuildContext {
   double get screenHeight => screenSize.height;
 
   /// Get device pixel ratio
-  double get devicePixelRatio => mediaQuery.devicePixelRatio;
+  double get devicePixelRatio => mediaQuery?.devicePixelRatio ?? 1.0;
 
   /// Get status bar height
-  double get statusBarHeight => mediaQuery.padding.top;
+  double get statusBarHeight => mediaQuery?.padding.top ?? 0.0;
 
   /// Get bottom safe area height
-  double get bottomSafeArea => mediaQuery.padding.bottom;
+  double get bottomSafeArea => mediaQuery?.padding.bottom ?? 0.0;
 
   /// Get keyboard height
-  double get keyboardHeight => mediaQuery.viewInsets.bottom;
+  double get keyboardHeight => mediaQuery?.viewInsets.bottom ?? 0.0;
 
   /// Check if keyboard is visible
   bool get isKeyboardVisible => keyboardHeight > 0;
 
   /// Check if device is in landscape mode
-  bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
+  bool get isLandscape => mediaQuery?.orientation == Orientation.landscape;
 
   /// Check if device is in portrait mode
-  bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
+  bool get isPortrait => mediaQuery?.orientation == Orientation.portrait;
 
   /// Check if device is a tablet (width > 600)
   bool get isTablet => screenWidth > 600;
@@ -292,10 +292,14 @@ extension ContextExtensions on BuildContext {
   /// Get primary focus
   FocusNode? get primaryFocus => FocusScope.of(this).focusedChild;
 
-  /// Responsive breakpoints
-  bool get isSmallScreen => screenWidth < 600;
+  /// Responsive breakpoints - optimized for high-resolution phones
+  bool get isSmallScreen => screenWidth < 400;
+  bool get isHighResPhone => screenWidth >= 400 && screenWidth < 600;
   bool get isMediumScreen => screenWidth >= 600 && screenWidth < 1200;
   bool get isLargeScreen => screenWidth >= 1200;
+  
+  /// Check if device is a high-resolution phone (like Pixel 6 Pro, iPhone Pro models)
+  bool get isHighResolutionPhone => (screenWidth >= 400 && screenWidth < 600) || devicePixelRatio >= 3.0;
 
   /// Get responsive padding
   EdgeInsets get responsivePadding {

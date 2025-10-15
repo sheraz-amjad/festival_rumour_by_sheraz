@@ -9,14 +9,16 @@ class ResponsiveTextService {
   static final ResponsiveTextService _instance = ResponsiveTextService._();
   static ResponsiveTextService get instance => _instance;
 
-  /// Get responsive font size based on screen size
+  /// Get responsive font size based on screen size - optimized for high-res phones
   double getResponsiveFontSize(BuildContext context, double baseFontSize) {
-    if (context.isLargeScreen) {
-      return baseFontSize * 1.2;
+    if (context.isHighResolutionPhone) {
+      return baseFontSize * 1.15; // Slightly larger for high-res phones like Pixel 6 Pro
+    } else if (context.isLargeScreen) {
+      return baseFontSize * 1.3; // Larger for desktop
     } else if (context.isMediumScreen) {
-      return baseFontSize * 1.1;
+      return baseFontSize * 1.2; // Medium for tablets
     } else {
-      return baseFontSize;
+      return baseFontSize; // Base size for small phones
     }
   }
 

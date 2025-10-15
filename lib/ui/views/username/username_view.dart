@@ -9,74 +9,8 @@ import '../../../../shared/extensions/context_extensions.dart';
 import '../../../../shared/widgets/responsive_widget.dart';
 import 'username_view_model.dart';
 
-class UsernameView extends StatefulWidget {
+class UsernameView extends StatelessWidget {
   const UsernameView({super.key});
-
-  @override
-  State<UsernameView> createState() => _UsernameViewState();
-}
-
-class _UsernameViewState extends State<UsernameView> {
-  final FocusNode _usernameFocusNode = FocusNode();
-  final FocusNode _passwordFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _usernameFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    super.dispose();
-  }
-
-  /// Handle focus management
-  void _handleFocusChange(bool hasFocus) {
-    if (hasFocus) {
-      // Focus gained - ensure proper layout
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    } else {
-      // Focus lost - hide keyboard if needed
-      FocusScope.of(context).unfocus();
-    }
-  }
-
-  /// Auto-focus next field
-  void _focusNextField() {
-    if (_usernameFocusNode.hasFocus) {
-      _passwordFocusNode.requestFocus();
-    }
-  }
-
-  /// Clear all focus
-  void _clearAllFocus() {
-    _usernameFocusNode.unfocus();
-    _passwordFocusNode.unfocus();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Add focus change listeners
-    _usernameFocusNode.addListener(() {
-      if (!_usernameFocusNode.hasFocus) {
-        // Username field lost focus
-        if (mounted) {
-          setState(() {});
-        }
-      }
-    });
-    
-    _passwordFocusNode.addListener(() {
-      if (!_passwordFocusNode.hasFocus) {
-        // Password field lost focus
-        if (mounted) {
-          setState(() {});
-        }
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +24,9 @@ class _UsernameViewState extends State<UsernameView> {
 
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            body: GestureDetector(
-              onTap: _clearAllFocus,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
                 /// 🔹 Background
                 Image.asset(AppAssets.usernameback, fit: BoxFit.cover),
 
@@ -126,8 +58,8 @@ class _UsernameViewState extends State<UsernameView> {
                         ),
                         child: SingleChildScrollView(
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
                           /// Logo
                           SvgPicture.asset(
                             AppAssets.logo,
@@ -169,30 +101,15 @@ class _UsernameViewState extends State<UsernameView> {
                                 const SizedBox(height: AppDimensions.spaceS),
 
                                 /// Username Field
-                                TextField(
-                                  controller: viewModel.emailController,
-                                  focusNode: _usernameFocusNode,
-                                  cursorColor: Colors.white,
-                                  textInputAction: TextInputAction.next,
-                                  onChanged: (value) {
-                                    viewModel.onUsernameChanged(value);
-                                    // Auto-focus password field when username is complete
-                                    if (value.length >= 3) {
-                                      Future.delayed(const Duration(milliseconds: 300), () {
-                                        _passwordFocusNode.requestFocus();
-                                      });
-                                    }
-                                  },
-                                  onSubmitted: (value) {
-                                    if (value.isNotEmpty) {
-                                      _passwordFocusNode.requestFocus();
-                                    }
-                                  },
-                                  onTap: () {
-                                    viewModel.onUsernameFocusChange(true);
-                                  },
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
+                                Focus(
+                                  onFocusChange: viewModel.onUsernameFocusChange,
+                                  child: TextField(
+                                    controller: viewModel.emailController,
+                                    cursorColor: Colors.white,
+
+                                    onChanged: viewModel.onUsernameChanged,
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
                                       hintText: "Enter your email",
@@ -215,6 +132,7 @@ class _UsernameViewState extends State<UsernameView> {
                                       ),
                                     ),
                                   ),
+                                ),
 
                                 const SizedBox(height: AppDimensions.spaceM),
 
@@ -237,26 +155,15 @@ class _UsernameViewState extends State<UsernameView> {
                                 const SizedBox(height: AppDimensions.spaceS),
 
                                 /// Password Field
-                                TextField(
-                                  controller: viewModel.passwordController,
-                                  focusNode: _passwordFocusNode,
-                                  obscureText: !viewModel.isPasswordVisible,
-                                  cursorColor: Colors.white,
-                                  textInputAction: TextInputAction.done,
-                                  onChanged: (value) {
-                                    viewModel.onPasswordChanged(value);
-                                  },
-                                  onSubmitted: (value) {
-                                    if (value.isNotEmpty) {
-                                      _passwordFocusNode.unfocus();
-                                      viewModel.validateAndLogin(context);
-                                    }
-                                  },
-                                  onTap: () {
-                                    viewModel.onPasswordFocusChange(true);
-                                  },
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
+                                Focus(
+                                  onFocusChange: viewModel.onPasswordFocusChange,
+                                  child: TextField(
+                                    controller: viewModel.passwordController,
+                                    obscureText: !viewModel.isPasswordVisible,
+                                    cursorColor: Colors.white,
+                                    onChanged: viewModel.onPasswordChanged,
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
                                       hintText: "********",
@@ -289,6 +196,7 @@ class _UsernameViewState extends State<UsernameView> {
                                       ),
                                     ),
                                   ),
+                                ),
 
                                 const SizedBox(height: AppDimensions.spaceS),
 
@@ -371,8 +279,8 @@ class _UsernameViewState extends State<UsernameView> {
                               ],
                             ),
                           ),
-                            ],
-                          ),
+                        ],
+                        ),
                         ),
                       ),
                     ),
@@ -380,7 +288,6 @@ class _UsernameViewState extends State<UsernameView> {
                 ),
               ],
             ),
-          )
           );
         },
       ),

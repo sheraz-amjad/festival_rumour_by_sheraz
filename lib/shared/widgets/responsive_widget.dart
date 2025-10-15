@@ -122,20 +122,24 @@ class ResponsivePadding extends StatelessWidget {
   }
 
   EdgeInsets _getPadding(BuildContext context) {
-    if (context.isLargeScreen && desktopPadding != null) {
+    if (context.isHighResolutionPhone && mobilePadding != null) {
+      return mobilePadding!;
+    } else if (context.isLargeScreen && desktopPadding != null) {
       return desktopPadding!;
     } else if (context.isMediumScreen && tabletPadding != null) {
       return tabletPadding!;
     } else if (mobilePadding != null) {
       return mobilePadding!;
     } else {
-      // Default responsive padding
-      if (context.isLargeScreen) {
-        return const EdgeInsets.all(AppDimensions.paddingXL);
+      // Default responsive padding - optimized for high-res phones
+      if (context.isHighResolutionPhone) {
+        return const EdgeInsets.all(AppDimensions.paddingL); // 24px for high-res phones
+      } else if (context.isLargeScreen) {
+        return const EdgeInsets.all(AppDimensions.paddingXL); // 32px for desktop
       } else if (context.isMediumScreen) {
-        return const EdgeInsets.all(AppDimensions.paddingL);
+        return const EdgeInsets.all(AppDimensions.paddingL); // 24px for tablets
       } else {
-        return const EdgeInsets.all(AppDimensions.paddingM);
+        return const EdgeInsets.all(AppDimensions.paddingM); // 16px for small phones
       }
     }
   }
@@ -176,9 +180,10 @@ class ResponsiveText extends StatelessWidget {
   }
 
   double _getScaleFactor(BuildContext context) {
-    if (context.isLargeScreen) return 1.2;
-    if (context.isMediumScreen) return 1.1;
-    return 1.0;
+    if (context.isHighResolutionPhone) return 1.15; // Slightly larger for high-res phones
+    if (context.isLargeScreen) return 1.3; // Larger for desktop
+    if (context.isMediumScreen) return 1.2; // Medium for tablets
+    return 1.0; // Base for small phones
   }
 }
 
@@ -224,10 +229,195 @@ class ResponsiveContainer extends StatelessWidget {
     } else if (mobileMaxWidth != null) {
       return mobileMaxWidth!;
     } else {
-      // Default responsive max widths
+      // Default responsive max widths - optimized for high-res phones
       if (context.isLargeScreen) return 1200;
       if (context.isMediumScreen) return 800;
+      if (context.isHighResolutionPhone) return 600; // Better for high-res phones
       return double.infinity;
     }
+  }
+}
+
+/// Responsive button that adapts size and padding based on screen size
+class ResponsiveButton extends StatelessWidget {
+  final Widget child;
+  final VoidCallback? onPressed;
+  final EdgeInsets? mobilePadding;
+  final EdgeInsets? tabletPadding;
+  final EdgeInsets? desktopPadding;
+  final double? mobileHeight;
+  final double? tabletHeight;
+  final double? desktopHeight;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final BorderRadius? borderRadius;
+  final BoxBorder? border;
+
+  const ResponsiveButton({
+    Key? key,
+    required this.child,
+    this.onPressed,
+    this.mobilePadding,
+    this.tabletPadding,
+    this.desktopPadding,
+    this.mobileHeight,
+    this.tabletHeight,
+    this.desktopHeight,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.borderRadius,
+    this.border,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: _getHeight(context),
+      padding: _getPadding(context),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: borderRadius,
+        border: border,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: borderRadius,
+          child: Center(
+            child: DefaultTextStyle(
+              style: TextStyle(
+                color: foregroundColor,
+                fontSize: _getFontSize(context),
+                fontWeight: FontWeight.w600,
+              ),
+              child: child,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _getHeight(BuildContext context) {
+    if (context.isHighResolutionPhone && mobileHeight != null) {
+      return mobileHeight!;
+    } else if (context.isLargeScreen && desktopHeight != null) {
+      return desktopHeight!;
+    } else if (context.isMediumScreen && tabletHeight != null) {
+      return tabletHeight!;
+    } else {
+      // Default responsive heights
+      if (context.isHighResolutionPhone) return 56;
+      if (context.isLargeScreen) return 64;
+      if (context.isMediumScreen) return 52;
+      return 48;
+    }
+  }
+
+  EdgeInsets _getPadding(BuildContext context) {
+    if (context.isHighResolutionPhone && mobilePadding != null) {
+      return mobilePadding!;
+    } else if (context.isLargeScreen && desktopPadding != null) {
+      return desktopPadding!;
+    } else if (context.isMediumScreen && tabletPadding != null) {
+      return tabletPadding!;
+    } else {
+      // Default responsive padding
+      if (context.isHighResolutionPhone) return const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+      if (context.isLargeScreen) return const EdgeInsets.symmetric(horizontal: 32, vertical: 20);
+      if (context.isMediumScreen) return const EdgeInsets.symmetric(horizontal: 20, vertical: 14);
+      return const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+    }
+  }
+
+  double _getFontSize(BuildContext context) {
+    if (context.isHighResolutionPhone) return 16;
+    if (context.isLargeScreen) return 18;
+    if (context.isMediumScreen) return 15;
+    return 14;
+  }
+}
+
+/// Responsive card that adapts padding and elevation based on screen size
+class ResponsiveCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsets? mobilePadding;
+  final EdgeInsets? tabletPadding;
+  final EdgeInsets? desktopPadding;
+  final double? mobileElevation;
+  final double? tabletElevation;
+  final double? desktopElevation;
+  final Color? color;
+  final BorderRadius? borderRadius;
+  final BoxBorder? border;
+
+  const ResponsiveCard({
+    Key? key,
+    required this.child,
+    this.mobilePadding,
+    this.tabletPadding,
+    this.desktopPadding,
+    this.mobileElevation,
+    this.tabletElevation,
+    this.desktopElevation,
+    this.color,
+    this.borderRadius,
+    this.border,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: _getElevation(context),
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius ?? BorderRadius.circular(_getBorderRadius(context)),
+        side: border is Border ? (border as Border).top : BorderSide.none,
+      ),
+      child: Padding(
+        padding: _getPadding(context),
+        child: child,
+      ),
+    );
+  }
+
+  double _getElevation(BuildContext context) {
+    if (context.isHighResolutionPhone && mobileElevation != null) {
+      return mobileElevation!;
+    } else if (context.isLargeScreen && desktopElevation != null) {
+      return desktopElevation!;
+    } else if (context.isMediumScreen && tabletElevation != null) {
+      return tabletElevation!;
+    } else {
+      // Default responsive elevations
+      if (context.isHighResolutionPhone) return 4;
+      if (context.isLargeScreen) return 6;
+      if (context.isMediumScreen) return 3;
+      return 2;
+    }
+  }
+
+  EdgeInsets _getPadding(BuildContext context) {
+    if (context.isHighResolutionPhone && mobilePadding != null) {
+      return mobilePadding!;
+    } else if (context.isLargeScreen && desktopPadding != null) {
+      return desktopPadding!;
+    } else if (context.isMediumScreen && tabletPadding != null) {
+      return tabletPadding!;
+    } else {
+      // Default responsive padding
+      if (context.isHighResolutionPhone) return const EdgeInsets.all(20);
+      if (context.isLargeScreen) return const EdgeInsets.all(24);
+      if (context.isMediumScreen) return const EdgeInsets.all(18);
+      return const EdgeInsets.all(16);
+    }
+  }
+
+  double _getBorderRadius(BuildContext context) {
+    if (context.isHighResolutionPhone) return 16;
+    if (context.isLargeScreen) return 20;
+    if (context.isMediumScreen) return 14;
+    return 12;
   }
 }

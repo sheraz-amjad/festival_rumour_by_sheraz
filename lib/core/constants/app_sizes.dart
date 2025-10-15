@@ -63,7 +63,7 @@ class AppDimensions {
   static const double appBarVerticalTablet = 12.0;
   static const double appBarVerticalDesktop = 16.0;
 
-  static const double appBarHorizontalMobile = 20.0;
+  static const double appBarHorizontalMobile = 15.0;
   static const double appBarHorizontalTablet = 24.0;
   static const double appBarHorizontalDesktop = 32.0;
 
@@ -79,9 +79,9 @@ class AppDimensions {
   static const double iconXS = 16.0;
   static const double iconS = 20.0;
   static const double iconM = 24.0;
-  static const double iconL = 32.0;
-  static const double iconXL = 48.0;
-  static const double iconXXL = 64.0;
+  static const double iconL = 28.0;
+  static const double iconXL = 36.0;
+  static const double iconXXL = 45.0;
 
   // Button Heights
   static const double buttonHeightS = 32.0;

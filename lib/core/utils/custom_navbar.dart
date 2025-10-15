@@ -24,7 +24,10 @@ class CustomNavBar extends StatelessWidget {
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double containerWidth = screenWidth / items.length;
-    final double iconSize = 24.0;
+    final double iconSize = _getResponsiveIconSize(context);
+    final double fontSize = _getResponsiveFontSize(context);
+    final double padding = _getResponsivePadding(context);
+    final double spacing = _getResponsiveSpacing(context);
 
     return SafeArea(
       top: false,
@@ -46,8 +49,8 @@ class CustomNavBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 width: containerWidth,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                child: _buildButton(item, selected, iconSize),
+                padding: EdgeInsets.symmetric(vertical: padding, horizontal: 8),
+                child: _buildButton(item, selected, iconSize, fontSize, spacing),
               ),
             );
           }),
@@ -56,38 +59,73 @@ class CustomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(Map<String, dynamic> item, bool selected, double iconSize) {
+  Widget _buildButton(Map<String, dynamic> item, bool selected, double iconSize, double fontSize, double spacing) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: selected 
             ? AppColors.accent // Use app accent color for selected
             : Colors.transparent, // Transparent for unselected
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            item["icon"] as IconData,
-            color: selected 
-                ? AppColors.black // Black for selected (contrasts well with accent)
-                : const Color(0xFF9E9E9E), // Light gray for unselected
-            size: iconSize,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            item["label"] as String,
-            style: TextStyle(
-              color: selected 
-                  ? AppColors.black // Black for selected (contrasts well with accent)
-                  : const Color(0xFF9E9E9E), // Light gray for unselected
-              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-              fontSize: 14,
+      child: selected 
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  item["icon"] as IconData,
+                  color: AppColors.black, // Black for selected (contrasts well with accent)
+                  size: iconSize,
+                ),
+                SizedBox(width: spacing),
+                Flexible(
+                  child: Text(
+                    item["label"] as String,
+                    style: TextStyle(
+                      color: AppColors.black, // Black for selected (contrasts well with accent)
+                      fontWeight: FontWeight.w600,
+                      fontSize: fontSize,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            )
+          : Icon(
+              item["icon"] as IconData,
+              color: const Color(0xFF9E9E9E), // Light gray for unselected
+              size: iconSize,
             ),
-          ),
-        ],
-      ),
     );
+  }
+
+  // Responsive helper methods
+  double _getResponsiveIconSize(BuildContext context) {
+    if (context.isHighResolutionPhone) return 28;
+    if (context.isLargeScreen) return 32;
+    if (context.isMediumScreen) return 26;
+    return 24;
+  }
+
+  double _getResponsiveFontSize(BuildContext context) {
+    if (context.isHighResolutionPhone) return 16;
+    if (context.isLargeScreen) return 18;
+    if (context.isMediumScreen) return 15;
+    return 14;
+  }
+
+  double _getResponsivePadding(BuildContext context) {
+    if (context.isHighResolutionPhone) return 12; // Reduced from 16
+    if (context.isLargeScreen) return 16; // Reduced from 20
+    if (context.isMediumScreen) return 10; // Reduced from 14
+    return 8; // Reduced from 12
+  }
+
+  double _getResponsiveSpacing(BuildContext context) {
+    if (context.isHighResolutionPhone) return 6; // Reduced from 8
+    if (context.isLargeScreen) return 8; // Reduced from 10
+    if (context.isMediumScreen) return 5; // Reduced from 7
+    return 4; // Reduced from 6
   }
 }

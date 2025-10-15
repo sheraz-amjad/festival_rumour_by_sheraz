@@ -80,16 +80,17 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
       child: Row(
         children: [
-          // Logo
+          // Logo with responsive sizing
           SvgPicture.asset(
             AppAssets.logo,
             color: AppColors.primary,
-            width: context.isLargeScreen ? AppDimensions.iconXXL : 
-                   context.isMediumScreen ? AppDimensions.iconXL : AppDimensions.iconXL,
-            height: context.isLargeScreen ? AppDimensions.iconXXL : 
-                    context.isMediumScreen ? AppDimensions.iconXL : AppDimensions.iconXL,
+           width: 50,
+           height: 50,
+           // width: _getResponsiveIconSize(context),
+           //  height: _getResponsiveIconSize(context),
           ),
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceXL : AppDimensions.spaceL),
+
+          SizedBox(width: _getResponsiveSpacing(context)),
           
           // Title - Flexible to prevent overflow
           Expanded(
@@ -97,27 +98,26 @@ class HomeView extends BaseView<HomeViewModel> {
               AppStrings.lunaFest2025,
               textType: TextType.heading,
               color: AppColors.primary,
-              baseFontSize: context.isLargeScreen ? AppDimensions.textXL : 
-                           context.isMediumScreen ? AppDimensions.textL : AppDimensions.textS,
               fontWeight: FontWeight.bold,
               maxLines: 1,
-              // overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceXXL),
+          const Spacer(),
 
-          // Job Icon Button
+
+          // Job Icon Button with responsive sizing
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-              width: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
-              height: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
+             // width: _getResponsiveIconSize(context),
+              //height: _getResponsiveIconSize(context),
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
           
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceL),
+          SizedBox(width:20),
           
           // Pro Label - Flexible container
           Flexible(
@@ -125,11 +125,11 @@ class HomeView extends BaseView<HomeViewModel> {
               onTap: viewModel.goToSubscription,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: context.isLargeScreen ? AppDimensions.paddingM : AppDimensions.paddingS,
-                  vertical: 2,
+                  horizontal: _getResponsivePadding(context),
+                  vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.proLabelBackground,
+                  color: AppColors.accent,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                 ),
                 child: ResponsiveTextWidget(
@@ -137,7 +137,6 @@ class HomeView extends BaseView<HomeViewModel> {
                   textType: TextType.label,
                   color: AppColors.proLabelText,
                   fontWeight: FontWeight.bold,
-                  baseFontSize: context.isLargeScreen ? AppDimensions.textM : AppDimensions.textS,
                 ),
               ),
             ),
@@ -147,6 +146,62 @@ class HomeView extends BaseView<HomeViewModel> {
     );
   }
 
+  // Helper methods for responsive sizing - optimized for high-res phones
+  double _getResponsiveIconSize(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.iconM; // 48px for high-res phones like Pixel 6 Pro
+    } else if (context.isLargeScreen) {
+      return AppDimensions.iconXL; // 64px for desktop
+    } else if (context.isMediumScreen) {
+      return AppDimensions.iconL; // 32px for tablets
+    }
+    return AppDimensions.iconL; // 32px minimum for all phones
+  }
+
+  double _getResponsiveSpacing(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.spaceM; // 16px for high-res phones (reduced from 24px)
+    } else if (context.isLargeScreen) {
+      return AppDimensions.spaceL; // 24px for desktop (reduced from 32px)
+    } else if (context.isMediumScreen) {
+      return AppDimensions.spaceS; // 8px for tablets (reduced from 16px)
+    }
+    return AppDimensions.spaceS; // 8px minimum for all phones (reduced from 16px)
+  }
+
+  double _getResponsiveTitleSize(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.textL; // 18px for high-res phones
+    } else if (context.isLargeScreen) {
+      return AppDimensions.textXL; // 26px for desktop
+    } else if (context.isMediumScreen) {
+      return AppDimensions.textM; // 14px for tablets
+    }
+    return AppDimensions.textM; // 14px minimum for all phones
+  }
+
+  double _getResponsivePadding(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.paddingS; // 8px for high-res phones (reduced from 16px)
+    } else if (context.isLargeScreen) {
+      return AppDimensions.paddingM; // 16px for desktop (reduced from 24px)
+    } else if (context.isMediumScreen) {
+      return AppDimensions.paddingXS; // 4px for tablets (reduced from 8px)
+    }
+    return AppDimensions.paddingXS; // 4px minimum for all phones (reduced from 8px)
+  }
+
+  double _getResponsiveLabelSize(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.textM; // 14px for high-res phones
+    } else if (context.isLargeScreen) {
+      return AppDimensions.textL; // 18px for desktop
+    } else if (context.isMediumScreen) {
+      return AppDimensions.textS; // 12px for tablets
+    }
+    return AppDimensions.textS; // 12px minimum for all phones
+  }
+
 
   Widget _buildSearchBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsiveContainer(
@@ -154,16 +209,20 @@ class HomeView extends BaseView<HomeViewModel> {
       tabletMaxWidth: double.infinity,
       desktopMaxWidth: double.infinity,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+        margin: EdgeInsets.symmetric(horizontal: _getResponsivePadding(context)),
+        padding: EdgeInsets.symmetric(horizontal: _getResponsivePadding(context)),
         decoration: BoxDecoration(
           color: AppColors.onPrimary,
           borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
         ),
         child: Row(
           children: [
-            const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
-            const SizedBox(width: AppDimensions.spaceS),
+            Icon(
+              Icons.search, 
+              color: AppColors.onSurfaceVariant, 
+              size: _getResponsiveIconSize(context),
+            ),
+            SizedBox(width: _getResponsiveSpacing(context)),
 
             /// 🔹 Search Field
             Expanded(
@@ -223,12 +282,16 @@ class HomeView extends BaseView<HomeViewModel> {
                 menuWidth: double.infinity,
                 menuMaxHeight: MediaQuery.of(context).size.height * 0.30,
                 icon: Container(
-                  padding: const EdgeInsets.all(AppDimensions.paddingXS),
+                  padding: EdgeInsets.all(_getResponsivePadding(context) * 0.5),
                   decoration: const BoxDecoration(
                     color: AppColors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.keyboard_arrow_up, color: AppColors.onPrimary, size: 16),
+                  child: Icon(
+                    Icons.keyboard_arrow_up, 
+                    color: AppColors.onPrimary, 
+                    size: _getResponsiveIconSize(context) * 0.6,
+                  ),
                 ),
                 items: [
                   DropdownMenuItem(
@@ -382,7 +445,6 @@ class HomeView extends BaseView<HomeViewModel> {
         return Column(
           children: [
             PostWidget(post: post),
-            // Add spacing except after the last post
             if (index != viewModel.posts.length - 1)
               const SizedBox(height: AppDimensions.spaceM),
           ],

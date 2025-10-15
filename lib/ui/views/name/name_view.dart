@@ -129,6 +129,7 @@ class NameView extends BaseView<NameViewModel> {
   Widget _buildNextButton(BuildContext context, NameViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
+      height: AppDimensions.buttonHeightXL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor:

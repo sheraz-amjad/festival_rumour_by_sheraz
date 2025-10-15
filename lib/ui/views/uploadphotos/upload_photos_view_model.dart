@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/viewmodels/base_view_model.dart';
@@ -10,7 +11,7 @@ class UploadPhotosViewModel extends BaseViewModel {
   final ImagePicker _picker = ImagePicker();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  File? selectedImage;
+  dynamic selectedImage; // Use dynamic to support both File (mobile) and XFile (web)
 
   /// Getter to check if image is picked
   bool get hasImage => selectedImage != null;
@@ -21,7 +22,7 @@ class UploadPhotosViewModel extends BaseViewModel {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
-        selectedImage = File(pickedFile.path);
+        selectedImage = kIsWeb ? pickedFile : File(pickedFile.path);
         notifyListeners();
       }
     }, errorMessage: AppStrings.failtouploadimage);
@@ -33,7 +34,7 @@ class UploadPhotosViewModel extends BaseViewModel {
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
       if (pickedFile != null) {
-        selectedImage = File(pickedFile.path);
+        selectedImage = kIsWeb ? pickedFile : File(pickedFile.path);
         notifyListeners();
       }
     }, errorMessage: AppStrings.failedtotakephoto);

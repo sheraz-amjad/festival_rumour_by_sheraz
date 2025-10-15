@@ -28,7 +28,6 @@ void main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
-  
   runApp(const FestivalRumourApp());
 }
 
@@ -46,7 +45,7 @@ class FestivalRumourApp extends StatelessWidget {
 
       
       // Routing Configuration
-      initialRoute: AppRoutes.splash,
+      initialRoute: AppRoutes.interest,
       onGenerateRoute: onGenerateRoute,
       
       // Navigation Configuration

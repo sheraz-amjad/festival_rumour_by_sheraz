@@ -29,8 +29,8 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
             alignment: Alignment.bottomCenter,
             child: ResponsiveContainer(
               mobileMaxWidth: double.infinity,
-              tabletMaxWidth: 600,
-              desktopMaxWidth: 800,
+              tabletMaxWidth: double.infinity,
+              desktopMaxWidth: double.infinity,
               child: Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(0),
@@ -55,13 +55,13 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context),
-                      const SizedBox(height: AppDimensions.paddingL),
+                      const SizedBox(height: AppDimensions.paddingS),
                       _buildEmailField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingM),
+                      const SizedBox(height: AppDimensions.paddingS),
                       _buildPasswordField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingM),
+                      const SizedBox(height: AppDimensions.paddingS),
                       _buildConfirmPasswordField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingL),
+                      const SizedBox(height: AppDimensions.paddingS),
                       _buildContinueButton(context, viewModel),
                     ],
                   ),

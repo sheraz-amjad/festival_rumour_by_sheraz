@@ -110,10 +110,10 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation = Tween<double>(begin: -1.0, end: 2.0).animate(
+    _animation = Tween<double>(begin: -0.1, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     if (widget.isLoading) {
@@ -157,9 +157,9 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
                 widget.baseColor ?? AppColors.surfaceVariant,
               ],
               stops: [
-                _animation.value - 0.3,
+                _animation.value - 0.1,
                 _animation.value,
-                _animation.value + 0.3,
+                _animation.value + 0.1,
               ].map((stop) => stop.clamp(0.0, 1.0)).toList(),
             ).createShader(bounds);
           },

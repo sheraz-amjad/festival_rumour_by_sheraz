@@ -67,7 +67,14 @@ class _PostWidgetState extends State<PostWidget> {
             padding: const EdgeInsets.symmetric(
               horizontal: AppDimensions.postContentPaddingHorizontal,
             ),
-            child: Text(post.content,style: const TextStyle(color: AppColors.primary), ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                post.content,
+                style: const TextStyle(color: AppColors.primary),
+                textAlign: TextAlign.left,
+              ),
+            ),
           ),
           const SizedBox(height: AppDimensions.reactionIconSpacing),
 

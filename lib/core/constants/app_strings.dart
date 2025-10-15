@@ -422,7 +422,7 @@ class AppStrings {
   static const String createChatRoom = 'Create Chat Room';
   static const String addTitle = 'Add Title';
   static const String peopleFromContacts = 'People from your contacts attending Luna Fest.';
-  static const String iAmUsingLuna = 'I am using Luna';
+  static const String iAmUsingLuna = 'Avaliable';
   static const String invite = 'INVITE';
   static const String privateChats = 'Private Chats';
   static const String post = 'POST';

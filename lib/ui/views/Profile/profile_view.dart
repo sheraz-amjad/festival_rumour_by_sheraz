@@ -33,62 +33,183 @@ class _ProfileViewState extends State<ProfileView> {
         return true;
       },
       child: Scaffold(
-      body: Stack(
-        children: [
-
-          /// 🔹 Fullscreen background image
-          Positioned.fill(
-            child: Image.asset(
-              AppAssets.bottomsheet,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          /// 🔹 Dark overlay for readability
-          Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.35)),
-          ),
-
-          /// 🔹 Main content
-          SafeArea(
-            child: ResponsiveContainer(
-              mobileMaxWidth: double.infinity,
-              tabletMaxWidth: AppDimensions.tabletWidth,
-              desktopMaxWidth: AppDimensions.desktopWidth,
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: MediaQuery
-                      .of(context)
-                      .size
-                      .height),
-                  child: Column(
-                    children: [
-                      _profileTopBarWidget(),
-                      const Divider(color: AppColors.white, thickness: 0.5),
-                      SizedBox(height: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 10),
-                      _profileHeaderSection(),
-                      SizedBox(height: context.isLargeScreen ? 40 : context.isMediumScreen ? 35 : 30),
-
-
-                      _profileTabs(),
-
-                      /// Dynamic section
-                      if (selectedTab == 0) _profileGridWidget(),
-                      if (selectedTab == 1) _profileReelsWidget(),
-                      if (selectedTab == 2) _profileRepostsWidget(),
-                    ],
-                  ),
-                ),
+        body: Stack(
+          children: [
+            /// 🔹 Fullscreen background image
+            Positioned.fill(
+              child: Image.asset(
+                AppAssets.bottomsheet,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
-      ),
+
+            /// 🔹 Dark overlay for readability
+            Positioned.fill(
+              child: Container(color: Colors.black.withOpacity(0.35)),
+            ),
+
+            /// 🔹 Instagram-like scrollable content
+            CustomScrollView(
+              slivers: [
+                /// Top Bar as Sliver
+                SliverToBoxAdapter(
+                  child: SafeArea(
+                    child: _profileTopBarWidget(),
+                  ),
+                ),
+
+                /// Profile Header (Collapsible)
+                SliverAppBar(
+                  expandedHeight: context.isLargeScreen ? 350 : context.isMediumScreen ? 300 : 250,
+                  floating: false,
+                  pinned: false,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: _buildProfileHeader(),
+                  ),
+                ),
+
+                /// Profile Tabs (Pinned)
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _ProfileTabsDelegate(
+                    child: Container(
+                      height: 56.0, // Match the actual content height
+                      color: Colors.black.withOpacity(0.8),
+                      child: _profileTabs(),
+                    ),
+                  ),
+                ),
+
+                /// Dynamic Content
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.8),
+                    child: _buildDynamicContent(),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  /// ---------------- PROFILE HEADER ----------------
+  /// ---------------- INSTAGRAM-LIKE PROFILE HEADER ----------------
+  Widget _buildProfileHeader() {
+    final mediaQuery = MediaQuery.maybeOf(context);
+    final topPadding = mediaQuery?.padding.top ?? 0.0;
+
+    return Container(
+      padding: EdgeInsets.only(
+        top: topPadding + 40, // Reduced from 60 to 40
+        left: AppDimensions.paddingM,
+        right: AppDimensions.paddingM,
+        bottom: AppDimensions.paddingM,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          /// Profile info (Username & followers left — Picture right)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: context.isLargeScreen ? 55 : context.isMediumScreen ? 50 : 45,
+                backgroundImage: const AssetImage(AppAssets.profile),
+              ),
+              SizedBox(width: context.isLargeScreen ? 22 : context.isMediumScreen ? 22 : 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Username
+                    ResponsiveTextWidget(
+                      AppStrings.username,
+                      textType: TextType.title,
+                      color: AppColors.white,
+                      fontWeight: FontWeight.bold,
+                      baseFontSize: 18,
+                    ),
+                    SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
+                    // Stats aligned with profile picture width
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _buildClickableStat("120", "Posts", () {
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('posts');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.posts);
+                          }
+                        }),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
+                        _buildClickableStat("5.4K", "Followers", () {
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('followers');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 0);
+                          }
+                        }),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
+                        _buildClickableStat("340", "Following", () {
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('following');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 1);
+                          }
+                        }),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
+                        _buildClickableStat("3", "Festivals", () {
+                          if (widget.onNavigateToSub != null) {
+                            widget.onNavigateToSub!('festivals');
+                          } else {
+                            Navigator.pushNamed(context, AppRoutes.profileList,
+                                arguments: 2);
+                          }
+                        }),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
+
+          /// Bio / Description below profile picture
+          ResponsiveTextWidget(
+            "Bringing people together through music, color, and culture!",
+            textType: TextType.body,
+            color: AppColors.white,
+            baseFontSize: 16,
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// ---------------- DYNAMIC CONTENT ----------------
+  Widget _buildDynamicContent() {
+    return Column(
+      children: [
+        SizedBox(height: context.isLargeScreen ? 20 : context.isMediumScreen ? 16 : 12),
+        if (selectedTab == 0) _profileGridWidget(),
+        if (selectedTab == 1) _profileReelsWidget(),
+        if (selectedTab == 2) _profileRepostsWidget(),
+      ],
+    );
+  }
+
+  /// ---------------- PROFILE HEADER (OLD METHOD - KEEP FOR REFERENCE) ----------------
   Widget _profileHeaderSection() {
     return ResponsivePadding(
       mobilePadding: const EdgeInsets.all(AppDimensions.paddingM),
@@ -106,11 +227,12 @@ class _ProfileViewState extends State<ProfileView> {
                 radius: context.isLargeScreen ? 55 : context.isMediumScreen ? 50 : 45,
                 backgroundImage: const AssetImage(AppAssets.profile),
               ),
-              SizedBox(width: context.isLargeScreen ? 24 : context.isMediumScreen ? 22 : 20),
+              SizedBox(width: context.isLargeScreen ? 22 : context.isMediumScreen ? 22 : 20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Username - full width
                     ResponsiveTextWidget(
                       AppStrings.username,
                       textType: TextType.title,
@@ -119,6 +241,7 @@ class _ProfileViewState extends State<ProfileView> {
                       baseFontSize: 18,
                     ),
                     SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
+                    // Stats aligned with profile picture width
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -129,7 +252,7 @@ class _ProfileViewState extends State<ProfileView> {
                             Navigator.pushNamed(context, AppRoutes.posts);
                           }
                         }),
-                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
                         _buildClickableStat("5.4K", "Followers", () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('followers');
@@ -138,7 +261,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 arguments: 0);
                           }
                         }),
-                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
                         _buildClickableStat("340", "Following", () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('following');
@@ -147,7 +270,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 arguments: 1);
                           }
                         }),
-                        SizedBox(width: context.isLargeScreen ? 20 : context.isMediumScreen ? 18 : 16),
+                        SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
                         _buildClickableStat("3", "Festivals", () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('festivals');
@@ -172,7 +295,7 @@ class _ProfileViewState extends State<ProfileView> {
             "Bringing people together through music, color, and culture!",
             textType: TextType.body,
             color: AppColors.white,
-            baseFontSize: 16,
+            baseFontSize: 14,
             textAlign: TextAlign.left,
           ),
         ],
@@ -185,17 +308,18 @@ class _ProfileViewState extends State<ProfileView> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
-        vertical: 8,
+        vertical: AppDimensions.paddingS,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           /// Back button
           CustomBackButton(
             onTap: widget.onBack ?? () {},
           ),
 
+          SizedBox(width: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 8),
+
+          /// Profile title
           ResponsiveTextWidget(
             "Profile",
             textType: TextType.title,
@@ -204,29 +328,50 @@ class _ProfileViewState extends State<ProfileView> {
             baseFontSize: 20,
           ),
 
+          /// Spacer to push icons to the right
+          const Spacer(),
+
           /// Right-side icons
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 onPressed: () => _showPostBottomSheet(context),
-                icon: const Icon(Icons.add_box_outlined,
-                    color: AppColors.white, size: 26),
+                icon: Icon(Icons.add_box_outlined,
+                    color: AppColors.white, 
+                    size: context.isHighResolutionPhone ? 28 : 26),
+                padding: EdgeInsets.all(context.isHighResolutionPhone ? 8 : 4),
+                constraints: BoxConstraints(
+                  minWidth: context.isHighResolutionPhone ? 48 : 40,
+                  minHeight: context.isHighResolutionPhone ? 48 : 40,
+                ),
               ),
               IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.notification);
                 },
-                icon: const Icon(Icons.notifications_none,
-                    color: AppColors.white, size: 26),
+                icon: Icon(Icons.notifications_none,
+                    color: AppColors.white, 
+                    size: context.isHighResolutionPhone ? 28 : 26),
+                padding: EdgeInsets.all(context.isHighResolutionPhone ? 8 : 4),
+                constraints: BoxConstraints(
+                  minWidth: context.isHighResolutionPhone ? 48 : 40,
+                  minHeight: context.isHighResolutionPhone ? 48 : 40,
+                ),
               ),
               IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.settings);
                 },
-                icon: const Icon(Icons.settings,
-                    color: AppColors.white, size: 26),
+                icon: Icon(Icons.settings,
+                    color: AppColors.white, 
+                    size: context.isHighResolutionPhone ? 28 : 26),
+                padding: EdgeInsets.all(context.isHighResolutionPhone ? 8 : 4),
+                constraints: BoxConstraints(
+                  minWidth: context.isHighResolutionPhone ? 48 : 40,
+                  minHeight: context.isHighResolutionPhone ? 48 : 40,
+                ),
               ),
-
             ],
           ),
         ],
@@ -294,19 +439,24 @@ class _ProfileViewState extends State<ProfileView> {
   /// ---------------- HELPERS ----------------
   Widget _buildStat(String count, String label) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ResponsiveTextWidget(
           count,
           textType: TextType.title,
           color: AppColors.white,
           fontWeight: FontWeight.bold,
-          baseFontSize: 16,
+          baseFontSize: context.isHighResolutionPhone ? 14 : 10,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         ResponsiveTextWidget(
           label,
           textType: TextType.caption,
           color: AppColors.white,
-          baseFontSize: 12,
+          baseFontSize: context.isHighResolutionPhone ? 10 : 6,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -315,7 +465,13 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildClickableStat(String count, String label, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: _buildStat(count, label),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.isHighResolutionPhone ? 2 : 1,
+          vertical: context.isHighResolutionPhone ? 2 : 1,
+        ),
+        child: _buildStat(count, label),
+      ),
     );
   }
 
@@ -336,13 +492,22 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget _profileTabs() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _tabIcon(Icons.grid_on, 0),
-        _tabIcon(Icons.video_collection_outlined, 1),
-        _tabIcon(Icons.repeat, 2),
-      ],
+    return Container(
+      height: 56.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: _tabIcon(Icons.grid_on, 0),
+          ),
+          Expanded(
+            child: _tabIcon(Icons.video_collection_outlined, 1),
+          ),
+          Expanded(
+            child: _tabIcon(Icons.repeat, 2),
+          ),
+        ],
+      ),
     );
   }
 
@@ -351,8 +516,14 @@ class _ProfileViewState extends State<ProfileView> {
       icon: Icon(
         icon,
         color: selectedTab == index ? AppColors.primary : AppColors.white,
+        size: context.isHighResolutionPhone ? 24 : 20,
       ),
       onPressed: () => setState(() => selectedTab = index),
+      padding: EdgeInsets.all(context.isHighResolutionPhone ? 8 : 6),
+      constraints: BoxConstraints(
+        minWidth: context.isHighResolutionPhone ? 48 : 40,
+        minHeight: context.isHighResolutionPhone ? 48 : 40,
+      ),
     );
   }
 
@@ -501,5 +672,28 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       ),
     );
+  }
+}
+
+/// ---------------- SLIVER PERSISTENT HEADER DELEGATE ----------------
+class _ProfileTabsDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  _ProfileTabsDelegate({required this.child});
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  double get maxExtent => 56.0;
+
+  @override
+  double get minExtent => 56.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

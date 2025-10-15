@@ -30,7 +30,6 @@ import '../../ui/views/subscription/subscription_view.dart';
 import '../../ui/views/settings/settings_view.dart';
 import '../../ui/views/leaderboard/leaderboard_view.dart';
 import '../../ui/views/posts/posts_view.dart';
-import '../../ui/views/chat/chat_room_view.dart';
 import '../../ui/views/chat/create_chat_room_view.dart';
 import '../../ui/views/rumors/rumors_view.dart';
 import '../utils/transition.dart';
@@ -73,12 +72,12 @@ class AppRoutes {
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
+
     case AppRoutes.welcome:
       return SmoothPageRoute(page: const WelcomeView());
 
     case AppRoutes.splash:
       return SmoothPageRoute(page: const SplashView());
-
 
     case AppRoutes.signup:
       return SmoothPageRoute(page: const SignupView());
@@ -92,10 +91,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.name:
       return SmoothPageRoute(page: const NameView());
 
-      case AppRoutes.festivals:
-       // final args = settings.arguments as List<dynamic>;
-        return SmoothPageRoute(page: const FestivalView());
-
+    case AppRoutes.festivals:
+      // final args = settings.arguments as List<dynamic>;
+      return SmoothPageRoute(page: const FestivalView());
 
     case AppRoutes.otp:
       return SmoothPageRoute(page: const OtpView());
@@ -115,7 +113,6 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.chat:
       return SmoothPageRoute(page: const ChatView());
 
-
     case AppRoutes.map:
       return SmoothPageRoute(page: const MapView());
 
@@ -128,14 +125,16 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.leaderboard:
       return SmoothPageRoute(page: const LeaderboardView());
 
-      case AppRoutes.comments:
+    case AppRoutes.comments:
       return SmoothPageRoute(page: const CommentView());
 
     case AppRoutes.discover:
       return SmoothPageRoute(page: const DiscoverView());
-      case AppRoutes.username:
-        return SmoothPageRoute(page: const UsernameView());
-        case AppRoutes.festivalsJob:
+
+    case AppRoutes.username:
+      return SmoothPageRoute(page: const UsernameView());
+
+    case AppRoutes.festivalsJob:
       return SmoothPageRoute(page: const FestivalsJobView());
 
     case AppRoutes.jobpost:
@@ -144,32 +143,34 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.profile:
       return SmoothPageRoute(page: ProfileView());
 
-      case AppRoutes.profileList:
-        final args = settings.arguments as int? ?? 0;
-            return SmoothPageRoute(page: ProfileListView(initialTab: args,username: 'username',));
+    case AppRoutes.profileList:
+      final args = settings.arguments as int? ?? 0;
+      return SmoothPageRoute(
+        page: ProfileListView(initialTab: args, username: 'username'),
+      );
 
     case AppRoutes.posts:
       return SmoothPageRoute(page: const PostsView());
 
-      case AppRoutes.detail:
+    case AppRoutes.detail:
       return SmoothPageRoute(page: const DetailView());
 
     case AppRoutes.chatRoom:
-      return SmoothPageRoute(page: const ChatRoomView());
+      return SmoothPageRoute(page: const ChatView());
 
     case AppRoutes.createChatRoom:
       return SmoothPageRoute(page: const CreateChatRoomView());
 
-      case AppRoutes.toilets:
+    case AppRoutes.toilets:
       return SmoothPageRoute(page: const ToiletView());
 
-      case AppRoutes.performance:
+    case AppRoutes.performance:
       return SmoothPageRoute(page: const PerformanceView());
 
-      case AppRoutes.event:
+    case AppRoutes.event:
       return SmoothPageRoute(page: const EventView());
 
-      case AppRoutes.news:
+    case AppRoutes.news:
       return SmoothPageRoute(page: const NewsView());
 
     case AppRoutes.rumors:
@@ -177,9 +178,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     default:
       return MaterialPageRoute(
-        builder: (_) => const Scaffold(
-          body: Center(child: Text(AppStrings.pageNotFound)),
-        ),
+        builder:
+            (_) => const Scaffold(
+              body: Center(child: Text(AppStrings.pageNotFound)),
+            ),
       );
   }
 }

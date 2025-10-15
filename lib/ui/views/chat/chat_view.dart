@@ -21,12 +21,13 @@ class ChatView extends BaseView<ChatViewModel> {
       body: Stack(
         children: [
           // Background image
-          // Dynamic background image
           Positioned.fill(
             child: Image.asset(
-              viewModel.selectedTab == 0
-                  ? AppAssets.publicbackground  // Public
-                  : AppAssets.privatebackground, // Private
+              viewModel.isInChatRoom 
+                  ? AppAssets.privatebackground
+                  : (viewModel.selectedTab == 0
+                      ? AppAssets.publicbackground  // Public
+                      : AppAssets.privatebackground), // Private
               fit: BoxFit.cover,
             ),
           ),
@@ -36,28 +37,14 @@ class ChatView extends BaseView<ChatViewModel> {
             child: Container(color: Colors.black.withOpacity(0.3)),
           ),
           
-          // App bar (extends into status bar)
-          _buildAppBar(context),
-          
-          // Main content (below app bar)
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 70, // Status bar + app bar height
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Column(
-              children: [
-                _buildSegmentedControl(context, viewModel),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: _buildChatRooms(context, viewModel),
-                ),
-              ],
-            ),
-          ),
+          // Main content
+          if (viewModel.isInChatRoom)
+            _buildChatRoomView(context, viewModel)
+          else
+            _buildChatListView(context, viewModel),
         ],
       ),
-      floatingActionButton: viewModel.selectedTab == 1 
+      floatingActionButton: !viewModel.isInChatRoom && viewModel.selectedTab == 1 
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, AppRoutes.createChatRoom);
@@ -69,6 +56,46 @@ class ChatView extends BaseView<ChatViewModel> {
               ),
             )
           : null,
+    );
+  }
+
+  Widget _buildChatListView(BuildContext context, ChatViewModel viewModel) {
+    return Stack(
+      children: [
+        // App bar (extends into status bar)
+        _buildAppBar(context),
+        
+        // Main content (below app bar)
+        Positioned(
+          top: MediaQuery.of(context).padding.top + 70, // Status bar + app bar height
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Column(
+            children: [
+              _buildSegmentedControl(context, viewModel),
+              const SizedBox(height: 20),
+              Expanded(
+                child: _buildChatRooms(context, viewModel),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChatRoomView(BuildContext context, ChatViewModel viewModel) {
+    return SafeArea(
+      child: Column(
+        children: [
+          _buildChatRoomAppBar(context, viewModel),
+          Expanded(
+            child: _buildChatContent(context, viewModel),
+          ),
+          _buildInputSection(context, viewModel),
+        ],
+      ),
     );
   }
 
@@ -190,17 +217,72 @@ class ChatView extends BaseView<ChatViewModel> {
 
   Widget _buildChatRooms(BuildContext context, ChatViewModel viewModel) {
     if (viewModel.selectedTab == 1) {
-      // Private chat rooms - show list format
+      // Private chat rooms
       return _buildPrivateChatList(context, viewModel);
     } else {
-      // Public chat rooms - show card format
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: viewModel.chatRooms.length,
+      // Public chat rooms - show grid view
+      return GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 cards per row
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.85, // Adjust height vs width ratio
+        ),
+        itemCount: viewModel.chatRooms1.length,
         itemBuilder: (context, index) {
-          final room = viewModel.chatRooms[index];
-          return Container(
-            margin: const EdgeInsets.only(bottom: 16),
+          final room = viewModel.chatRooms1[index];
+          return GestureDetector(
+            onTap: () {
+              viewModel.enterChatRoom(room);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: AppColors.onPrimary.withOpacity(0.3),
+                border: Border.all(
+                  color: AppColors.white.withOpacity(0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withOpacity(0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Image section
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                      child: Image.asset(
+                        room['image'] ?? AppAssets.post1,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
+                  ),
+
+                  // Text section
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      room['name'] ?? 'Luna Festival Community',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       );
@@ -208,130 +290,152 @@ class ChatView extends BaseView<ChatViewModel> {
   }
 
   Widget _buildPrivateChatList(BuildContext context, ChatViewModel viewModel) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.onPrimary.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.white.withOpacity(0.2),
-          width: 1,
-        ),
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // 2 cards per row
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.85, // Adjust height vs width ratio
       ),
-      child: Column(
-        children: [
-          //const SizedBox(height: 10),
-          // Chat list
-          Expanded(
-            child: ListView.builder(
-              itemCount: viewModel.privateChats.length,
-              itemBuilder: (context, index) {
-                final chat = viewModel.privateChats[index];
-                return _buildPrivateChatItem(context, chat);
-              },
-            ),
-          ),
-        ],
-      ),
+      itemCount: viewModel.privateChats.length,
+      itemBuilder: (context, index) {
+        final chat = viewModel.privateChats[index];
+        return _buildPrivateChatItem(context, viewModel, chat);
+      },
     );
   }
 
 
-  Widget _buildPrivateChatItem(BuildContext context, Map<String, dynamic> chat) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          // Avatar with unread badge
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 28,
-                backgroundImage: AssetImage(chat['avatar'] ?? ''),
-                backgroundColor: AppColors.onPrimary,
-              ),
-              if (chat['unreadCount'] > 0)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: AppColors.accent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${chat['unreadCount']}',
-                        style: const TextStyle(
-                          color: AppColors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+  Widget _buildPrivateChatItem(BuildContext context, ChatViewModel viewModel, Map<String, dynamic> chat) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to private chat room
+        viewModel.enterChatRoom(chat);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: AppColors.onPrimary.withOpacity(0.3),
+          border: Border.all(
+            color: AppColors.white.withOpacity(0.2),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withOpacity(0.2),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Avatar section
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundImage: AssetImage(chat['avatar'] ?? AppAssets.profile),
+                        backgroundColor: AppColors.onPrimary,
                       ),
                     ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 12),
-          
-          // Chat info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  chat['name'] ?? AppStrings.chatName,
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  chat['lastMessage'] ?? AppStrings.noMessages,
-                  style: const TextStyle(
-                    color: AppColors.grey600,
-                    fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          
-          // Timestamp and status
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                chat['timestamp'] ?? AppStrings.timestamp0000,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 12,
+                    if (chat['unreadCount'] > 0)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: AppColors.accent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${chat['unreadCount']}',
+                              style: const TextStyle(
+                                color: AppColors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (chat['isActive'] == true)
+                      Positioned(
+                        bottom: 8,
+                        right: 8,
+                        child: Container(
+                          width: 12,
+                          height: 12,
+                          decoration: const BoxDecoration(
+                            color: AppColors.accent,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 4),
-              if (chat['isActive'] == true)
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.accent,
-                    shape: BoxShape.circle,
-                  ),
+            ),
+
+            // Text section
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      chat['name'] ?? AppStrings.chatName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      chat['lastMessage'] ?? AppStrings.noMessages,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.grey600,
+                        fontSize: 11,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      chat['timestamp'] ?? '12:00',
+                      style: const TextStyle(
+                        color: AppColors.grey600,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
                 ),
-            ],
-          ),
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   Widget _buildCommunityCards(BuildContext context) {
     return Padding(
@@ -425,6 +529,219 @@ class ChatView extends BaseView<ChatViewModel> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildChatRoomAppBar(BuildContext context, ChatViewModel viewModel) {
+    return Container(
+      height: 60,
+      color: Colors.transparent,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.white),
+            onPressed: () => viewModel.exitChatRoom(),
+          ),
+          Expanded(
+            child: Text(
+              viewModel.currentChatRoom?['name'] ?? AppStrings.lunaCommunityRoom,
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.share, color: AppColors.white),
+            onPressed: () {
+              // Handle share action
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite_border, color: AppColors.white),
+            onPressed: () {
+              // Handle favorite action
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: AppColors.white),
+            onPressed: () {
+              // Handle more options
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatContent(BuildContext context, ChatViewModel viewModel) {
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        children: [
+          // FestivalRumour logo and timestamp
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'FA',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'FestivalRumour 10:05 PM',
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Welcome message bubble
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Join the conversation!',
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Follow this topic to receive notifications when people respond.',
+                    style: TextStyle(
+                      color: AppColors.grey600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => viewModel.inviteFriends(),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.primary, width: 2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          AppStrings.inviteYourFriends,
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          
+          const Spacer(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputSection(BuildContext context, ChatViewModel viewModel) {
+    return Container(
+      color: Colors.transparent,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Input field row
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.add,
+                  color: AppColors.black,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Container(
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: TextField(
+                    controller: viewModel.messageController,
+                    decoration: const InputDecoration(
+                      hintText: AppStrings.typeSomething,
+                      hintStyle: TextStyle(color: AppColors.grey600),
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(color: AppColors.black),
+                    onSubmitted: (_) => viewModel.sendMessage(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              GestureDetector(
+                onTap: () => viewModel.sendMessage(),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.send,
+                    color: AppColors.white,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -65,9 +65,12 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                       children: [
                         /// Header
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomBackButton(onTap: onBack ?? () {}),
+                            
+                            SizedBox(width: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 8),
+                            
+                            /// Overview title
                             Text(
                               AppStrings.overview,
                               style: const TextStyle(
@@ -75,6 +78,11 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                                 fontSize: AppDimensions.textXL,
                               ),
                             ),
+                            
+                            /// Spacer to push icons to the right
+                            const Spacer(),
+                            
+                            /// Right-side icons
                             Row(
                               children: [
                                 GestureDetector(
@@ -148,8 +156,9 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                             await Share.share(
                               '🎉 Hey! Join me at LunaFest using the Festival Rumour app! '
                                   'Let’s enjoy the vibe together 🌙🔥\n\n'
-                                  'Download now: https://yourapp.link',
+                                  'Download now: https://festival-romour.link',
                               subject: 'Join me at LunaFest!',
+                              sharePositionOrigin: const Rect.fromLTWH(0, 0, 0, 0),
                             );
                           },
                         ),

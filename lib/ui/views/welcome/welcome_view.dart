@@ -66,15 +66,15 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
+
                       _buildGoogleLogin(viewModel,context),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       _buildEmailLogin(viewModel),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       _buildAppleLogin(viewModel,context),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       _buildSignupText(viewModel),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 15),
                     ],
                   ),
                 ),
@@ -112,18 +112,18 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
           );
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: _buildCircleIcon(AppAssets.googleIcon),
             ),
-            const SizedBox(width: 55),
             Expanded(
               child: Text(
                 AppStrings.loginWithGoogle,
                 style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ),
           ],
@@ -146,16 +146,18 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
         ),
         onPressed: viewModel.loginWithEmail,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: _buildCircleIcon(AppAssets.phoneIcon),
             ),
-            const SizedBox(width: 35),
-            Text(
-              AppStrings.loginWithEmailPhone,
-              style: const TextStyle(color: Colors.white),
+            Expanded(
+              child: Text(
+                AppStrings.loginWithEmailPhone,
+                style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
@@ -181,16 +183,18 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
           );
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: _buildCircleIcon(AppAssets.appleIcon),
             ),
-            const SizedBox(width: 55),
-            Text(
-              AppStrings.loginWithApple,
-              style: const TextStyle(color: AppColors.white),
+            Expanded(
+              child: Text(
+                AppStrings.loginWithApple,
+                style: const TextStyle(color: AppColors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
