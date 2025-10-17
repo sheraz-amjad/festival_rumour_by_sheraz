@@ -5,6 +5,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'posts_view_model.dart';
 
 class PostsView extends BaseView<PostsViewModel> {
@@ -29,7 +30,7 @@ class PostsView extends BaseView<PostsViewModel> {
 
           /// 🔹 Dark overlay for readability
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.35)),
+            child: Container(color: AppColors.overlayBlack45),
           ),
 
           /// 🔹 Main content
@@ -69,13 +70,11 @@ class PostsView extends BaseView<PostsViewModel> {
           }
         },
       ),
-      title: const Text(
+      title: const ResponsiveTextWidget(
         'Posts',
-        style: TextStyle(
-          color: AppColors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
+        textType: TextType.title,
+        color: AppColors.white,
+        fontWeight: FontWeight.w600,
       ),
       centerTitle: true,
       actions: [
@@ -151,11 +150,13 @@ class PostsView extends BaseView<PostsViewModel> {
                 leading: CircleAvatar(
                   backgroundImage: AssetImage(post['userImage'] ?? ''),
                 ),
-                title: Text(
+                title: ResponsiveTextWidget(
                   post['username'] ?? 'Unknown User',
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.accent),
+                  textType: TextType.body,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.accent,
                 ),
-                subtitle: Text(post['timeAgo'] ?? '2 hours ago'),
+                subtitle: ResponsiveTextWidget(post['timeAgo'] ?? '2 hours ago'),
                 trailing: const Icon(Icons.more_horiz),
               ),
 
@@ -164,9 +165,10 @@ class PostsView extends BaseView<PostsViewModel> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimensions.postContentPaddingHorizontal,
                 ),
-                child: Text(
+                child: ResponsiveTextWidget(
                   post['description'] ?? '',
-                  style: const TextStyle(color: AppColors.primary),
+                  textType: TextType.body,
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: AppDimensions.reactionIconSpacing),
@@ -203,16 +205,15 @@ class PostsView extends BaseView<PostsViewModel> {
                                   children: [
                                     _selectedReaction == null
                                         ? const Icon(Icons.thumb_up, color: Colors.white, size: 20)
-                                        : Text(
+                                        : ResponsiveTextWidget(
                                       _selectedReaction!,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: _reactionColor,
-                                      ),
+                                      textType: TextType.body,
+                                      color: _reactionColor,
                                     ),
                                     const SizedBox(width: 4),
-                                    Text("${post['likes'] ?? 0}",
-                                        style: const TextStyle(color: Colors.white)),
+                                    ResponsiveTextWidget("${post['likes'] ?? 0}",
+                                        textType: TextType.caption,
+                                        color: Colors.white),
                                   ],
                                 ),
                               ),
@@ -230,8 +231,9 @@ class PostsView extends BaseView<PostsViewModel> {
                                   children: [
                                     const Icon(Icons.comment_outlined, color: Colors.white, size: 18),
                                     const SizedBox(width: 4),
-                                    Text("${post['comments'] ?? 0}",
-                                        style: const TextStyle(color: Colors.white)),
+                                    ResponsiveTextWidget("${post['comments'] ?? 0}",
+                                        textType: TextType.caption,
+                                        color: Colors.white),
                                   ],
                                 ),
                               ),
@@ -285,11 +287,11 @@ class PostsView extends BaseView<PostsViewModel> {
                   const SizedBox(width: AppDimensions.reactionIconSpacing),
                   const Icon(Icons.thumb_up, color: AppColors.reactionLove, size: AppDimensions.reactionIconSize),
                   const SizedBox(width: AppDimensions.reactionIconSpacing),
-                  Text("${post['likes'] ?? 0}", style: const TextStyle(color: AppColors.white)),
+                  ResponsiveTextWidget("${post['likes'] ?? 0}", textType: TextType.caption, color: AppColors.white),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.3),
-                  Text("${post['comments'] ?? 0} ", style: const TextStyle(color: AppColors.white)),
+                  ResponsiveTextWidget("${post['comments'] ?? 0} ", textType: TextType.caption, color: AppColors.white),
                   const SizedBox(width: AppDimensions.reactionIconSpacing),
-                  const Text("Comments ", style: TextStyle(color: AppColors.white)),
+                  const ResponsiveTextWidget("Comments ", textType: TextType.caption, color: AppColors.white),
                 ],
               ),
               const SizedBox(height: AppDimensions.reactionIconSpacing),
@@ -321,13 +323,11 @@ class PostsView extends BaseView<PostsViewModel> {
               size: 20,
             ),
             if (count != null && count > 0)
-              Text(
+              ResponsiveTextWidget(
                 _formatCount(count),
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.caption,
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
               ),
           ],
         ),
@@ -346,9 +346,9 @@ class PostsView extends BaseView<PostsViewModel> {
           color: AppColors.grey800,
           shape: BoxShape.circle,
         ),
-        child: Text(
+        child: ResponsiveTextWidget(
           emoji,
-          style: const TextStyle(fontSize: 16),
+          textType: TextType.caption,
         ),
       ),
     );
@@ -366,9 +366,10 @@ class PostsView extends BaseView<PostsViewModel> {
       onTap: () => onTap(emoji),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Text(
+        child: ResponsiveTextWidget(
           emoji,
-          style: TextStyle(fontSize: 28, color: color),
+          textType: TextType.body,
+          color: color,
         ),
       ),
     );

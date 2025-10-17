@@ -8,6 +8,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/auth_background.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/utils/snackbar_util.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 
@@ -73,7 +74,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                       const SizedBox(height: 10),
                       _buildAppleLogin(viewModel,context),
                       const SizedBox(height: 10),
-                      _buildSignupText(viewModel),
+                      _buildSignupResponsiveTextWidget(viewModel),
                       const SizedBox(height: 15),
                     ],
                   ),
@@ -100,7 +101,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
       height: AppDimensions.buttonHeightXL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.googleRed,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           ),
@@ -108,7 +109,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
         onPressed: () {
           SnackbarUtil.showDevelopmentSnackBar(
             context,
-            '🔧 Google login is under development',
+            AppStrings.googleLoginDevelopment,
           );
         },
         child: Row(
@@ -120,9 +121,9 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
               child: _buildCircleIcon(AppAssets.googleIcon),
             ),
             Expanded(
-              child: Text(
+              child: ResponsiveTextWidget(
                 AppStrings.loginWithGoogle,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppColors.white),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -153,7 +154,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
               child: _buildCircleIcon(AppAssets.phoneIcon),
             ),
             Expanded(
-              child: Text(
+              child: ResponsiveTextWidget(
                 AppStrings.loginWithEmailPhone,
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
@@ -190,7 +191,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
               child: _buildCircleIcon(AppAssets.appleIcon),
             ),
             Expanded(
-              child: Text(
+              child: ResponsiveTextWidget(
                 AppStrings.loginWithApple,
                 style: const TextStyle(color: AppColors.white),
                 textAlign: TextAlign.center,
@@ -218,7 +219,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
     );
   }
   /// 🔹 Signup Text
-  Widget _buildSignupText(WelcomeViewModel viewModel) {
+  Widget _buildSignupResponsiveTextWidget(WelcomeViewModel viewModel) {
     return GestureDetector(
       onTap: viewModel.goToSignup,
       child: const Center(
@@ -231,7 +232,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
               TextSpan(
                 text: AppStrings.signupNow,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

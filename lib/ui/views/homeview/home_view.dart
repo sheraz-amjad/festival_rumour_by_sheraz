@@ -432,7 +432,7 @@ class HomeView extends BaseView<HomeViewModel> {
           AppStrings.noPostsAvailable,
           textType: TextType.body,
           color: AppColors.onPrimary,
-          baseFontSize: AppDimensions.textM,
+          fontSize: AppDimensions.textM,
         ),
       );
     }
@@ -475,7 +475,7 @@ class HomeView extends BaseView<HomeViewModel> {
                     "JOB Details",
                     textType: TextType.title,
                     color: Colors.yellow,
-                    baseFontSize: 16,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -551,7 +551,7 @@ class HomeView extends BaseView<HomeViewModel> {
                       textType: TextType.body,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      baseFontSize: 16,
+                      fontSize: 16,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

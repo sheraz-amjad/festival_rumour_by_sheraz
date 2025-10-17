@@ -45,7 +45,7 @@ class _ProfileViewState extends State<ProfileView> {
 
             /// 🔹 Dark overlay for readability
             Positioned.fill(
-              child: Container(color: Colors.black.withOpacity(0.35)),
+              child: Container(color: AppColors.overlayBlack45),
             ),
 
             /// 🔹 Instagram-like scrollable content
@@ -133,7 +133,7 @@ class _ProfileViewState extends State<ProfileView> {
                       textType: TextType.title,
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
-                      baseFontSize: 18,
+                      fontSize: 18,
                     ),
                     SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
                     // Stats aligned with profile picture width
@@ -189,7 +189,7 @@ class _ProfileViewState extends State<ProfileView> {
             "Bringing people together through music, color, and culture!",
             textType: TextType.body,
             color: AppColors.white,
-            baseFontSize: 16,
+            fontSize: 16,
             textAlign: TextAlign.left,
           ),
         ],
@@ -238,7 +238,7 @@ class _ProfileViewState extends State<ProfileView> {
                       textType: TextType.title,
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
-                      baseFontSize: 18,
+                      fontSize: 18,
                     ),
                     SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
                     // Stats aligned with profile picture width
@@ -295,7 +295,7 @@ class _ProfileViewState extends State<ProfileView> {
             "Bringing people together through music, color, and culture!",
             textType: TextType.body,
             color: AppColors.white,
-            baseFontSize: 14,
+            fontSize: 14,
             textAlign: TextAlign.left,
           ),
         ],
@@ -325,7 +325,7 @@ class _ProfileViewState extends State<ProfileView> {
             textType: TextType.title,
             color: AppColors.white,
             fontWeight: FontWeight.bold,
-            baseFontSize: 20,
+            fontSize: 20,
           ),
 
           /// Spacer to push icons to the right
@@ -416,7 +416,7 @@ class _ProfileViewState extends State<ProfileView> {
           "Reels Section",
           textType: TextType.body,
           color: AppColors.white,
-          baseFontSize: 16,
+          fontSize: 16,
         ),
       ),
     );
@@ -430,7 +430,7 @@ class _ProfileViewState extends State<ProfileView> {
           "Reposts Section",
           textType: TextType.body,
           color: AppColors.white,
-          baseFontSize: 16,
+          fontSize: 16,
         ),
       ),
     );
@@ -446,7 +446,7 @@ class _ProfileViewState extends State<ProfileView> {
           textType: TextType.title,
           color: AppColors.white,
           fontWeight: FontWeight.bold,
-          baseFontSize: context.isHighResolutionPhone ? 14 : 10,
+          fontSize: context.isHighResolutionPhone ? 14 : 10,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -454,7 +454,7 @@ class _ProfileViewState extends State<ProfileView> {
           label,
           textType: TextType.caption,
           color: AppColors.white,
-          baseFontSize: context.isHighResolutionPhone ? 10 : 6,
+          fontSize: context.isHighResolutionPhone ? 10 : 6,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

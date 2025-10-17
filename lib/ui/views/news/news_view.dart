@@ -5,6 +5,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'news_view_model.dart';
 
 class NewsView extends BaseView<NewsViewModel> {
@@ -25,15 +26,15 @@ class NewsView extends BaseView<NewsViewModel> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE8F5E8), // Light green
-              Colors.white,
+              AppColors.lightGreen, // Light green
+              AppColors.white,
             ],
           ),
         ),
@@ -67,24 +68,22 @@ class NewsView extends BaseView<NewsViewModel> {
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50), // Green background
+                color: AppColors.greenBackground, // Green background
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppDimensions.iconM,
               ),
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
-            'Bulletin Management',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+          ResponsiveTextWidget(
+            AppStrings.bulletinManagement,
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -109,13 +108,11 @@ class NewsView extends BaseView<NewsViewModel> {
       ),
       child: Column(
         children: [
-          const Text(
+          ResponsiveTextWidget(
             'Bulletin',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: AppDimensions.textXXL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.heading,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: AppDimensions.spaceM),
           Row(
@@ -144,25 +141,21 @@ class NewsView extends BaseView<NewsViewModel> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          ResponsiveTextWidget(
             'Toilets',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
           GestureDetector(
             onTap: () {
               // Handle view all action
             },
-            child: const Text(
+            child: ResponsiveTextWidget(
               'View All',
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -217,13 +210,11 @@ class NewsView extends BaseView<NewsViewModel> {
 
           // Festival name
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               festival.name,
-              style: const TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
 
@@ -242,13 +233,11 @@ class NewsView extends BaseView<NewsViewModel> {
                 color: const Color(0xFF4CAF50),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: ResponsiveTextWidget(
                 'View Detail',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: AppDimensions.textS,
-                  fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.caption,
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -311,13 +300,11 @@ class NewsView extends BaseView<NewsViewModel> {
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          ResponsiveTextWidget(
             'Bulletin Preview',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -328,13 +315,11 @@ class NewsView extends BaseView<NewsViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        ResponsiveTextWidget(
           'Bulletin Information',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
 
@@ -375,21 +360,17 @@ class NewsView extends BaseView<NewsViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),
@@ -410,12 +391,10 @@ class NewsView extends BaseView<NewsViewModel> {
         children: [
           Row(
             children: [
-              const Text(
+              ResponsiveTextWidget(
                 'Content',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: AppDimensions.textS,
-                ),
+                textType: TextType.caption,
+                color: Colors.grey,
               ),
             ],
           ),
@@ -429,7 +408,7 @@ class NewsView extends BaseView<NewsViewModel> {
               ),
               child: const Icon(
                 Icons.edit_document,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppDimensions.iconXXL,
               ),
             ),
@@ -465,21 +444,17 @@ class NewsView extends BaseView<NewsViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                ResponsiveTextWidget(
                   'Schedule Options',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                const Text(
+                ResponsiveTextWidget(
                   'Publish Now',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),
@@ -493,13 +468,11 @@ class NewsView extends BaseView<NewsViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        ResponsiveTextWidget(
           'Schedule For Later',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
         Row(
@@ -566,13 +539,11 @@ class NewsView extends BaseView<NewsViewModel> {
             },
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          ResponsiveTextWidget(
             'Bulletin Preview',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -583,13 +554,11 @@ class NewsView extends BaseView<NewsViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        ResponsiveTextWidget(
           'Bulletin Information',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
 
@@ -620,13 +589,11 @@ class NewsView extends BaseView<NewsViewModel> {
         ),
         const SizedBox(height: AppDimensions.spaceM),
 
-        Text(
+        ResponsiveTextWidget(
           'Schedule For Later',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
         Row(
@@ -680,21 +647,17 @@ class NewsView extends BaseView<NewsViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),
@@ -730,21 +693,17 @@ class NewsView extends BaseView<NewsViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),

@@ -13,7 +13,7 @@ class ResponsiveTextWidget extends StatelessWidget {
   final TextType textType;
   final Color? color;
   final FontWeight? fontWeight;
-  final double? baseFontSize;
+  final double? fontSize;
 
   const ResponsiveTextWidget(
     this.text, {
@@ -25,7 +25,7 @@ class ResponsiveTextWidget extends StatelessWidget {
     this.textType = TextType.body,
     this.color,
     this.fontWeight,
-    this.baseFontSize,
+    this.fontSize,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.body:
@@ -47,7 +47,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.label:
@@ -55,7 +55,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.button:
@@ -63,7 +63,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.caption:
@@ -71,7 +71,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.title:
@@ -79,7 +79,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.subtitle:
@@ -87,7 +87,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.error:
@@ -95,7 +95,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.success:
@@ -103,7 +103,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.accent:
@@ -111,7 +111,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.primary:
@@ -119,7 +119,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.secondary:
@@ -127,7 +127,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.white:
@@ -135,7 +135,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
       case TextType.grey:
@@ -143,7 +143,7 @@ class ResponsiveTextWidget extends StatelessWidget {
           context,
           color: color,
           fontWeight: fontWeight,
-          baseFontSize: baseFontSize,
+          baseFontSize: fontSize,
         );
         break;
     }

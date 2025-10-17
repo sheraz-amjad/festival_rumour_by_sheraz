@@ -3,7 +3,9 @@ import 'package:festival_rumour/core/constants/app_colors.dart';
 import 'package:festival_rumour/core/constants/app_sizes.dart';
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'festivals_job_post_view_model.dart';
+
 
 class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
   const FestivalsJobPostView({super.key});
@@ -27,11 +29,10 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
+          title: const ResponsiveTextWidget(
             "Post Festival Job",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            textType: TextType.body, color: Colors.white, fontWeight: FontWeight.bold),
           ),
-        ),
         body: Stack(
           children: [
             // Background Image
@@ -84,14 +85,13 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
-          const Text(
+          const ResponsiveTextWidget(
             "Job Details",
-            style: TextStyle(
+            textType: TextType.body, 
               color: Colors.yellow,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
-          ),
           const SizedBox(height: 20),
           
           // Job Title Field
@@ -194,7 +194,7 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
             hint: "e.g., March 15-17, 2024",
             icon: Icons.calendar_today,
           ),
-        ],
+      ]
       ),
     );
   }
@@ -214,13 +214,11 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
             const SizedBox(width: 8),
-            Text(
+            ResponsiveTextWidget(
               label,
-              style: const TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: Colors.yellow,
+              fontWeight: FontWeight.w600,
             ),
           ],
         ),
@@ -269,13 +267,11 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
             const SizedBox(width: 8),
-            Text(
+            ResponsiveTextWidget(
               label,
-              style: const TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: Colors.yellow,
+              fontWeight: FontWeight.w600,
             ),
           ],
         ),
@@ -323,13 +319,11 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
             const SizedBox(width: 8),
-            Text(
+            ResponsiveTextWidget(
               label,
-              style: const TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: Colors.yellow,
+              fontWeight: FontWeight.w600,
             ),
           ],
         ),
@@ -350,9 +344,10 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(
+                  child: ResponsiveTextWidget(
                     item,
-                    style: const TextStyle(color: Colors.white),
+                    textType: TextType.body,
+                    color: Colors.white,
                   ),
                 );
               }).toList(),
@@ -387,7 +382,7 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: viewModel.isLoading ? null : () => viewModel.postJob(context),
+        onPressed: viewModel.isLoading ? null : () => viewModel.postJob(),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -409,14 +404,13 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
                 children: [
                   Icon(Icons.post_add, color: Colors.white),
                   SizedBox(width: 8),
-                  Text(
+                  ResponsiveTextWidget(
                     "Post Job",
-                    style: TextStyle(
+                    textType: TextType.body, 
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
                 ],
               ),
       ),

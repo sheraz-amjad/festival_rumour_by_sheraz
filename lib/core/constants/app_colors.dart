@@ -121,4 +121,75 @@ class AppColors {
     end: Alignment.bottomCenter,
     colors: [white, grey100],
   );
+
+  // Additional colors found in UI components
+  static const Color googleRed = Color(0xFFDB4437);
+  static const Color googleBlue = Color(0xFF4285F4);
+  static const Color googleGreen = Color(0xFF34A853);
+  static const Color googleYellow = Color(0xFFFBBC05);
+  
+  // Avatar colors for chat
+  static const Color avatarPurple = Color(0xFF9C27B0);
+  static const Color avatarOrange = Color(0xFFFF9800);
+  static const Color avatarGrey = Color(0xFF9E9E9E);
+  static const Color avatarYellow = Color(0xFFFFEB3B);
+  static const Color avatarBlue = Color(0xFF2196F3);
+  static const Color avatarPink = Color(0xFFE91E63);
+  
+  // News and Bulletin colors
+  static const Color lightGreen = Color(0xFFE8F5E8);
+  static const Color greenBackground = Color(0xFF4CAF50);
+  static const Color lightBlue = Color(0xFFE3F2FD);
+  
+  // Reaction colors
+
+  static const Color reactionHaha = Color(0xFFFFEB3B); // Yellow
+  static const Color reactionWow = Color(0xFFFF9800); // Orange
+  static const Color reactionSad = Color(0xFF9C27B0); // Purple
+  static const Color reactionAngry = Color(0xFFF44336); // Red
+  
+  // Overlay colors
+  static const Color overlayBlack54 = Color(0x8A000000); // 54% black
+  static const Color overlayBlack45 = Color(0x73000000); // 45% black
+  
+  // Text colors with opacity
+  static const Color white70 = Color(0xB3FFFFFF); // 70% white
+  static const Color white60 = Color(0x99FFFFFF); // 60% white
+  static const Color black54 = Color(0x8A000000); // 54% black
+  static const Color black45 = Color(0x73000000); // 45% black
+  
+  // Border colors
+  static const Color borderWhite = Color(0xFFFFFFFF);
+  static const Color borderWhite60 = Color(0x99FFFFFF);
+  static const Color borderGrey = Color(0xFF9E9E9E);
+  
+  // Status colors
+  static const Color online = Color(0xFF4CAF50);
+  static const Color offline = Color(0xFF9E9E9E);
+  static const Color away = Color(0xFFFF9800);
+  static const Color busy = Color(0xFFF44336);
+  
+  // Priority colors
+  static const Color highPriority = Color(0xFFF44336);
+  static const Color mediumPriority = Color(0xFFFF9800);
+  static const Color lowPriority = Color(0xFF4CAF50);
+  
+  // Chat bubble colors
+  static const Color chatBubbleSent = Color(0xFF2196F3);
+  static const Color chatBubbleReceived = Color(0xFFE0E0E0);
+  static const Color chatBubbleTextSent = Color(0xFFFFFFFF);
+  static const Color chatBubbleTextReceived = Color(0xFF000000);
+  
+  // List of avatar colors for random selection
+  static const List<Color> avatarColors = [
+    avatarPurple,
+    avatarOrange,
+    avatarGrey,
+    avatarYellow,
+    avatarBlue,
+    avatarPink,
+  ];
+  
+  // Transparent color
+  static const Color transparent = Color(0x00000000);
 }

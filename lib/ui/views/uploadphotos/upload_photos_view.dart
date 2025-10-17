@@ -11,10 +11,12 @@ import '../../../core/constants/app_strings.dart';
 
 import '../../../core/utils/backbutton.dart';
 
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 
 import '../../../shared/extensions/context_extensions.dart';
 import 'upload_photos_view_model.dart';
+
 
 class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
   const UploadPhotosViews({super.key});
@@ -227,15 +229,14 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                         strokeWidth: 2,
                       ),
                     )
-                    : const Text(
+                    : const ResponsiveTextWidget(
                       AppStrings.next,
-                      style: TextStyle(
+                      textType: TextType.body,
                         fontSize: AppDimensions.textXL,
                         color: AppColors.onPrimary,
                       ),
                     ),
           ),
-        ),
 
         const SizedBox(height: AppDimensions.spaceM),
 
@@ -292,14 +293,13 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                               onTap: () => Navigator.of(context).pop(),
                             ),
 
-                            const Text(
+                            const ResponsiveTextWidget(
                               AppStrings.selectsourse,
-                              style: TextStyle(
+                              textType: TextType.body, 
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.onPrimary,
                               ),
-                            ),
 
                             const SizedBox(
                               width: 48,
@@ -318,9 +318,9 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                           padding: EdgeInsets.symmetric(
                             horizontal: width < 600 ? 20 : 40,
                             vertical:
-                                width < 600
-                                    ? 80
-                                    : 100, // ⬅ leave space for custom appbar
+                            width < 600
+                                ? 80
+                                : 100, // ⬅ leave space for custom appbar
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -345,17 +345,21 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                                       ),
                                     ),
                                     const SizedBox(width: 16),
-                                    const Text(
+                                    const ResponsiveTextWidget(
                                       AppStrings.camera,
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.primary,
-                                      ),
+                                      textType: TextType.body,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primary,
                                     ),
                                   ],
                                 ),
                               ),
+                            ],
+                          ),
+                        );
+                      }
+                      ),
 
                               const SizedBox(height: 20),
                               const Divider(
@@ -382,27 +386,21 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                                       ),
                                     ),
                                     const SizedBox(width: 16),
-                                    const Text(
+                                    const ResponsiveTextWidget(
                                       AppStrings.gallery,
-                                      style: TextStyle(
+                                      textType: TextType.body,
                                         fontSize: 28,
                                         fontWeight: FontWeight.w600,
                                         color: AppColors.primary,
                                       ),
-                                    ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      },
                     ),
-                  ],
                 ),
               ),
-            ),
-      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'create_chat_room_view_model.dart';
 
 class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
@@ -65,17 +66,14 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
             ),
           ),
           const Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               AppStrings.createChatRoom,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Montserrat',
+              textType: TextType.title,
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
               ),
             ),
-          ),
           const SizedBox(width: 40), // Balance the back button
         ],
       ),
@@ -132,15 +130,11 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
               controller: viewModel.titleController,
               style: const TextStyle(
                 color: AppColors.white,
-                fontSize: 16,
-                fontFamily: 'Montserrat',
               ),
               decoration: const InputDecoration(
                 hintText: AppStrings.addTitle,
                 hintStyle: TextStyle(
                   color: AppColors.grey400,
-                  fontSize: 16,
-                  fontFamily: 'Montserrat',
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
@@ -153,15 +147,12 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
   }
 
   Widget _buildContactsHeader() {
-    return const Text(
+    return const ResponsiveTextWidget(
       AppStrings.peopleFromContacts,
-      style: TextStyle(
+      textType: TextType.body, //_OLD_STYLE_
         color: AppColors.white,
-        fontSize: 16,
         fontWeight: FontWeight.w500,
-        fontFamily: 'Montserrat',
-      ),
-    );
+      );
   }
 
   Widget _buildContactsList(BuildContext context, CreateChatRoomViewModel viewModel) {
@@ -209,24 +200,19 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   displayName,
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Montserrat',
-                  ),
+                    style: const TextStyle(
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                 ),
                 const SizedBox(height: 4),
-                Text(
+                ResponsiveTextWidget(
                   isFestivalContact ? AppStrings.iAmUsingLuna : phoneNumber,
-                  style: TextStyle(
+                  textType: TextType.body, //_OLD_STYLE_
                     color: isFestivalContact ? AppColors.grey400 : AppColors.grey300,
-                    fontSize: 14,
-                    fontFamily: 'Montserrat',
                   ),
-                ),
               ],
             ),
           ),
@@ -241,12 +227,12 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
 
   Widget _buildAvatar(String name) {
     final colors = [
-      Colors.purple,
-      Colors.orange,
-      Colors.grey,
-      Colors.yellow,
-      Colors.blue,
-      Colors.pink,
+      AppColors.avatarPurple,
+      AppColors.avatarOrange,
+      AppColors.avatarGrey,
+      AppColors.avatarYellow,
+      AppColors.avatarBlue,
+      AppColors.avatarPink,
     ];
     
     final colorIndex = name.hashCode % colors.length;
@@ -261,14 +247,12 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
         border: Border.all(color: AppColors.accent, width: 2),
       ),
       child: Center(
-        child: Text(
+        child: ResponsiveTextWidget(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
-          style: const TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat',
-          ),
+            style: const TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+            ),
         ),
       ),
     );
@@ -283,7 +267,7 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.accent : Colors.transparent,
+          color: isSelected ? AppColors.accent : AppColors.transparent,
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? AppColors.accent : AppColors.grey400,
@@ -311,17 +295,14 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.error),
         ),
-        child: const Text(
+        child: const ResponsiveTextWidget(
           AppStrings.invite,
-          style: TextStyle(
+            textType: TextType.caption,
             color: AppColors.primary,
-            fontSize: 12,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat',
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildSaveButton(BuildContext context, CreateChatRoomViewModel viewModel) {
@@ -329,7 +310,7 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: () => viewModel.createChatRoom(context),
+        onPressed: () => viewModel.createChatRoom(),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
@@ -337,16 +318,13 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
           ),
           elevation: 0,
         ),
-        child: const Text(
+        child: const ResponsiveTextWidget(
           AppStrings.save,
-          style: TextStyle(
+            textType: TextType.body,
             color: AppColors.black,
-            fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat',
           ),
         ),
-      ),
-    );
+      );
   }
 }

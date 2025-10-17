@@ -4,6 +4,7 @@ import 'package:festival_rumour/core/constants/app_strings.dart';
 import 'package:festival_rumour/core/constants/app_colors.dart';
 import 'package:festival_rumour/core/constants/app_sizes.dart';
 import 'package:festival_rumour/core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'package:festival_rumour/ui/views/subscription/widgets/subscription_plan_tile.dart';
 import 'subscription_viewmodel.dart';
 
@@ -100,7 +101,7 @@ class _Title extends StatelessWidget {
 
                 /// ✅ Wrap long text safely
                 Flexible(
-                  child: Text(
+                  child: ResponsiveTextWidget(
                     AppStrings.upgradetoprimium,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -203,17 +204,16 @@ class _SubscriptionDetails extends StatelessWidget {
         border: Border.all(color: AppColors.white),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
+      child: const ResponsiveTextWidget(
         "Subscription Details\n"
             "• Users can join anonymously and remain hidden\n"
             "• Posts and comments will show as 'Anonymous'\n"
             "• Only available to users who purchase this as an in-app premium feature.",
-        style: TextStyle(
+        textType: TextType.body, 
           color: AppColors.white,
           fontSize: AppDimensions.textS,
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -237,7 +237,7 @@ class _SubscribeButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        child: const Text(AppStrings.subscribeNow),
+        child: const ResponsiveTextWidget(AppStrings.subscribeNow),
       ),
     );
   }

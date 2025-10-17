@@ -5,6 +5,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'performance_view_model.dart';
 
 class PerformanceView extends BaseView<PerformanceViewModel> {
@@ -75,13 +76,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Stage Running Order',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -106,13 +105,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
       ),
       child: Column(
         children: [
-          const Text(
+          const ResponsiveTextWidget(
             'Performance',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: AppDimensions.textXXL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.heading,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: AppDimensions.spaceM),
           Row(
@@ -140,25 +137,21 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          const ResponsiveTextWidget(
             'Toilets',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
           GestureDetector(
             onTap: () {
               // Handle view all action
             },
-            child: const Text(
+            child: const ResponsiveTextWidget(
               'View All',
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -219,13 +212,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
           
           // Category name
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               category.name,
-              style: const TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
           
@@ -244,13 +235,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
                 color: const Color(0xFF4CAF50),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 'View Detail',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: AppDimensions.textS,
-                  fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.caption,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -301,13 +290,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             },
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Performance Preview',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -320,13 +307,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const ResponsiveTextWidget(
           'Performance Information',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
 
@@ -465,21 +450,17 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),
@@ -516,21 +497,17 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: AppDimensions.textS,
-                  ),
+                  textType: TextType.caption,
+                  color: Colors.grey,
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: AppDimensions.textM,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textType: TextType.body,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ],
             ),
@@ -564,13 +541,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               'Participant Name',
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.bold,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -582,13 +557,11 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const ResponsiveTextWidget(
           'Notes',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-          ),
+          textType: TextType.title,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: AppDimensions.spaceM),
         Container(
@@ -603,12 +576,10 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
               ),
             ),
           ),
-          child: const Text(
+          child: const ResponsiveTextWidget(
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the,',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textM,
-            ),
+            textType: TextType.body,
+            color: AppColors.black,
           ),
         ),
       ],

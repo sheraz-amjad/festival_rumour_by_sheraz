@@ -6,6 +6,7 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/backbutton.dart';
 import '../../../../core/utils/base_view.dart';
+import '../../../../shared/widgets/responsive_text_widget.dart';
 import 'profile_list_view_model.dart';
 
 
@@ -61,7 +62,7 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                           Navigator.pop(context);
                         }
                       }),
-                      Text(
+                      ResponsiveTextWidget(
                         username,
                         style: const TextStyle(
                           color: AppColors.white,
@@ -149,15 +150,14 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
             color: isActive ? AppColors.accent : AppColors.onPrimary,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
+          child: ResponsiveTextWidget(
             label,
-            style: TextStyle(
+            textType: TextType.body, 
               color: isActive ? AppColors.onPrimary : AppColors.primary,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

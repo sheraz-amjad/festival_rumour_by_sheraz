@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -79,14 +80,13 @@ class MapView extends BaseView<MapViewModel> {
             onTap: onBack ?? () => Navigator.pop(context),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Location',
-            style: TextStyle(
+            textType: TextType.body, 
               color: AppColors.white,
               fontSize: AppDimensions.textL,
               fontWeight: FontWeight.w600,
             ),
-          ),
           const Spacer(),
           GestureDetector(
             onTap: () {
@@ -131,24 +131,22 @@ class MapView extends BaseView<MapViewModel> {
                   color: AppColors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                 ),
-                child: const Text(
+                child: const ResponsiveTextWidget(
                   '</>',
-                  style: TextStyle(
+                  textType: TextType.body, 
                     color: AppColors.black,
                     fontSize: AppDimensions.textXL,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
               const SizedBox(height: AppDimensions.spaceS),
-              const Text(
+              const ResponsiveTextWidget(
                 'Code with joy',
-                style: TextStyle(
+                textType: TextType.body, 
                   color: AppColors.white,
                   fontSize: AppDimensions.textM,
                   fontWeight: FontWeight.w600,
                 ),
-              ),
             ],
           ),
         ),
@@ -195,7 +193,7 @@ class MapView extends BaseView<MapViewModel> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Directions shown to festival location'),
+              content: ResponsiveTextWidget('Directions shown to festival location'),
               backgroundColor: AppColors.buttonYellow,
             ),
           );
@@ -205,7 +203,7 @@ class MapView extends BaseView<MapViewModel> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Location permission is required to show directions'),
+              content: ResponsiveTextWidget('Location permission is required to show directions'),
               backgroundColor: AppColors.error,
             ),
           );
@@ -216,7 +214,7 @@ class MapView extends BaseView<MapViewModel> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error getting location: $e'),
+            content: ResponsiveTextWidget('Error getting location: $e'),
             backgroundColor: AppColors.error,
           ),
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -58,10 +59,7 @@ class CommentView extends BaseView<CommentViewModel> {
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
                   hintText: "Ask a question, gather people or share your thoughts 💡",
-                  hintStyle: TextStyle(
-                    color: AppColors.grey600,
-                    fontSize: 16,
-                  ),
+                  hintStyle: TextStyle(color: AppColors.grey600),
                   border: InputBorder.none,
                 ),
                 style: const TextStyle(
@@ -90,9 +88,9 @@ class CommentView extends BaseView<CommentViewModel> {
                   onTap: () => viewModel.insertEmoji(viewModel.emojis[index]),
                   child: Container(
                     margin: const EdgeInsets.only(right: 12),
-                    child: Text(
+                    child: ResponsiveTextWidget(
                       viewModel.emojis[index],
-                      style: const TextStyle(fontSize: 24),
+                      textType: TextType.body,
                     ),
                   ),
                 );
@@ -155,7 +153,7 @@ class CommentView extends BaseView<CommentViewModel> {
           //             controller: viewModel.commentController,
           //             decoration: const InputDecoration(
           //               hintText: "Type a message...",
-          //               hintStyle: TextStyle(color: AppColors.grey600),
+          //               hintStyle: TextStyle(color: AppColors.grey600), color: AppColors.grey600),
           //               border: InputBorder.none,
           //             ),
           //             style: const TextStyle(color: AppColors.white),
@@ -207,14 +205,12 @@ class CommentView extends BaseView<CommentViewModel> {
             onPressed: viewModel.closeCommentView,
           ),
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               'Comment',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.title,
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
           Container(
@@ -228,15 +224,13 @@ class CommentView extends BaseView<CommentViewModel> {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 'POST',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+                textType: TextType.caption,
+                fontWeight: FontWeight.bold,
+              ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -256,13 +250,11 @@ class CommentView extends BaseView<CommentViewModel> {
   Widget _buildToolbarText(String text, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Text(
+      child: ResponsiveTextWidget(
         text,
-        style: const TextStyle(
-          color: AppColors.grey600,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+        textType: TextType.body,
+        color: AppColors.grey600,
+        fontWeight: FontWeight.w500,
       ),
     );
   }
@@ -276,12 +268,10 @@ class CommentView extends BaseView<CommentViewModel> {
           color: AppColors.grey700,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Text(
+        child: ResponsiveTextWidget(
           text,
-          style: const TextStyle(
-            color: AppColors.white,
-            fontSize: 16,
-          ),
+          textType: TextType.body,
+          color: AppColors.white,
         ),
       ),
     );

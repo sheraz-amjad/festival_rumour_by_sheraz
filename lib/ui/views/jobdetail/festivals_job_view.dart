@@ -1,7 +1,9 @@
 import 'package:festival_rumour/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'festivals_job_view_model.dart';
+
 
 class FestivalsJobView extends BaseView<FestivalsJobViewModel> {
   const FestivalsJobView({super.key});
@@ -21,11 +23,10 @@ class FestivalsJobView extends BaseView<FestivalsJobViewModel> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: const ResponsiveTextWidget(
           "Festivals Gizza Job",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          textType: TextType.body, color: Colors.white, fontWeight: FontWeight.bold),
         ),
-      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -67,29 +68,29 @@ class _JobCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          ResponsiveTextWidget(
             job.title,
-            style: const TextStyle(
-              color: Colors.yellow,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: Colors.yellow,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 8),
-          Text(
+          ResponsiveTextWidget(
             job.description,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+            textType: TextType.caption,
+            color: Colors.white,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
           Align(
             alignment: Alignment.bottomRight,
-            child: Text(
+            child: ResponsiveTextWidget(
               "more",
-              style: TextStyle(color: Colors.yellow.shade600, fontSize: 14),
+              textType: TextType.caption,
+              color: Colors.yellow.shade600,
             ),
-          )
+            ),
         ],
       ),
     );

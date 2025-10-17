@@ -6,9 +6,11 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'interests_view_model.dart';
+
 
 class InterestsView extends BaseView<InterestsViewModel> {
   const InterestsView({super.key});
@@ -111,9 +113,9 @@ class InterestsView extends BaseView<InterestsViewModel> {
           horizontal: AppDimensions.paddingM,
           vertical: AppDimensions.paddingS,
         ),
-        child: Text(
+        child: ResponsiveTextWidget(
           category,
-          style: TextStyle(
+          textType: TextType.body, 
             color: selected
                 ? AppColors.onPrimary
                 : AppColors.onSurfaceVariant,
@@ -121,7 +123,6 @@ class InterestsView extends BaseView<InterestsViewModel> {
             selected ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
-      ),
       selected: selected,
       onSelected: (_) => viewModel.toggle(category),
       selectedColor: AppColors.accent,
@@ -166,7 +167,7 @@ class InterestsView extends BaseView<InterestsViewModel> {
                 strokeWidth: AppDimensions.loadingIndicatorStrokeWidth,
               ),
             )
-                : Text(
+                : ResponsiveTextWidget(
               AppStrings.next,
               style: const TextStyle(
                   fontSize: AppDimensions.textXL,

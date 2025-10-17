@@ -4,6 +4,7 @@ import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'leaderboard_view_model.dart';
 
 class LeaderboardView extends BaseView<LeaderboardViewModel> {
@@ -71,14 +72,13 @@ class LeaderboardWidgets {
               child: const Icon(Icons.arrow_back, color: Colors.white),
             ),
 
-            const Text(
+            const ResponsiveTextWidget(
               "Leader board",
-              style: TextStyle(
+              textType: TextType.body, 
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: AppDimensions.textL,
               ),
-            ),
 
             // PRO badge
             Container(
@@ -92,14 +92,13 @@ class LeaderboardWidgets {
                   Icon(Icons.workspace_premium,
                       color: Colors.white, size: 16),
                   SizedBox(width: 4),
-                  Text(
+                  ResponsiveTextWidget(
                     "PRO",
-                    style: TextStyle(
+                    textType: TextType.body, 
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
-                  ),
                 ],
               ),
             ),
@@ -135,14 +134,13 @@ class LeaderboardWidgets {
         color: AppColors.onPrimary.withOpacity(0.7),
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       ),
-        child: Text(
+        child: ResponsiveTextWidget(
       "Luna Fest 2025",
-      style: TextStyle(
+      textType: TextType.body, 
         color: Colors.white,
         fontWeight: FontWeight.bold,
         fontSize: 24,
       ),
-    ),
     );
   }
 
@@ -167,13 +165,11 @@ class LeaderboardWidgets {
       ),
       child: Row(
         children: [
-          Text(
+          ResponsiveTextWidget(
             '$rank',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+            textType: TextType.title,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(width: 16),
           CircleAvatar(
@@ -185,20 +181,16 @@ class LeaderboardWidgets {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              ResponsiveTextWidget(
                 name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                ),
+                textType: TextType.body,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
-              Text(
+              ResponsiveTextWidget(
                 badge,
-                style: const TextStyle(
-                  color: AppColors.grey400,
-                  fontSize: 13,
-                ),
+                textType: TextType.caption,
+                color: AppColors.grey400,
               ),
             ],
           ),

@@ -4,8 +4,11 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/di/locator.dart';
+import '../../../core/services/navigation_service.dart';
 
 class CreateChatRoomViewModel extends BaseViewModel {
+  final NavigationService _navigationService = locator<NavigationService>();
   final TextEditingController titleController = TextEditingController();
   
   List<Contact> _allContacts = [];
@@ -169,7 +172,7 @@ class CreateChatRoomViewModel extends BaseViewModel {
     // You could show a success snackbar here
   }
 
-  void createChatRoom(BuildContext context) {
+  void createChatRoom() {
     if (titleController.text.trim().isEmpty) {
       setError(AppStrings.pleaseEnterChatRoomTitle);
       return;
@@ -188,7 +191,7 @@ class CreateChatRoomViewModel extends BaseViewModel {
     // For now, we'll just navigate to the chat room
     
     setError(null);
-    Navigator.pushNamed(context, AppRoutes.chatRoom);
+    _navigationService.navigateTo(AppRoutes.chatRoom);
   }
 
   void refreshContacts() {

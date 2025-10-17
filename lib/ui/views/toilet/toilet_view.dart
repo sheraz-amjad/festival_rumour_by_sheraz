@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_assets.dart';
@@ -18,7 +19,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
     if (viewModel.showToiletDetail) {
       return _buildToiletDetail(context, viewModel);
     }
-    
+
     return Scaffold(
       backgroundColor: AppColors.black,
       body: Stack(
@@ -34,16 +35,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
               ),
             ),
           ),
-          
+
           // Main content
           SafeArea(
             child: Column(
               children: [
                 _buildAppBar(context),
                 const SizedBox(height: AppDimensions.spaceL),
-                Expanded(
-                  child: _buildToiletList(context, viewModel),
-                ),
+                Expanded(child: _buildToiletList(context, viewModel)),
               ],
             ),
           ),
@@ -60,23 +59,13 @@ class ToiletView extends BaseView<ToiletViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(
-            onTap: () {
-              if (onBack != null) {
-                onBack!();
-              } else {
-                Navigator.pop(context);
-              }
-            },
-          ),
+          CustomBackButton(onTap: onBack ?? () {}),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Toilets',
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -94,17 +83,18 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-  Widget _buildToiletCard(BuildContext context, ToiletItem toilet, ToiletViewModel viewModel) {
+  Widget _buildToiletCard(
+    BuildContext context,
+    ToiletItem toilet,
+    ToiletViewModel viewModel,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: AppDimensions.spaceM),
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
         color: AppColors.onPrimary.withOpacity(0.7),
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-        border: Border.all(
-          color: AppColors.grey600,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.grey600, width: 1),
       ),
       child: Row(
         children: [
@@ -114,23 +104,23 @@ class ToiletView extends BaseView<ToiletViewModel> {
             height: 80,
             // child: ClipRRect(
             //   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-              child: Container(
-                child: Center(
-                  child: Image.asset(
-                    AppAssets.toilet1, // 👈 your custom icon path
-                    width: AppDimensions.iconXXL,
-                    height: AppDimensions.iconXXL,
-                   // color: Colors.white, // optional if you want to tint the image
-                    fit: BoxFit.contain,
-                  ),
+            child: Container(
+              child: Center(
+                child: Image.asset(
+                  AppAssets.toilet1, // 👈 your custom icon path
+                  width: AppDimensions.iconXXL,
+                  height: AppDimensions.iconXXL,
+                  // color: Colors.white, // optional if you want to tint the image
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
+          ),
           const SizedBox(width: AppDimensions.spaceM),
-          
+
           // Toilet name
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               toilet.name,
               style: const TextStyle(
                 color: AppColors.white,
@@ -139,7 +129,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
               ),
             ),
           ),
-          
+
           // View Detail button
           GestureDetector(
             onTap: () {
@@ -156,13 +146,12 @@ class ToiletView extends BaseView<ToiletViewModel> {
                 color: AppColors.buttonYellow,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 'View Detail',
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: AppDimensions.textM,
-                  //fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.body,
+                color: AppColors.black,
+                fontSize: AppDimensions.textM,
+                //fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -171,12 +160,10 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-
   Widget _buildToiletDetail(BuildContext context, ToiletViewModel viewModel) {
     final toilet = viewModel.selectedToilet!;
-    
-    return Scaffold(
 
+    return Scaffold(
       body: Stack(
         children: [
           // Dark background
@@ -190,7 +177,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
               ),
             ),
           ),
-          
+
           // Main content
           SafeArea(
             child: Column(
@@ -205,15 +192,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
                         _buildFestivalInformationSection1(context, toilet),
                         const SizedBox(height: AppDimensions.spaceXS),
                         _buildFestivalInformationSection2(context, toilet),
-                       // const SizedBox(height: AppDimensions.spaceL),
+                        // const SizedBox(height: AppDimensions.spaceL),
                         _buildFestivalInformationSection3(context, toilet),
-                       // const SizedBox(height: AppDimensions.spaceL),
+                        // const SizedBox(height: AppDimensions.spaceL),
                         _buildImageSection(context, toilet),
-                       // const SizedBox(height: AppDimensions.spaceL),
+                        // const SizedBox(height: AppDimensions.spaceL),
                         _buildLocationSection(context, toilet),
                         const SizedBox(height: AppDimensions.spaceXS),
                         _buildLocationSection2(context, toilet),
-
                       ],
                     ),
                   ),
@@ -241,7 +227,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
             },
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          Text(
+          ResponsiveTextWidget(
             viewModel.selectedToilet?.name ?? 'Toilet Detail',
             style: const TextStyle(
               color: AppColors.white,
@@ -254,13 +240,16 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-  Widget _buildFestivalInformationSection1(BuildContext context, ToiletItem toilet) {
+  Widget _buildFestivalInformationSection1(
+    BuildContext context,
+    ToiletItem toilet,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-      child: Text(
+      child: ResponsiveTextWidget(
         'Festival Information', // 👈 your display text
         style: const TextStyle(
-          color: Colors.white,       // or AppColors.primary if preferred
+          color: Colors.white, // or AppColors.primary if preferred
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
@@ -269,36 +258,31 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-  Widget _buildFestivalInformationSection2(BuildContext context, ToiletItem toilet) {
+  Widget _buildFestivalInformationSection2(
+    BuildContext context,
+    ToiletItem toilet,
+  ) {
     return _buildWhiteCard(
       context,
       '',
       Column(
         children: [
-          _buildInfoRow(
-            context,
-            Icons.people,
-            'Festival Name',
-            'Magic show',
-          ),
+          _buildInfoRow(context, Icons.people, 'Festival Name', 'Magic show'),
         ],
       ),
     );
   }
 
-
-  Widget _buildFestivalInformationSection3(BuildContext context, ToiletItem toilet) {
+  Widget _buildFestivalInformationSection3(
+    BuildContext context,
+    ToiletItem toilet,
+  ) {
     return _buildWhiteCard(
       context,
       '',
       Column(
         children: [
-          _buildInfoRow(
-            context,
-            Icons.wc,
-            'Toilet Category',
-            'Magic show',
-          ),
+          _buildInfoRow(context, Icons.wc, 'Toilet Category', 'Magic show'),
         ],
       ),
     );
@@ -319,13 +303,13 @@ class ToiletView extends BaseView<ToiletViewModel> {
           child: Container(
             child: Center(
               child: Image.asset(
-              AppAssets.toiletdetail, // 👈 your custom icon path
-              // color: Colors.white, // optional if you want to tint the image
-              fit: BoxFit.contain,
+                AppAssets.toiletdetail, // 👈 your custom icon path
+                // color: Colors.white, // optional if you want to tint the image
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -335,44 +319,42 @@ class ToiletView extends BaseView<ToiletViewModel> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       child: Column(
         children: [
-        Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Location',
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              // Handle open map action
-            },
-            child: Row(
-              children: [
-                const Text(
-                  'Open Map',
-                  style: TextStyle(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const ResponsiveTextWidget(
+                'Location',
+                textType: TextType.body,
+                color: AppColors.primary,
+                fontSize: AppDimensions.textL,
+                fontWeight: FontWeight.bold,
+              ),
+            ],
+      ),
+            GestureDetector(
+              onTap: () {
+                // Handle open map action
+              },
+              child: Row(
+                children: [
+                  const ResponsiveTextWidget(
+                    'Open Map',
+                    textType: TextType.body,
                     color: AppColors.primary,
                     fontSize: AppDimensions.textS,
                     fontWeight: FontWeight.w600,
                   ),
-                ),
-                const SizedBox(width: AppDimensions.spaceS),
-                const Icon(
-                  Icons.map,
-                  color: AppColors.primary,
-                  size: AppDimensions.iconS,
-                ),
-              ],
+                  const SizedBox(width: AppDimensions.spaceS),
+                  const Icon(
+                    Icons.map,
+                    color: AppColors.primary,
+                    size: AppDimensions.iconS,
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
-      ],
-    ),
     );
   }
 
@@ -382,26 +364,11 @@ class ToiletView extends BaseView<ToiletViewModel> {
       '',
       Column(
         children: [
-          _buildInfoRow(
-            context,
-            Icons.location_on,
-            'Latitude',
-            'Lorem Ipsum',
-          ),
+          _buildInfoRow(context, Icons.location_on, 'Latitude', 'Lorem Ipsum'),
           const SizedBox(height: AppDimensions.spaceM),
-          _buildInfoRow(
-            context,
-            Icons.location_on,
-            'Longitude',
-            'Lorem Ipsum',
-          ),
+          _buildInfoRow(context, Icons.location_on, 'Longitude', 'Lorem Ipsum'),
           const SizedBox(height: AppDimensions.spaceM),
-          _buildInfoRow(
-            context,
-            Icons.location_on,
-            'What3word',
-            'Lorem Ipsum',
-          ),
+          _buildInfoRow(context, Icons.location_on, 'What3word', 'Lorem Ipsum'),
         ],
       ),
     );
@@ -428,7 +395,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
         children: [
           // Only show title if not empty
           if (title.isNotEmpty) ...[
-            Text(
+            ResponsiveTextWidget(
               title,
               style: const TextStyle(
                 color: AppColors.grey600,
@@ -444,14 +411,18 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-
-  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(AppDimensions.paddingS),
           decoration: BoxDecoration(
-           // color: AppColors.grey600,
+            // color: AppColors.grey600,
             borderRadius: BorderRadius.circular(AppDimensions.radiusS),
           ),
           child: Icon(
@@ -465,7 +436,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              ResponsiveTextWidget(
                 label,
                 style: const TextStyle(
                   color: AppColors.grey600,
@@ -474,7 +445,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
                 ),
               ),
               const SizedBox(height: AppDimensions.spaceXS),
-              Text(
+              ResponsiveTextWidget(
                 value,
                 style: const TextStyle(
                   color: AppColors.grey600,

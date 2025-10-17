@@ -92,7 +92,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
               AppStrings.rumors,
               textType: TextType.heading,
               color: AppColors.primary,
-              baseFontSize: context.isLargeScreen ? AppDimensions.textXL : 
+              fontSize: context.isLargeScreen ? AppDimensions.textXL :
                            context.isMediumScreen ? AppDimensions.textL : AppDimensions.textS,
               fontWeight: FontWeight.bold,
               maxLines: 1,
@@ -131,7 +131,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                   textType: TextType.label,
                   color: AppColors.proLabelText,
                   fontWeight: FontWeight.bold,
-                  baseFontSize: context.isLargeScreen ? AppDimensions.textM : AppDimensions.textS,
+                  fontSize: context.isLargeScreen ? AppDimensions.textM : AppDimensions.textS,
                 ),
               ),
             ),
@@ -263,7 +263,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
           AppStrings.noPostsAvailable,
           textType: TextType.body,
           color: AppColors.onPrimary,
-          baseFontSize: AppDimensions.textM,
+          fontSize: AppDimensions.textM,
         ),
       );
     }
@@ -306,7 +306,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                     "POST JOB",
                     textType: TextType.title,
                     color: Colors.yellow,
-                    baseFontSize: 16,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -373,7 +373,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                       textType: TextType.body,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      baseFontSize: 16,
+                      fontSize: 16,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

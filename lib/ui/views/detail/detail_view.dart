@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -65,14 +66,12 @@ class DetailView extends BaseView<DetailViewModel> {
             onTap: onBack ?? () => Navigator.pop(context),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Detail',
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.w600,
+            textType: TextType.title,
+            color: AppColors.white,
+            fontWeight: FontWeight.w600,
             ),
-          ),
         ],
       ),
     );
@@ -186,14 +185,11 @@ class DetailView extends BaseView<DetailViewModel> {
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: Text(
+                  child: ResponsiveTextWidget(
                     title,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: AppDimensions.textXL,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
+                    textType: TextType.heading,
+                    color: AppColors.white,
+                    fontWeight: FontWeight.bold,
                     textAlign: TextAlign.center,
                   ),
                 ),

@@ -519,4 +519,59 @@ class AppStrings {
   static const String price999 = '\$9.99';
   static const String price9999 = '\$99.99';
   static const String price19999 = '\$199.99';
+
+  // Additional hardcoded strings found in UI
+  static const String googleLoginDevelopment = '🔧 Google login is under development';
+  static const String festivalRumourLogo = 'FA';
+  static const String festivalRumourTimestamp = 'FestivalRumour 10:05 PM';
+  static const String emojiWave = '👋';
+  static const String emojiLike = '👍';
+  static const String emojiLove = '❤️';
+  static const String emojiHaha = '😂';
+  static const String emojiWow = '😮';
+  static const String emojiSad = '😢';
+  static const String emojiAngry = '😡';
+  static const String emojiHeart = '❤️';
+  static const String emojiThumbsUp = '👍';
+  static const String emojiLaughing = '😂';
+  static const String emojiSurprised = '😮';
+  static const String emojiCrying = '😢';
+  static const String emojiAngryFace = '😡';
+  
+  // News and Bulletin specific strings
+
+  static const String time200PM = '2.00 PM';
+  static const String time1000AM = '10:00 AM';
+  static const String date07122024 = '07.12.2024';
+  
+  // Leaderboard specific strings
+
+  
+  // Home view specific strings
+  static const String jobDetails = 'JOB Details';
+  static const String festivalGizzaJob = 'Festival Gizza Job';
+  static const String festieHerosJob = 'FestieHeros Job';
+  
+  // Chat specific strings
+  static const String festivalRumour = 'FestivalRumour';
+
+  static const String passwordPlaceholder = '********';
+  
+  // Profile specific strings
+
+  
+  // Color names for avatar generation
+  static const String purple = 'Purple';
+  static const String orange = 'Orange';
+  static const String grey = 'Grey';
+  static const String yellow = 'Yellow';
+  static const String blue = 'Blue';
+  static const String pink = 'Pink';
+  
+  // Reaction labels
+  static const String love = 'Love';
+  static const String haha = 'Haha';
+  static const String wow = 'Wow';
+  static const String sad = 'Sad';
+  static const String angry = 'Angry';
 }

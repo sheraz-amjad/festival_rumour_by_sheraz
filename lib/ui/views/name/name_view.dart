@@ -5,6 +5,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'name_view_model.dart';
@@ -67,9 +68,10 @@ class NameView extends BaseView<NameViewModel> {
                       const SizedBox(height: AppDimensions.paddingL),
                       _buildNameInput(context, viewModel),
                       const SizedBox(height: AppDimensions.paddingXL),
-                      const ResponsiveText(
+                      const ResponsiveTextWidget(
                         AppStrings.firstNameInfo,
-                        style: TextStyle(color: AppColors.primary),
+                        textType: TextType.body,
+                          color: AppColors.primary
                       ),
                       const Spacer(),
                       _buildNextButton(context, viewModel),
@@ -153,11 +155,10 @@ class NameView extends BaseView<NameViewModel> {
             strokeWidth: 2,
           ),
         )
-            : const Text(
+            : const ResponsiveTextWidget(
           AppStrings.next,
-          style: TextStyle(color: AppColors.onPrimary),
+          textType: TextType.body, color: AppColors.onPrimary),
         ),
-      ),
     );
   }
 
@@ -212,7 +213,7 @@ class NameView extends BaseView<NameViewModel> {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("👋", style: TextStyle(fontSize: AppDimensions.textXXL)),
+                      const ResponsiveTextWidget(AppStrings.emojiWave, textType: TextType.body),
                       const SizedBox(height: AppDimensions.spaceS),
                       ResponsiveText(
                         "${AppStrings.welcome} ${viewModel.firstName}",
@@ -224,10 +225,11 @@ class NameView extends BaseView<NameViewModel> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: AppDimensions.spaceS),
-                      const ResponsiveText(
+                      const ResponsiveTextWidget(
                         AppStrings.welcomeInfo,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.primary),
+                        textType: TextType.body,
+                          color: AppColors.primary
                       ),
                       const SizedBox(height: AppDimensions.paddingL),
 
@@ -247,12 +249,11 @@ class NameView extends BaseView<NameViewModel> {
                                 ),
                               ),
                               onPressed: viewModel.continueToNext,
-                              child: const Text(
+                              child: const ResponsiveTextWidget(
                                 AppStrings.letsGo,
-                                style: TextStyle(color: AppColors.onPrimary),
+                                textType: TextType.body, color: AppColors.onPrimary),
                               ),
                             ),
-                          ),
                           const SizedBox(height: AppDimensions.spaceS),
                           SizedBox(
                             width: double.infinity,
@@ -262,12 +263,11 @@ class NameView extends BaseView<NameViewModel> {
                                 elevation: 0,
                               ),
                               onPressed: viewModel.onEditName,
-                              child: const Text(
+                              child: const ResponsiveTextWidget(
                                 AppStrings.editName,
-                                style: TextStyle(color: AppColors.accent),
+                                textType: TextType.body, color: AppColors.accent),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ],

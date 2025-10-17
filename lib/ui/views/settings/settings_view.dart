@@ -3,6 +3,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'settings_view_model.dart';
 
 class SettingsView extends BaseView<SettingsViewModel> {
@@ -30,12 +31,11 @@ class SettingsView extends BaseView<SettingsViewModel> {
             }
           },
         ),
-        title: const Text(
+        title: const ResponsiveTextWidget(
           AppStrings.settings,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppColors.onPrimary,
-          ),
+          textType: TextType.title,
+          fontWeight: FontWeight.bold,
+          color: AppColors.onPrimary,
         ),
         actions: [
           GestureDetector(
@@ -50,13 +50,11 @@ class SettingsView extends BaseView<SettingsViewModel> {
                 color: AppColors.accent, // ✅ Changed button color to black
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 AppStrings.proLabel,
-                style: TextStyle(
-                  color: Colors.white, // ✅ White text on black background
-                  fontWeight: FontWeight.bold,
-                  fontSize: AppDimensions.textS,
-                ),
+                textType: TextType.caption,
+                color: Colors.white, // ✅ White text on black background
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -68,14 +66,13 @@ class SettingsView extends BaseView<SettingsViewModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// 🔹 General Section
-            const Text(
+            const ResponsiveTextWidget(
               "General",
-              style: TextStyle(
+              textType: TextType.body,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: AppColors.grey700,
               ),
-            ),
             const SizedBox(height: 10),
 
             _buildTile(
@@ -127,14 +124,13 @@ class SettingsView extends BaseView<SettingsViewModel> {
             const SizedBox(height: 20),
 
             /// 🔹 Others Section
-            const Text(
+            const ResponsiveTextWidget(
               "Others",
-              style: TextStyle(
+              textType: TextType.body,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: AppColors.grey700,
               ),
-            ),
             const SizedBox(height: 10),
             _buildTile(
               icon: Icons.help_outline,
@@ -166,7 +162,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
               title: "Terms & Conditions",
               onTap: viewModel.openTerms,
             ),
-          ],
+        ]
         ),
       ),
     );
@@ -187,13 +183,12 @@ class SettingsView extends BaseView<SettingsViewModel> {
         backgroundColor: iconColor.withOpacity(0.15),
         child: Icon(icon, color: iconColor),
       ),
-      title: Text(
+      title: ResponsiveTextWidget(
         title,
-        style: TextStyle(
+        textType: TextType.body,
           color: titleColor ?? AppColors.grey900,
           fontWeight: FontWeight.w600,
         ),
-      ),
       trailing: trailing,
       onTap: onTap,
     );
@@ -214,20 +209,17 @@ class SettingsView extends BaseView<SettingsViewModel> {
         backgroundColor: iconColor.withOpacity(0.15),
         child: Icon(icon, color: iconColor),
       ),
-      title: Text(
+      title: ResponsiveTextWidget(
         title,
-        style: const TextStyle(
-          color: AppColors.grey900,
-          fontWeight: FontWeight.w600,
-        ),
+        textType: TextType.body,
+        color: AppColors.grey900,
+        fontWeight: FontWeight.w600,
       ),
       subtitle: subtitle != null
-          ? Text(
+          ? ResponsiveTextWidget(
         subtitle,
-        style: const TextStyle(
-          color: AppColors.grey600,
-          fontSize: 12,
-        ),
+        textType: TextType.caption,
+        color: AppColors.grey600,
       )
           : null,
       trailing: Switch(
@@ -255,14 +247,13 @@ class SettingsView extends BaseView<SettingsViewModel> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                const ResponsiveTextWidget(
                   "Badges",
-                  style: TextStyle(
+                  textType: TextType.body,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: AppColors.onPrimary,
                   ),
-                ),
                 const SizedBox(height: 20),
 
                 // 🏅 Each badge item
@@ -291,11 +282,10 @@ class SettingsView extends BaseView<SettingsViewModel> {
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.onPrimary,
                   ),
-                  child: const Text(
+                  child: const ResponsiveTextWidget(
                     "Close",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textType: TextType.body,fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ),
               ],
             ),
           ),
@@ -322,22 +312,18 @@ class SettingsView extends BaseView<SettingsViewModel> {
             ),
           ),
           const SizedBox(height: 10),
-          Text(
+          ResponsiveTextWidget(
             title,
             textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 25,
-              color: AppColors.grey900,
-            ),
+            textType: TextType.heading,
+            fontWeight: FontWeight.w800,
+            color: AppColors.grey900,
           ),
-          Text(
+          ResponsiveTextWidget(
             subtitle,
             textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.grey600,
-            ),
+            textType: TextType.caption,
+            color: AppColors.grey600,
           ),
         ],
       ),

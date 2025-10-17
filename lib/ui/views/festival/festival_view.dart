@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/loading_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import 'festival_view_model.dart';
@@ -197,12 +198,10 @@ class FestivalView extends BaseView<FestivalViewModel> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              const ResponsiveTextWidget(
                                 'All Festivals',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                                textType: TextType.caption,
+                                color: Colors.white,
                               ),
                             ],
                           ),
@@ -225,12 +224,10 @@ class FestivalView extends BaseView<FestivalViewModel> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              const ResponsiveTextWidget(
                                 'Live',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                                textType: TextType.caption,
+                                color: Colors.white,
                               ),
                             ],
                           ),
@@ -253,12 +250,10 @@ class FestivalView extends BaseView<FestivalViewModel> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              const ResponsiveTextWidget(
                                 'Upcoming',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                                textType: TextType.caption,
+                                color: Colors.white,
                               ),
                             ],
                           ),
@@ -281,12 +276,10 @@ class FestivalView extends BaseView<FestivalViewModel> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              const ResponsiveTextWidget(
                                 'Past',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                                textType: TextType.caption,
+                                color: Colors.white,
                               ),
                             ],
                           ),
@@ -328,25 +321,22 @@ class FestivalView extends BaseView<FestivalViewModel> {
               color: AppColors.onSurfaceVariant,
             ),
             const SizedBox(height: AppDimensions.spaceM),
-            Text(
+            ResponsiveTextWidget(
               viewModel.searchQuery.isNotEmpty 
                 ? "No festivals found for '${viewModel.searchQuery}'"
                 : AppStrings.noFestivalsAvailable,
-              style: const TextStyle(
-                fontSize: AppDimensions.textM, 
-                color: AppColors.onSurfaceVariant,
-              ),
+              textType: TextType.body,
+              color: AppColors.onSurfaceVariant,
               textAlign: TextAlign.center,
             ),
             if (viewModel.searchQuery.isNotEmpty) ...[
               const SizedBox(height: AppDimensions.spaceS),
               TextButton(
                 onPressed: () => viewModel.clearSearch(),
-                child: const Text(
+                child: const ResponsiveTextWidget(
                   "Clear search",
-                  style: TextStyle(color: AppColors.primary),
+                  textType: TextType.body, color: AppColors.primary),
                 ),
-              ),
             ],
           ],
         ),
@@ -400,14 +390,12 @@ class FestivalView extends BaseView<FestivalViewModel> {
       decoration: BoxDecoration(
         color: AppColors.headlineBackground,
       ),
-      child: Text(
+      child: ResponsiveTextWidget(
         AppStrings.headlineText,
         textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: AppDimensions.textL,
-          fontWeight: FontWeight.bold,
-          color: AppColors.primary,
-        ),
+        textType: TextType.title,
+        fontWeight: FontWeight.bold,
+        color: AppColors.primary,
       ),
     );
   }

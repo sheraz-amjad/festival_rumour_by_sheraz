@@ -9,8 +9,10 @@ import '../../../../core/utils/auth_background.dart';
 import '../../../../core/utils/backbutton.dart';
 import '../../../../core/utils/base_view.dart';
 import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../shared/widgets/responsive_text_widget.dart';
 import '../../../../shared/widgets/responsive_widget.dart';
 import 'signup_view_model.dart';
+
 
 class SignupView extends BaseView<SignupViewModel> {
   const SignupView({super.key});
@@ -94,7 +96,7 @@ class SignupView extends BaseView<SignupViewModel> {
       children: [
         CustomBackButton(onTap: () => context.pop()),
         const SizedBox(width: AppDimensions.spaceS),
-        Text(
+        ResponsiveTextWidget(
           AppStrings.signUp,
           style: const TextStyle(
             fontSize: AppDimensions.textXXL,
@@ -183,7 +185,7 @@ class SignupView extends BaseView<SignupViewModel> {
 
 
   Widget _buildDescription(BuildContext context) {
-    return Text(
+    return ResponsiveTextWidget(
       AppStrings.description,
       style: const TextStyle(
         color: AppColors.white,
@@ -215,15 +217,14 @@ class SignupView extends BaseView<SignupViewModel> {
             strokeWidth: 2,
           ),
         )
-            :  Text(
+            :  ResponsiveTextWidget(
           AppStrings.continueText,
-          style: TextStyle(
+          textType: TextType.body, 
             fontSize: AppDimensions.textL,
             fontWeight: FontWeight.bold,
             color: AppColors.onPrimary,
           ),
         ),
-      ),
     );
   }
 }

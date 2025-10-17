@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -75,14 +76,12 @@ class EventView extends BaseView<EventViewModel> {
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'Events',
-            style: TextStyle(
+            textType: TextType.body, 
               color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
+           //                 fontWeight: FontWeight.bold,
             ),
-          ),
         ],
       ),
     );
@@ -109,14 +108,13 @@ class EventView extends BaseView<EventViewModel> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          const ResponsiveTextWidget(
             'Events',
-            style: TextStyle(
+            textType: TextType.body, 
               color: Colors.white,
-              fontSize: AppDimensions.textXXL,
+              //fontSize: AppDimensions.textXXL,
               fontWeight: FontWeight.bold,
             ),
-          ),
           const SizedBox(height: AppDimensions.spaceM),
           // Clipboard with checklist icon
           Container(
@@ -141,27 +139,23 @@ class EventView extends BaseView<EventViewModel> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          const ResponsiveTextWidget(
             'Toilets',
-            style: TextStyle(
+            textType: TextType.body, 
               color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
+              //              fontWeight: FontWeight.bold,
             ),
-          ),
           GestureDetector(
             onTap: () {
               // Handle view all action
             },
-            child: const Text(
+            child: const ResponsiveTextWidget(
               'View All',
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
               ),
             ),
-          ),
         ],
       ),
     );
@@ -218,13 +212,11 @@ class EventView extends BaseView<EventViewModel> {
           
           // Category name
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               category.name,
-              style: const TextStyle(
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
           
@@ -243,16 +235,14 @@ class EventView extends BaseView<EventViewModel> {
                 color: const Color(0xFF4CAF50),
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 'View Detail',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: AppDimensions.textM,
-                  fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.caption,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -316,13 +306,11 @@ class EventView extends BaseView<EventViewModel> {
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
-          const Text(
+          const ResponsiveTextWidget(
             'New Event Preview',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: AppDimensions.textL,
-              fontWeight: FontWeight.bold,
-            ),
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
           ),
         ],
       ),
@@ -333,14 +321,12 @@ class EventView extends BaseView<EventViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const ResponsiveTextWidget(
           'New Event Information',
-          style: TextStyle(
+          textType: TextType.body, 
             color: AppColors.black,
-            fontSize: AppDimensions.textL,
             fontWeight: FontWeight.bold,
           ),
-        ),
         const SizedBox(height: AppDimensions.spaceM),
         
         // Festival Name Card
@@ -393,19 +379,17 @@ class EventView extends BaseView<EventViewModel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ResponsiveTextWidget(
                   label,
                   style: const TextStyle(
                     color: Colors.grey,
-                    fontSize: AppDimensions.textS,
                   ),
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
-                Text(
+                ResponsiveTextWidget(
                   value,
                   style: const TextStyle(
                     color: AppColors.black,
-                    fontSize: AppDimensions.textM,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -428,13 +412,11 @@ class EventView extends BaseView<EventViewModel> {
         children: [
           Row(
             children: [
-              const Text(
+              const ResponsiveTextWidget(
                 'Content',
-                style: TextStyle(
+                textType: TextType.body, 
                   color: Colors.grey,
-                  fontSize: AppDimensions.textS,
                 ),
-              ),
             ],
           ),
           const SizedBox(height: AppDimensions.spaceM),

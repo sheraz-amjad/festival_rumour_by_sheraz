@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/di/locator.dart';
+import '../../../core/services/navigation_service.dart';
 
 class ChatViewModel extends BaseViewModel {
+  final NavigationService _navigationService = locator<NavigationService>();
+  
   int _selectedTab = 0; // 0 = Public, 1 = Private
   bool _isInChatRoom = false;
   Map<String, dynamic>? _currentChatRoom;

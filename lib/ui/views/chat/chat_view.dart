@@ -5,6 +5,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/router/app_router.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'chat_view_model.dart';
 
 class ChatView extends BaseView<ChatViewModel> {
@@ -34,7 +35,7 @@ class ChatView extends BaseView<ChatViewModel> {
           
           // Dark overlay
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.3)),
+            child: Container(color: AppColors.overlayBlack45),
           ),
           
           // Main content
@@ -121,14 +122,12 @@ class ChatView extends BaseView<ChatViewModel> {
               onPressed: onBack ?? () => Navigator.pop(context),
             ),
             Expanded(
-              child: Text(
+              child: ResponsiveTextWidget(
                 AppStrings.chatRooms,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
+                textType: TextType.title,
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -165,13 +164,11 @@ class ChatView extends BaseView<ChatViewModel> {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(width: 8),
-                    Text(
+                    ResponsiveTextWidget(
                       AppStrings.public,
-                      style: TextStyle(
-                        color: viewModel.selectedTab == 0 ? AppColors.black : AppColors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
+                      textType: TextType.body,
+                      color: viewModel.selectedTab == 0 ? AppColors.black : AppColors.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ],
                 ),
@@ -197,13 +194,11 @@ class ChatView extends BaseView<ChatViewModel> {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(width: 8),
-                    Text(
+                    ResponsiveTextWidget(
                       AppStrings.private,
-                      style: TextStyle(
-                        color: viewModel.selectedTab == 1 ? AppColors.black : AppColors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
+                      textType: TextType.body,
+                      color: viewModel.selectedTab == 1 ? AppColors.black : AppColors.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ],
                 ),
@@ -270,14 +265,12 @@ class ChatView extends BaseView<ChatViewModel> {
                   // Text section
                   Padding(
                     padding: const EdgeInsets.all(6.0),
-                    child: Text(
+                    child: ResponsiveTextWidget(
                       room['name'] ?? 'Luna Festival Community',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      textType: TextType.caption,
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -359,13 +352,11 @@ class ChatView extends BaseView<ChatViewModel> {
                             shape: BoxShape.circle,
                           ),
                           child: Center(
-                            child: Text(
+                            child: ResponsiveTextWidget(
                               '${chat['unreadCount']}',
-                              style: const TextStyle(
-                                color: AppColors.black,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              textType: TextType.caption,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -396,35 +387,29 @@ class ChatView extends BaseView<ChatViewModel> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    ResponsiveTextWidget(
                       chat['name'] ?? AppStrings.chatName,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      textType: TextType.caption,
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w600,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    ResponsiveTextWidget(
                       chat['lastMessage'] ?? AppStrings.noMessages,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.grey600,
-                        fontSize: 11,
-                      ),
+                      textType: TextType.caption,
+                      color: AppColors.grey600,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    ResponsiveTextWidget(
                       chat['timestamp'] ?? '12:00',
-                      style: const TextStyle(
-                        color: AppColors.grey600,
-                        fontSize: 10,
-                      ),
+                      textType: TextType.caption,
+                      color: AppColors.grey600,
                     ),
                   ],
                 ),
@@ -514,14 +499,11 @@ class ChatView extends BaseView<ChatViewModel> {
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: Text(
+                  child: ResponsiveTextWidget(
                     title,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: AppDimensions.textXL,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
+                    textType: TextType.heading,
+                    color: AppColors.white,
+                    fontWeight: FontWeight.bold,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -545,13 +527,11 @@ class ChatView extends BaseView<ChatViewModel> {
             onPressed: () => viewModel.exitChatRoom(),
           ),
           Expanded(
-            child: Text(
+            child: ResponsiveTextWidget(
               viewModel.currentChatRoom?['name'] ?? AppStrings.lunaCommunityRoom,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
           IconButton(
@@ -595,23 +575,19 @@ class ChatView extends BaseView<ChatViewModel> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
-                    child: Text(
-                      'FA',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: ResponsiveTextWidget(
+                      AppStrings.festivalRumourLogo,
+                      textType: TextType.body,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  'FestivalRumour 10:05 PM',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 14,
-                  ),
+                const ResponsiveTextWidget(
+                  AppStrings.festivalRumourTimestamp,
+                  textType: TextType.caption,
+                  color: AppColors.white,
                 ),
               ],
             ),
@@ -630,21 +606,17 @@ class ChatView extends BaseView<ChatViewModel> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  const                   ResponsiveTextWidget(
                     'Join the conversation!',
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    textType: TextType.body,
+                    color: AppColors.black,
+                    fontWeight: FontWeight.w600,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  const ResponsiveTextWidget(
                     'Follow this topic to receive notifications when people respond.',
-                    style: TextStyle(
-                      color: AppColors.grey600,
-                      fontSize: 14,
-                    ),
+                    textType: TextType.caption,
+                    color: AppColors.grey600,
                   ),
                   const SizedBox(height: 16),
                   GestureDetector(
@@ -657,13 +629,11 @@ class ChatView extends BaseView<ChatViewModel> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(
-                        child: Text(
+                        child: ResponsiveTextWidget(
                           AppStrings.inviteYourFriends,
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          textType: TextType.caption,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

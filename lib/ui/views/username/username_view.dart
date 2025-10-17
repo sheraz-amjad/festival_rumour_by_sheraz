@@ -7,7 +7,9 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../shared/extensions/context_extensions.dart';
 import '../../../../shared/widgets/responsive_widget.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import 'username_view_model.dart';
+
 
 class UsernameView extends StatelessWidget {
   const UsernameView({super.key});
@@ -31,7 +33,7 @@ class UsernameView extends StatelessWidget {
                 Image.asset(AppAssets.usernameback, fit: BoxFit.cover),
 
                 /// 🔹 Overlay
-                Container(color: Colors.black.withOpacity(0.5)),
+                Container(color: AppColors.overlayBlack45),
 
                 /// 🔹 Content (moves up on keyboard)
                 AnimatedPadding(
@@ -84,17 +86,17 @@ class UsernameView extends StatelessWidget {
                               children: [
                                 /// Username Label
                                 Row(
-                                  children: const [
-                                    Text(
+                                  children: [
+                                    ResponsiveTextWidget(
                                       AppStrings.username,
-                                      style: TextStyle(
-                                        color: AppColors.accent,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      textType: TextType.body,
+                                      color: AppColors.accent,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    ResponsiveTextWidget(
+                                      AppStrings.asterisk,
+                                      textType: TextType.body,
+                                      color: AppColors.error,
                                     ),
                                   ],
                                 ),
@@ -105,15 +107,15 @@ class UsernameView extends StatelessWidget {
                                   onFocusChange: viewModel.onUsernameFocusChange,
                                   child: TextField(
                                     controller: viewModel.emailController,
-                                    cursorColor: Colors.white,
+                                    cursorColor: AppColors.white,
 
                                     onChanged: viewModel.onUsernameChanged,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: AppColors.white),
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
-                                      hintText: "Enter your email",
-                                      hintStyle: const TextStyle(color: Colors.white70),
+                                      hintText: AppStrings.enterYourEmail,
+                                      hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.emailError,
                                       errorStyle: const TextStyle(
                                         color: AppColors.accent, // ✅ white validation message
@@ -123,12 +125,12 @@ class UsernameView extends StatelessWidget {
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                         borderSide:
-                                        const BorderSide(color: Colors.white, width: 2),
+                                        const BorderSide(color: AppColors.white, width: 2),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                         borderSide:
-                                        const BorderSide(color: Colors.white60, width: 1),
+                                        const BorderSide(color: AppColors.white60, width: 1),
                                       ),
                                     ),
                                   ),
@@ -138,20 +140,20 @@ class UsernameView extends StatelessWidget {
 
                                 /// Password Label
                                 Row(
-                                  children: const [
-                                    Text(
+                                  children: [
+                                    ResponsiveTextWidget(
                                       AppStrings.password,
-                                      style: TextStyle(
-                                        color: AppColors.accent,
+                                      textType: TextType.body,
+                                      color: AppColors.accent,
                                         fontWeight: FontWeight.bold,
                                       ),
+                          ]
                                     ),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    ResponsiveTextWidget(
+                                      AppStrings.asterisk,
+                                      textType: TextType.body,
+                                      color: AppColors.error
                                     ),
-                                  ],
-                                ),
                                 const SizedBox(height: AppDimensions.spaceS),
 
                                 /// Password Field
@@ -160,14 +162,14 @@ class UsernameView extends StatelessWidget {
                                   child: TextField(
                                     controller: viewModel.passwordController,
                                     obscureText: !viewModel.isPasswordVisible,
-                                    cursorColor: Colors.white,
+                                    cursorColor: AppColors.white,
                                     onChanged: viewModel.onPasswordChanged,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: AppColors.white),
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.primary.withOpacity(0.3),
-                                      hintText: "********",
-                                      hintStyle: const TextStyle(color: Colors.white70),
+                                      hintText: AppStrings.passwordPlaceholder,
+                                      hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.passwordError,
                                       errorStyle: const TextStyle(
                                         color: AppColors.accent, // ✅ white validation message
@@ -187,12 +189,12 @@ class UsernameView extends StatelessWidget {
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                         borderSide:
-                                        const BorderSide(color: Colors.white, width: 2),
+                                        const BorderSide(color: AppColors.white, width: 2),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                         borderSide:
-                                        const BorderSide(color: Colors.white60, width: 1),
+                                        const BorderSide(color: AppColors.white60, width: 1),
                                       ),
                                     ),
                                   ),
@@ -211,19 +213,18 @@ class UsernameView extends StatelessWidget {
                                           onChanged: viewModel.toggleRememberMe,
                                           activeColor: AppColors.onPrimary,
                                         ),
-                                        const Text(
+                                        const ResponsiveTextWidget(
                                           AppStrings.rememberMe,
-                                          style: TextStyle(color: AppColors.primary),
-                                        ),
+                                          textType: TextType.body,
+                                      color: AppColors.primary),
                                       ],
                                     ),
-                                    const Text(
+                                    const ResponsiveTextWidget(
                                       AppStrings.forgotPassword,
-                                      style: TextStyle(
-                                        color: AppColors.accent,
+                                      textType: TextType.body,
+                                      color: AppColors.accent,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),
                                   ],
                                 ),
 
@@ -242,15 +243,14 @@ class UsernameView extends StatelessWidget {
                                       ? const CircularProgressIndicator(
                                     color: AppColors.accent,
                                   )
-                                      : const Text(
+                                      : const ResponsiveTextWidget(
                                     AppStrings.login,
-                                    style: TextStyle(
+                                    textType: TextType.body,
                                       color: AppColors.onPrimary,
-                                      fontSize: 20,
+                                     // fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
 
                                 const SizedBox(height: AppDimensions.spaceM),
 
@@ -259,21 +259,20 @@ class UsernameView extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
+                                    const ResponsiveTextWidget(
                                       AppStrings.dontHaveAccount,
-                                      style: TextStyle(color: AppColors.primary),
-                                    ),
+                                      textType: TextType.body,
+                                      color: AppColors.primary),
                                     const SizedBox(width: 6),
                                     GestureDetector(
                                       onTap: () => viewModel.goToSignUp(context),
-                                      child: const Text(
+                                      child: const ResponsiveTextWidget(
                                         AppStrings.signUp,
-                                        style: TextStyle(
+                                        textType: TextType.body,
                                           color: AppColors.accent,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               ],

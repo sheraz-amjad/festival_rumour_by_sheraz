@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
@@ -66,14 +67,13 @@ class NotificationView extends BaseView<NotificationViewModel> {
           ),
           
           /// Title
-          const Text(
+          const ResponsiveTextWidget(
             'Notifications',
-            style: TextStyle(
+            textType: TextType.body, 
               color: AppColors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
-          ),
           
           /// Mark All Read Button
           if (viewModel.unreadCount > 0)
@@ -94,16 +94,15 @@ class NotificationView extends BaseView<NotificationViewModel> {
                 color: AppColors.accent,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const Text(
+              child: const ResponsiveTextWidget(
                 'Mark All Read',
-                style: TextStyle(
+                textType: TextType.body, 
                   color: AppColors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -112,14 +111,13 @@ class NotificationView extends BaseView<NotificationViewModel> {
   Widget _buildNotificationsList(BuildContext context, NotificationViewModel viewModel) {
     if (viewModel.notifications.isEmpty) {
       return const Center(
-        child: Text(
+        child: ResponsiveTextWidget(
           'No notifications yet',
-          style: TextStyle(
+          textType: TextType.body, 
             color: AppColors.white,
             fontSize: 16,
           ),
-        ),
-      );
+        );
     }
 
     return ListView.builder(
@@ -189,43 +187,37 @@ class NotificationView extends BaseView<NotificationViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /// Title
-                      Text(
+                      ResponsiveTextWidget(
                         notification.title,
-                        style: TextStyle(
+                        textType: TextType.body, 
                           color: AppColors.white,
                           fontSize: 16,
                           fontWeight: notification.isRead 
                             ? FontWeight.w500 
                             : FontWeight.bold,
                         ),
-                      ),
-                      
                       const SizedBox(height: 4),
                       
                       /// Message
-                      Text(
+                      ResponsiveTextWidget(
                         notification.message,
-                        style: TextStyle(
+                        textType: TextType.body, 
                           color: AppColors.white.withOpacity(0.8),
                           fontSize: 14,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      
+
                       const SizedBox(height: 8),
                       
                       /// Time and Status
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          ResponsiveTextWidget(
                             notification.time,
-                            style: TextStyle(
+                            textType: TextType.body, 
                               color: AppColors.white.withOpacity(0.6),
                               fontSize: 12,
                             ),
-                          ),
                           if (!notification.isRead)
                             Container(
                               width: 8,

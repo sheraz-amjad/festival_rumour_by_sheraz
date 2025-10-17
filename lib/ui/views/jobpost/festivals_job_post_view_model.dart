@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/di/locator.dart';
+import '../../../core/services/navigation_service.dart';
 
 class FestivalsJobPostViewModel extends BaseViewModel {
+  final NavigationService _navigationService = locator<NavigationService>();
+  
   // Text Controllers
   late TextEditingController jobTitleController;
   late TextEditingController companyController;
@@ -131,7 +135,7 @@ class FestivalsJobPostViewModel extends BaseViewModel {
     debugPrint('Success: $message');
   }
 
-  Future<void> postJob(BuildContext context) async {
+  Future<void> postJob() async {
     if (!_validateForm()) {
       return;
     }
@@ -163,8 +167,8 @@ class FestivalsJobPostViewModel extends BaseViewModel {
       // Clear form after successful posting
       _clearForm();
       
-      // Navigate back or show success message
-      Navigator.pop(context);
+      // Navigate back using NavigationService (MVVM compliant)
+      _navigationService.pop();
       
     }, errorMessage: 'Failed to post job. Please try again.');
   }

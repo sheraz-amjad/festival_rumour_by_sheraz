@@ -17,7 +17,7 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   bool _showReactions = false;
   String? _selectedReaction; // stores emoji / icon selected
-  Color _reactionColor = Colors.white; // default Like color
+  Color _reactionColor = AppColors.white; // default Like color
 
   void _toggleReactions() {
     setState(() {
@@ -182,12 +182,12 @@ class _PostWidgetState extends State<PostWidget> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            _buildEmojiReaction("👍", "Like", Colors.blue), // blue like
-                            _buildEmojiReaction("❤️", "Love"),
-                            _buildEmojiReaction("😂", "Haha"),
-                            _buildEmojiReaction("😮", "Wow"),
-                            _buildEmojiReaction("😢", "Sad"),
-                            _buildEmojiReaction("😡", "Angry"),
+                            _buildEmojiReaction(AppStrings.emojiLike, AppStrings.like, AppColors.reactionLike), // blue like
+                            _buildEmojiReaction(AppStrings.emojiLove, AppStrings.love),
+                            _buildEmojiReaction(AppStrings.emojiHaha, AppStrings.haha),
+                            _buildEmojiReaction(AppStrings.emojiWow, AppStrings.wow),
+                            _buildEmojiReaction(AppStrings.emojiSad, AppStrings.sad),
+                            _buildEmojiReaction(AppStrings.emojiAngry, AppStrings.angry),
                           ],
                         ),
                       ),
@@ -240,7 +240,7 @@ class _PostWidgetState extends State<PostWidget> {
       onTap: () {
         setState(() {
           _selectedReaction = emoji;
-          _reactionColor = (emoji == "👍") ? Colors.blue : Colors.black;
+          _reactionColor = (emoji == AppStrings.emojiLike) ? AppColors.reactionLike : AppColors.black;
           _showReactions = false;
         });
         debugPrint("User reacted with $label");
@@ -249,7 +249,7 @@ class _PostWidgetState extends State<PostWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Text(
           emoji,
-          style: TextStyle(fontSize: 28, color: (emoji == "👍") ? Colors.blue : null),
+          style: TextStyle(fontSize: 28, color: (emoji == AppStrings.emojiLike) ? AppColors.reactionLike : null),
         ),
       ),
     );

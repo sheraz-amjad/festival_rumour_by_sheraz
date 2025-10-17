@@ -7,9 +7,11 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
 import 'opt_view_model.dart';
+
 
 class OtpView extends BaseView<OtpViewModel> {
   const OtpView({super.key});
@@ -46,25 +48,24 @@ class OtpView extends BaseView<OtpViewModel> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 60),
-                        const Text(
+                        const ResponsiveTextWidget(
                           AppStrings.enterCode,
-                          style: TextStyle(
+                          textType: TextType.body, 
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
-                        ),
                         const SizedBox(height: AppDimensions.spaceS),
-                        const Text(
+                        const ResponsiveTextWidget(
                           "${AppStrings.enterOtpDescription}\n+62 873 7764 2922",
-                          style: TextStyle(color: AppColors.primary, fontSize: 15),
-                        ),
+                          textType: TextType.body, color: AppColors.primary, fontSize: 15),
+
                         const SizedBox(height: AppDimensions.paddingL),
                         _buildOtpInput(context, viewModel),
 
                         if (viewModel.errorText != null) ...[
                           const SizedBox(height: 10),
-                          Text(
+                          ResponsiveTextWidget(
                             viewModel.errorText!,
                             style: const TextStyle(
                               color: AppColors.accent,
@@ -159,14 +160,13 @@ class OtpView extends BaseView<OtpViewModel> {
             strokeWidth: 2,
           ),
         )
-            : const Text(
+            : const ResponsiveTextWidget(
           AppStrings.signUp,
-          style: TextStyle(
+          textType: TextType.body, 
             color: AppColors.onPrimary,
             fontSize: AppDimensions.textXL,
           ),
         ),
-      ),
     );
   }
 
@@ -174,15 +174,14 @@ class OtpView extends BaseView<OtpViewModel> {
     return Center(
       child: TextButton(
         onPressed: viewModel.isLoading ? null : viewModel.resendCode,
-        child: const Text(
+        child: const ResponsiveTextWidget(
           AppStrings.resendCode,
-          style: TextStyle(
+          textType: TextType.body, 
             color: AppColors.primary,
             fontSize: AppDimensions.textM,
             fontWeight: FontWeight.w500,
           ),
         ),
-      ),
     );
   }
 }

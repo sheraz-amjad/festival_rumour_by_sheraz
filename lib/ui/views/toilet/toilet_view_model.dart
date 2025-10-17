@@ -65,4 +65,8 @@ class ToiletViewModel extends BaseViewModel {
     _selectedToilet = toilet;
     notifyListeners();
   }
+  void onBack(BuildContext context) {
+    Navigator.pop(context);
+  }
+
 }

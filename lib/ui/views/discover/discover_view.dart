@@ -14,6 +14,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../core/utils/base_view.dart';
+import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/utils/snackbar_util.dart';
 import '../../../shared/widgets/responsive_widget.dart';
 import 'discover_viewmodel.dart';
@@ -71,12 +72,10 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                             SizedBox(width: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 8),
                             
                             /// Overview title
-                            Text(
+                            ResponsiveTextWidget(
                               AppStrings.overview,
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: AppDimensions.textXL,
-                              ),
+                              textType: TextType.heading,
+                              color: AppColors.primary,
                             ),
                             
                             /// Spacer to push icons to the right
@@ -124,14 +123,12 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
 
                         const SizedBox(height: AppDimensions.spaceL),
 
-                        const Text(
+                        const ResponsiveTextWidget(
                           AppStrings.getReady,
-                          style: TextStyle(
+                          textType: TextType.body, 
                             color: AppColors.white,
                             fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
                           ),
-                        ),
 
                         const SizedBox(height: AppDimensions.spaceL),
 
@@ -245,12 +242,12 @@ class ShareLocationPopup extends StatelessWidget {
             const Icon(Icons.location_on,
                 color: AppColors.accent, size: 60),
             const SizedBox(height: 10),
-            const Text(
+            const ResponsiveTextWidget(
               'Share Location',
-              style: TextStyle(
+              textType: TextType.body, 
                   color: AppColors.accent,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20),
+                  //fontSize: 20
             ),
             const SizedBox(height: 20),
             GestureDetector(
@@ -268,16 +265,17 @@ class ShareLocationPopup extends StatelessWidget {
                   color: AppColors.accent,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
+                child: const ResponsiveTextWidget(
                   'Allow To Share Location So The Crowd Can Find You, Nothing Else',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  textType: TextType.body, 
                       color: Colors.black,
                       fontWeight: FontWeight.w800,
-                      fontSize: 16),
+                      //fontSize: 16),
                 ),
               ),
             ),
+
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () => Navigator.pop(context),
@@ -288,17 +286,17 @@ class ShareLocationPopup extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
+                child: const ResponsiveTextWidget(
                   'Hiding My Vibe, Staying Incognito',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  textType: TextType.body, 
                       color: Colors.black,
                       fontWeight: FontWeight.w800,
-                      fontSize: 16),
+                      //fontSize: 16
+                  ),
                 ),
               ),
-            ),
-          ],
+        ],
         ),
       ),
     );
