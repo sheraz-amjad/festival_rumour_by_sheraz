@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -40,7 +41,7 @@ class PostsView extends BaseView<PostsViewModel> {
                 _buildAppBar(context),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: AppDimensions.spaceS),
                     itemCount: viewModel.posts.length,
                     itemBuilder: (context, index) {
                       final post = viewModel.posts[index];
@@ -64,7 +65,7 @@ class PostsView extends BaseView<PostsViewModel> {
         icon: const Icon(Icons.arrow_back, color: AppColors.white),
         onPressed: () {
           if (onBack != null) {
-            onBack!();
+            onBack!(); // Navigate back to discover screen
           } else {
             Navigator.pop(context);
           }
@@ -93,7 +94,7 @@ class PostsView extends BaseView<PostsViewModel> {
       builder: (context, setState) {
         bool _showReactions = false;
         String? _selectedReaction;
-        Color _reactionColor = Colors.white;
+        Color _reactionColor = AppColors.white;
 
         void _toggleReactions() {
           setState(() {
@@ -120,15 +121,15 @@ class PostsView extends BaseView<PostsViewModel> {
         void _handleReaction(String emoji) {
           setState(() {
             _selectedReaction = emoji;
-            _reactionColor = (emoji == "👍") ? Colors.blue : Colors.black;
+            _reactionColor = (emoji == "👍") ? AppColors.blue : AppColors.black;
             _showReactions = false;
             post['likes'] = (post['likes'] ?? 0) + 1;
           });
         }
 
         return Container(
-          height: MediaQuery.of(context).size.height * 0.5,
-          margin: const EdgeInsets.only(bottom: 16),
+          height: context.screenHeight * 0.5,
+          margin: const EdgeInsets.only(bottom: AppDimensions.paddingM),
           decoration: BoxDecoration(
             color: AppColors.postBackground.withOpacity(0.7),
             borderRadius: const BorderRadius.only(
@@ -196,44 +197,44 @@ class PostsView extends BaseView<PostsViewModel> {
                             GestureDetector(
                               onTap: _handleLike,
                               child: Container(
-                                padding: const EdgeInsets.all(6),
+                                padding: const EdgeInsets.all(AppDimensions.spaceXS),
                                 decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.black.withOpacity(0.6),
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                                 ),
                                 child: Row(
                                   children: [
                                     _selectedReaction == null
-                                        ? const Icon(Icons.thumb_up, color: Colors.white, size: 20)
+                                        ? const Icon(Icons.thumb_up, color: AppColors.white, size: AppDimensions.iconS)
                                         : ResponsiveTextWidget(
                                       _selectedReaction!,
                                       textType: TextType.body,
                                       color: _reactionColor,
                                     ),
-                                    const SizedBox(width: 4),
+                                    const SizedBox(width: AppDimensions.spaceXS),
                                     ResponsiveTextWidget("${post['likes'] ?? 0}",
                                         textType: TextType.caption,
-                                        color: Colors.white),
+                                        color: AppColors.white),
                                   ],
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: AppDimensions.spaceS),
                             Container(
                               padding: const EdgeInsets.all(6),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.6),
+                                color: AppColors.black.withOpacity(0.6),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: InkWell(
                                 onTap: _handleComment,
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.comment_outlined, color: Colors.white, size: 18),
-                                    const SizedBox(width: 4),
+                                    const Icon(Icons.comment_outlined, color: AppColors.white, size: AppDimensions.iconS),
+                                    const SizedBox(width: AppDimensions.spaceXS),
                                     ResponsiveTextWidget("${post['comments'] ?? 0}",
                                         textType: TextType.caption,
-                                        color: Colors.white),
+                                        color: AppColors.white),
                                   ],
                                 ),
                               ),
@@ -251,11 +252,11 @@ class PostsView extends BaseView<PostsViewModel> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 12),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: AppColors.black.withOpacity(0.2),
                                   blurRadius: 8,
                                 )
                               ],
@@ -263,12 +264,12 @@ class PostsView extends BaseView<PostsViewModel> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                _buildEmojiReaction("👍", "Like", Colors.blue, _handleReaction),
-                                _buildEmojiReaction("❤️", "Love", Colors.red, _handleReaction),
-                                _buildEmojiReaction("😂", "Haha", Colors.yellow, _handleReaction),
-                                _buildEmojiReaction("😮", "Wow", Colors.orange, _handleReaction),
-                                _buildEmojiReaction("😢", "Sad", Colors.blue, _handleReaction),
-                                _buildEmojiReaction("😡", "Angry", Colors.red, _handleReaction),
+                                _buildEmojiReaction("👍", AppStrings.like, AppColors.blue, _handleReaction),
+                                _buildEmojiReaction("❤️", AppStrings.love, AppColors.red, _handleReaction),
+                                _buildEmojiReaction("😂", AppStrings.haha, AppColors.yellow, _handleReaction),
+                                _buildEmojiReaction("😮", AppStrings.wow, AppColors.orange, _handleReaction),
+                                _buildEmojiReaction("😢", AppStrings.sad, AppColors.blue, _handleReaction),
+                                _buildEmojiReaction("😡", AppStrings.angry, AppColors.red, _handleReaction),
                               ],
                             ),
                           ),
@@ -288,10 +289,10 @@ class PostsView extends BaseView<PostsViewModel> {
                   const Icon(Icons.thumb_up, color: AppColors.reactionLove, size: AppDimensions.reactionIconSize),
                   const SizedBox(width: AppDimensions.reactionIconSpacing),
                   ResponsiveTextWidget("${post['likes'] ?? 0}", textType: TextType.caption, color: AppColors.white),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.3),
+                  SizedBox(width: context.screenWidth * 0.3),
                   ResponsiveTextWidget("${post['comments'] ?? 0} ", textType: TextType.caption, color: AppColors.white),
                   const SizedBox(width: AppDimensions.reactionIconSpacing),
-                  const ResponsiveTextWidget("Comments ", textType: TextType.caption, color: AppColors.white),
+                  const ResponsiveTextWidget(AppStrings.comments, textType: TextType.caption, color: AppColors.white),
                 ],
               ),
               const SizedBox(height: AppDimensions.reactionIconSpacing),
@@ -310,7 +311,7 @@ class PostsView extends BaseView<PostsViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(AppDimensions.spaceS),
         decoration: BoxDecoration(
           color: AppColors.black.withOpacity(0.6),
           shape: BoxShape.circle,
@@ -320,7 +321,7 @@ class PostsView extends BaseView<PostsViewModel> {
             Icon(
               icon,
               color: AppColors.white,
-              size: 20,
+              size: AppDimensions.iconS,
             ),
             if (count != null && count > 0)
               ResponsiveTextWidget(
@@ -341,7 +342,7 @@ class PostsView extends BaseView<PostsViewModel> {
         // Handle emoji reaction
       },
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(AppDimensions.spaceS),
         decoration: BoxDecoration(
           color: AppColors.grey800,
           shape: BoxShape.circle,
@@ -365,7 +366,7 @@ class PostsView extends BaseView<PostsViewModel> {
     return GestureDetector(
       onTap: () => onTap(emoji),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceXS),
         child: ResponsiveTextWidget(
           emoji,
           textType: TextType.body,

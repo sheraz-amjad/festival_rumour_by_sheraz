@@ -6,6 +6,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
+import '../../../shared/extensions/context_extensions.dart';
 import 'event_view_model.dart';
 
 class EventView extends BaseView<EventViewModel> {
@@ -21,15 +22,15 @@ class EventView extends BaseView<EventViewModel> {
     }
     
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE8F5E8), // Light green
-              Colors.white,
+              AppColors.eventLightGreen,
+              AppColors.white,
             ],
           ),
         ),
@@ -65,19 +66,19 @@ class EventView extends BaseView<EventViewModel> {
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50), // Green background
+                color: AppColors.eventGreen,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppDimensions.iconM,
               ),
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
-            'Events',
+            AppStrings.events,
             textType: TextType.body, 
               color: AppColors.black,
            //                 fontWeight: FontWeight.bold,
@@ -92,14 +93,14 @@ class EventView extends BaseView<EventViewModel> {
       margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.25,
+      height: context.screenHeight * 0.25,
 
       decoration: BoxDecoration(
-        color: const Color(0xFF4CAF50), // Green background
+        color: AppColors.eventGreen,
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -109,9 +110,9 @@ class EventView extends BaseView<EventViewModel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const ResponsiveTextWidget(
-            'Events',
+            AppStrings.events,
             textType: TextType.body, 
-              color: Colors.white,
+              color: AppColors.white,
               //fontSize: AppDimensions.textXXL,
               fontWeight: FontWeight.bold,
             ),
@@ -140,7 +141,7 @@ class EventView extends BaseView<EventViewModel> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const ResponsiveTextWidget(
-            'Toilets',
+            AppStrings.toilets,
             textType: TextType.body, 
               color: AppColors.black,
               //              fontWeight: FontWeight.bold,
@@ -150,7 +151,7 @@ class EventView extends BaseView<EventViewModel> {
               // Handle view all action
             },
             child: const ResponsiveTextWidget(
-              'View All',
+              AppStrings.viewAll,
               textType: TextType.body,
               color: AppColors.black,
               fontWeight: FontWeight.w600,
@@ -179,14 +180,14 @@ class EventView extends BaseView<EventViewModel> {
       margin: const EdgeInsets.only(bottom: AppDimensions.spaceM),
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         border: Border.all(
-         color: isSelected ? const Color(0xFF4CAF50) : Colors.transparent,
+         color: isSelected ? AppColors.eventGreen : Colors.transparent,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.black.withOpacity(0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -198,7 +199,7 @@ class EventView extends BaseView<EventViewModel> {
           Container(
             padding: const EdgeInsets.all(AppDimensions.paddingS),
             decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50),
+              color: AppColors.eventGreen,
               shape: BoxShape.circle,
             ),
             child: Image.asset(
@@ -232,13 +233,13 @@ class EventView extends BaseView<EventViewModel> {
                 vertical: AppDimensions.paddingS,
               ),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50),
+                color: AppColors.eventGreen,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: const ResponsiveTextWidget(
-                'View Detail',
+                AppStrings.viewDetail,
                 textType: TextType.caption,
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.w600,
               ),
               ),
@@ -250,7 +251,7 @@ class EventView extends BaseView<EventViewModel> {
 
   Widget _buildEventPreview(BuildContext context, EventViewModel viewModel) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -283,7 +284,7 @@ class EventView extends BaseView<EventViewModel> {
         vertical: AppDimensions.paddingS,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFFE8F5E8), // Light green background
+        color: AppColors.eventLightGreen,
       ),
       child: Row(
         children: [
@@ -295,19 +296,19 @@ class EventView extends BaseView<EventViewModel> {
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50), // Green background
+                color: AppColors.eventGreen,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppDimensions.iconM,
               ),
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
-            'New Event Preview',
+            AppStrings.newEventPreview,
             textType: TextType.title,
             color: AppColors.black,
             fontWeight: FontWeight.bold,
@@ -322,7 +323,7 @@ class EventView extends BaseView<EventViewModel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ResponsiveTextWidget(
-          'New Event Information',
+          AppStrings.newEventInformation,
           textType: TextType.body, 
             color: AppColors.black,
             fontWeight: FontWeight.bold,
@@ -332,8 +333,8 @@ class EventView extends BaseView<EventViewModel> {
         // Festival Name Card
         _buildInfoCard(
           context,
-          'Festival Name',
-          'Magic show',
+          AppStrings.festivalName,
+          AppStrings.magicShow,
           Icons.auto_fix_high,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -341,8 +342,8 @@ class EventView extends BaseView<EventViewModel> {
         // Title Card
         _buildInfoCard(
           context,
-          'Title',
-          'Abcde',
+          AppStrings.title,
+          AppStrings.abcde,
           Icons.description,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -357,7 +358,7 @@ class EventView extends BaseView<EventViewModel> {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD), // Light blue
+        color: AppColors.eventLightBlue,
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       ),
       child: Row(
@@ -365,12 +366,12 @@ class EventView extends BaseView<EventViewModel> {
           Container(
             padding: const EdgeInsets.all(AppDimensions.paddingS),
             decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50),
+              color: AppColors.eventGreen,
               borderRadius: BorderRadius.circular(AppDimensions.radiusS),
             ),
             child: Icon(
               icon,
-              color: Colors.white,
+              color: AppColors.white,
               size: AppDimensions.iconM,
             ),
           ),
@@ -382,7 +383,7 @@ class EventView extends BaseView<EventViewModel> {
                 ResponsiveTextWidget(
                   label,
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: AppColors.grey600,
                   ),
                 ),
                 const SizedBox(height: AppDimensions.spaceXS),
@@ -405,7 +406,7 @@ class EventView extends BaseView<EventViewModel> {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingL),
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD), // Light blue
+        color: AppColors.eventLightBlue,
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       ),
       child: Column(
@@ -413,9 +414,9 @@ class EventView extends BaseView<EventViewModel> {
           Row(
             children: [
               const ResponsiveTextWidget(
-                'Content',
+                AppStrings.content,
                 textType: TextType.body, 
-                  color: Colors.grey,
+                  color: AppColors.grey600,
                 ),
             ],
           ),
@@ -424,12 +425,12 @@ class EventView extends BaseView<EventViewModel> {
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingL),
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50),
+                color: AppColors.eventGreen,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: const Icon(
                 Icons.edit_document,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppDimensions.iconXXL,
               ),
             ),
@@ -445,7 +446,7 @@ class EventView extends BaseView<EventViewModel> {
         // Crowd Capacity Card
         _buildInfoCard(
           context,
-          'Crowd Capacity',
+          AppStrings.crowdCapacity,
           '5000',
           Icons.groups,
         ),
@@ -454,7 +455,7 @@ class EventView extends BaseView<EventViewModel> {
         // Price Per Person Card
         _buildInfoCard(
           context,
-          'Price Per Person',
+          AppStrings.pricePerPerson,
           '50',
           Icons.person_add_alt_1,
         ),
@@ -463,7 +464,7 @@ class EventView extends BaseView<EventViewModel> {
         // Total Amount Card
         _buildInfoCard(
           context,
-          'Total Amount',
+          AppStrings.totalAmount,
           '25.0000',
           Icons.monetization_on,
         ),
@@ -472,7 +473,7 @@ class EventView extends BaseView<EventViewModel> {
         // Tax Card
         _buildInfoCard(
           context,
-          'Tax',
+          AppStrings.tax,
           '1',
           Icons.receipt_long,
         ),
@@ -486,7 +487,7 @@ class EventView extends BaseView<EventViewModel> {
         Expanded(
           child: _buildInfoCard(
             context,
-            'Start Time',
+            AppStrings.startTime,
             '10.00 AM',
             Icons.access_time,
           ),
@@ -495,7 +496,7 @@ class EventView extends BaseView<EventViewModel> {
         Expanded(
           child: _buildInfoCard(
             context,
-            'End Time',
+            AppStrings.endTime,
             '12:00AM',
             Icons.access_time,
           ),

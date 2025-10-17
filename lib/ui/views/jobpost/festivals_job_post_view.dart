@@ -2,6 +2,7 @@ import 'package:festival_rumour/core/constants/app_assets.dart';
 import 'package:festival_rumour/core/constants/app_colors.dart';
 import 'package:festival_rumour/core/constants/app_sizes.dart';
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import 'festivals_job_post_view_model.dart';
@@ -26,12 +27,12 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: AppColors.white),
             onPressed: () => Navigator.pop(context),
           ),
           title: const ResponsiveTextWidget(
-            "Post Festival Job",
-            textType: TextType.body, color: Colors.white, fontWeight: FontWeight.bold),
+            AppStrings.postJob,
+            textType: TextType.body, color: AppColors.white, fontWeight: FontWeight.bold),
           ),
         body: Stack(
           children: [
@@ -46,22 +47,22 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
             // Main Content
             SafeArea(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppDimensions.paddingM),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppDimensions.paddingL),
                       
                       // Job Post Form
                       _buildJobPostForm(context, viewModel),
                       
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppDimensions.paddingL),
                       
                       // Post Job Button
                       _buildPostButton(context, viewModel),
                       
-                      const SizedBox(height: 20),
+                      const SizedBox(height: AppDimensions.paddingL),
                     ],
                   ),
                 ),
@@ -75,123 +76,123 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
 
   Widget _buildJobPostForm(BuildContext context, FestivalsJobPostViewModel viewModel) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppDimensions.paddingL),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.7),
+        color: AppColors.black.withOpacity(0.7),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.yellow, width: 2),
+        border: Border.all(color: AppColors.yellow, width: AppDimensions.borderWidthS),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
           const ResponsiveTextWidget(
-            "Job Details",
+            AppStrings.jobDetails,
             textType: TextType.body, 
-              color: Colors.yellow,
-              fontSize: 20,
+              color: AppColors.yellow,
+              fontSize: AppDimensions.textL,
               fontWeight: FontWeight.bold,
             ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppDimensions.paddingL),
           
           // Job Title Field
           _buildTextField(
             controller: viewModel.jobTitleController,
             focusNode: viewModel.jobTitleFocusNode,
-            label: "Job Title",
-            hint: "e.g., Audio Visual Technician",
+            label: AppStrings.jobTitle,
+            hint: AppStrings.jobTitleHint,
             icon: Icons.work,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Company/Organization Field
           _buildTextField(
             controller: viewModel.companyController,
             focusNode: viewModel.companyFocusNode,
-            label: "Company/Organization",
-            hint: "e.g., Festival Productions Inc.",
+            label: AppStrings.company,
+            hint: AppStrings.companyHint,
             icon: Icons.business,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Location Field
           _buildTextField(
             controller: viewModel.locationController,
             focusNode: viewModel.locationFocusNode,
-            label: "Location",
-            hint: "e.g., Miami, Florida",
+            label: AppStrings.location,
+            hint: AppStrings.locationHint,
             icon: Icons.location_on,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Job Type Dropdown
           _buildDropdownField(
             value: viewModel.selectedJobType,
-            label: "Job Type",
+            label: AppStrings.jobType,
             icon: Icons.category,
             items: viewModel.jobTypes,
             onChanged: (value) => viewModel.setJobType(value!),
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Salary Field
           _buildTextField(
             controller: viewModel.salaryController,
             focusNode: viewModel.salaryFocusNode,
-            label: "Salary (Optional)",
-            hint: "e.g., \$25-35/hour or \$50,000/year",
+            label: AppStrings.salary,
+            hint: AppStrings.salaryHint,
             icon: Icons.attach_money,
             keyboardType: TextInputType.text,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Job Description
           _buildTextAreaField(
             controller: viewModel.descriptionController,
             focusNode: viewModel.descriptionFocusNode,
-            label: "Job Description",
-            hint: "Describe the job responsibilities, requirements, and what you're looking for...",
+            label: AppStrings.jobDescription,
+            hint: AppStrings.jobDescriptionHint,
             icon: Icons.description,
             maxLines: 5,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Requirements
           _buildTextAreaField(
             controller: viewModel.requirementsController,
             focusNode: viewModel.requirementsFocusNode,
-            label: "Requirements (Optional)",
-            hint: "List any specific skills, experience, or qualifications needed...",
+            label: AppStrings.requirements,
+            hint: AppStrings.requirementsHint,
             icon: Icons.checklist,
             maxLines: 3,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Contact Information
           _buildTextField(
             controller: viewModel.contactController,
             focusNode: viewModel.contactFocusNode,
-            label: "Contact Information",
-            hint: "Email or phone number for applications",
+            label: AppStrings.contactInfo,
+            hint: AppStrings.contactInfoHint,
             icon: Icons.contact_mail,
             keyboardType: TextInputType.emailAddress,
           ),
           
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.paddingM),
           
           // Festival Date
           _buildTextField(
             controller: viewModel.festivalDateController,
             focusNode: viewModel.festivalDateFocusNode,
-            label: "Festival Date",
-            hint: "e.g., March 15-17, 2024",
+            label: AppStrings.festivalDate,
+            hint: AppStrings.festivalDateHint,
             icon: Icons.calendar_today,
           ),
       ]
@@ -213,16 +214,16 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         Row(
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppDimensions.spaceS),
             ResponsiveTextWidget(
               label,
               textType: TextType.body,
-              color: Colors.yellow,
+              color: AppColors.yellow,
               fontWeight: FontWeight.w600,
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppDimensions.spaceS),
         TextField(
           controller: controller,
           focusNode: focusNode,
@@ -243,9 +244,9 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.yellow, width: 2),
+              borderSide: const BorderSide(color: AppColors.yellow, width: AppDimensions.borderWidthS),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: AppDimensions.spaceM, vertical: AppDimensions.spaceM),
           ),
         ),
       ],
@@ -266,16 +267,16 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         Row(
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppDimensions.spaceS),
             ResponsiveTextWidget(
               label,
               textType: TextType.body,
-              color: Colors.yellow,
+              color: AppColors.yellow,
               fontWeight: FontWeight.w600,
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppDimensions.spaceS),
         TextField(
           controller: controller,
           focusNode: focusNode,
@@ -296,9 +297,9 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.yellow, width: 2),
+              borderSide: const BorderSide(color: AppColors.yellow, width: AppDimensions.borderWidthS),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: AppDimensions.spaceM, vertical: AppDimensions.spaceM),
           ),
         ),
       ],
@@ -318,18 +319,18 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         Row(
           children: [
             Icon(icon, color: Colors.yellow, size: 20),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppDimensions.spaceS),
             ResponsiveTextWidget(
               label,
               textType: TextType.body,
-              color: Colors.yellow,
+              color: AppColors.yellow,
               fontWeight: FontWeight.w600,
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppDimensions.spaceS),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(horizontal: AppDimensions.spaceM),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8),
@@ -347,7 +348,7 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
                   child: ResponsiveTextWidget(
                     item,
                     textType: TextType.body,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 );
               }).toList(),
@@ -365,10 +366,10 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
 
   Widget _buildPostButton(BuildContext context, FestivalsJobPostViewModel viewModel) {
     return Container(
-      height: 50,
+      height: AppDimensions.buttonHeightXL,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Colors.yellow, Colors.orange],
+          colors: [AppColors.yellow, AppColors.orange],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -392,10 +393,10 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
         ),
         child: viewModel.isLoading
             ? const SizedBox(
-                height: 20,
-                width: 20,
+                height: AppDimensions.iconS,
+                width: AppDimensions.iconS,
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: AppColors.white,
                   strokeWidth: 2,
                 ),
               )
@@ -403,12 +404,12 @@ class FestivalsJobPostView extends BaseView<FestivalsJobPostViewModel> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.post_add, color: Colors.white),
-                  SizedBox(width: 8),
+                  SizedBox(width: AppDimensions.spaceS),
                   ResponsiveTextWidget(
-                    "Post Job",
+                    AppStrings.postJob,
                     textType: TextType.body, 
-                      color: Colors.white,
-                      fontSize: 18,
+                      color: AppColors.white,
+                      fontSize: AppDimensions.textL,
                       fontWeight: FontWeight.bold,
                     ),
                 ],

@@ -153,6 +153,42 @@ class AppStrings {
   static const String overview = "Overview";
 
   static const String searchHint = "Search...";
+  static const String searchFestivals = "Search festivals...";
+  static const String more = "more";
+  static const String clearSearch = "Clear search";
+  static const String allFestivals = "All Festivals";
+  static const String live = "Live";
+  static const String upcoming = "Upcoming";
+  static const String past = "Past";
+  static const String toilets = "Toilets";
+  static const String viewDetail = "View Detail";
+  static const String toiletDetail = "Toilet Detail";
+  static const String festivalInformation = "Festival Information";
+  static const String festivalName = "Festival Name";
+  static const String toiletCategory = "Toilet Category";
+  static const String image = "Image";
+  static const String location = "Location";
+  static const String openMap = "Open Map";
+  static const String latitude = "Latitude";
+  static const String longitude = "Longitude";
+  static const String what3word = "What3word";
+  static const String bulletin = "Bulletin";
+  static const String bulletinPreview = "Bulletin Preview";
+  static const String bulletinInformation = "Bulletin Information";
+  static const String titleName = "Title Name";
+  static const String magicShow = "Magic show";
+  static const String content = "Content";
+  static const String scheduleOptions = "Schedule Options";
+  static const String publishNow = "Publish Now";
+  static const String scheduleForLater = "Schedule For Later";
+  static const String time = "Time";
+  static const String date = "Date";
+  static const String shareMessage = "Let's enjoy the vibe together 🌙🔥\n\nDownload now: https://festival-romour.link";
+  static const String shareSubject = "Join me at LunaFest!";
+  static const String shareLocation = "Share Location";
+  static const String locationSharingEnabled = "Location Sharing Enabled";
+  static const String locationSharingDescription = "Allow To Share Location So The Crowd Can Find You, Nothing Else";
+  static const String hidingMyVibe = "Hiding My Vibe, Staying Incognito";
   static const String allFilter = "";
   static const String usersFilter = "Users";
   static const String postsFilter = "Posts";
@@ -191,8 +227,8 @@ class AppStrings {
   static const String rumors = 'Rumors';
   static const String featured = 'Featured';
   static const String popular = 'Popular';
-  static const String upcoming = 'Upcoming';
-  static const String past = 'Past';
+
+
   static const String today = 'Today';
   static const String tomorrow = 'Tomorrow';
   static const String thisWeek = 'This Week';
@@ -227,16 +263,13 @@ class AppStrings {
   
   // Events Related
   static const String events = 'Events';
-  static const String toilets = 'Toilets';
+
   static const String viewAll = 'View All';
-  static const String viewDetail = 'View Detail';
   static const String newEventPreview = 'New Event Preview';
   static const String newEventInformation = 'New Event Information';
-  static const String festivalName = 'Festival Name';
-  static const String magicShow = 'Magic show';
   static const String title = 'Title';
   static const String abcde = 'Abcde';
-  static const String content = 'Content';
+
   static const String crowdCapacity = 'Crowd Capacity';
   static const String pricePerPerson = 'Price Per Person';
   static const String totalAmount = 'Total Amount';
@@ -261,15 +294,6 @@ class AppStrings {
   
   // News Related
   static const String bulletinManagement = 'Bulletin Management';
-  static const String bulletin = 'Bulletin';
-  static const String bulletinPreview = 'Bulletin Preview';
-  static const String bulletinInformation = 'Bulletin Information';
-  static const String titleName = 'Title Name';
-  static const String scheduleOptions = 'Schedule Options';
-  static const String publishNow = 'Publish Now';
-  static const String scheduleForLater = 'Schedule For Later';
-  static const String time = 'Time';
-  static const String date = 'Date';
   static const String newBulletin = 'New Bulletin';
   static const String latestFestivalUpdates = 'Latest Festival Updates';
   
@@ -282,9 +306,7 @@ class AppStrings {
   static const String rockAndMetalMusicFestival = 'Rock and Metal Music Festival';
   
   // Toilet Related
-  static const String toiletDetail = 'Toilet Detail';
-  static const String festivalInformation = 'Festival Information';
-  
+
   // Leaderboard Related
   static const String leaderBoard = 'Leader board';
   static const String pro = 'PRO';
@@ -322,6 +344,7 @@ class AppStrings {
   static const String timestamp2108 = '21:08';
   static const String timestamp2045 = '20:45';
   static const String timestamp0000 = '00:00';
+  static const String defaultTime = '12:00';
   
   // Error Messages
   static const String pageNotFound = 'Page not found';
@@ -336,7 +359,6 @@ class AppStrings {
   static const String getReady = 'GET READY';
   static const String countMeInCatchYaAtLunaFest = 'Count me in, catch ya at Luna Fest';
   static const String inviteYourFestieBestie = 'Invite your festie bestie';
-  static const String location = 'LOCATION';
   static const String chatRooms = 'CHAT ROOMS';
   static const String detail = 'DETAIL';
   static const String addedToFavorites = '❤️ Added to favorites!';
@@ -397,7 +419,6 @@ class AppStrings {
   static const String zipCode = 'Zip Code';
 
   // Media
-  static const String image = 'Image';
   static const String video = 'Video';
   static const String audio = 'Audio';
   static const String uploadphoto = 'Upload Photos';
@@ -465,6 +486,8 @@ class AppStrings {
   // Settings
   static const String general = 'General';
   static const String notifications = 'Notifications';
+  static const String markAllRead = 'Mark All Read';
+  static const String noNotifications = 'No notifications yet';
   static const String privacySettings = 'Privacy Settings';
   static const String accountSettings = 'Account Settings';
   static const String language = 'Language';
@@ -505,7 +528,6 @@ class AppStrings {
   static const String tickets = 'Tickets';
   static const String subscribeNow = 'Subscribe Now';
   static const String selectFestivalsBy = 'Select Festivals by...';
-  static const String live = 'Live';
   static const String monNom = 'MonNom';
   static const String profileDescription = 'La description de mon profil';
   static const String posts100 = '100';
@@ -552,12 +574,80 @@ class AppStrings {
   static const String festivalGizzaJob = 'Festival Gizza Job';
   static const String festieHerosJob = 'FestieHeros Job';
   
+  // Job Form Fields
+  static const String jobTitle = 'Job Title';
+  static const String jobTitleHint = 'e.g., Audio Visual Technician';
+  static const String company = 'Company/Organization';
+  static const String companyHint = 'e.g., Festival Productions Inc.';
+  static const String locationHint = 'e.g., Miami, Florida';
+  static const String jobType = 'Job Type';
+  static const String salary = 'Salary (Optional)';
+  static const String salaryHint = 'e.g., \$25-35/hour or \$50,000/year';
+  static const String jobDescription = 'Job Description';
+  static const String jobDescriptionHint = 'Describe the job responsibilities, requirements, and what you\'re looking for...';
+  static const String requirements = 'Requirements (Optional)';
+  static const String requirementsHint = 'List any specific skills, experience, or qualifications needed...';
+  static const String contactInfo = 'Contact Information';
+  static const String contactInfoHint = 'Email or phone number for applications';
+  static const String festivalDate = 'Festival Date';
+  static const String festivalDateHint = 'e.g., March 15-17, 2024';
+  
   // Chat specific strings
   static const String festivalRumour = 'FestivalRumour';
 
   static const String passwordPlaceholder = '********';
   
   // Profile specific strings
+  static const String bioDescription = 'Bringing people together through music, color, and culture!';
+
+  // Performance & Event Strings
+
+  static const String loremIpsumDummy = 'Lorem Ipsum is simply dummy text.';
+  static const String loremIpsumLong = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the,';
+
+  // Performance Category Strings
+  static const String liveMusicPerformances = 'Live music performances';
+  static const String sportsAndGames = 'Sports And Games';
+  static const String sportsActivitiesAndGames = 'Sports activities and games';
+  static const String exhibitionsAndArtDisplays = 'Exhibitions And Art Displays';
+  static const String artExhibitionsAndDisplays = 'Art exhibitions and displays';
+  static const String culturalPerformances = 'Cultural Performances';
+  static const String traditionalCulturalPerformances = 'Traditional cultural performances';
+
+  // Event category strings
+  static const String workshopsAndTalks = 'Workshops & Talks';
+  static const String educationalWorkshopsAndSpeakerSessions = 'Educational workshops and speaker sessions';
+  static const String filmScreenings = 'Film Screenings';
+  static const String movieAndDocumentaryScreenings = 'Movie and documentary screenings';
+  static const String artInstallations = 'Art Installations';
+  static const String interactiveArtDisplaysAndExhibitions = 'Interactive art displays and exhibitions';
+  static const String charityAndCommunityEvents = 'Charity & Community Events';
+  static const String communityServiceAndCharityActivities = 'Community service and charity activities';
+  static const String musicPerformances = 'Music Performances';
+  static const String liveMusicAndEntertainmentShows = 'Live music and entertainment shows';
+
+  // Validation strings
+  static const String emailRequired = 'Email is required';
+  static const String emailInvalid = 'Enter a valid email address';
+  static const String passwordRequired = 'Password is required';
+  static const String passwordMinLength = 'Password must be at least 6 characters';
+  static const String passwordMaxLength = 'Password must be less than 50 characters';
+  static const String passwordWeak = 'Password is too weak';
+  static const String passwordStrong = 'Strong password';
+  static const String passwordMedium = 'Medium strength password';
+  static const String loginSuccess = 'Login Successful';
+  static const String loginFailed = 'Invalid email or password';
+  static const String fixErrors = 'Please fix the highlighted errors';
+  static const String emailFormat = 'Please enter a valid email format';
+  static const String passwordFormat = 'Password must contain letters and numbers';
+  static const String usernameRequired = 'Username is required';
+  static const String usernameMinLength = 'Username must be at least 3 characters';
+  static const String usernameMaxLength = 'Username must be less than 20 characters';
+  static const String usernameInvalid = 'Username can only contain letters, numbers, and underscores';
+  static const String usernameAvailable = 'Username is available';
+  static const String usernameTaken = 'Username is already taken';
+  static const String completeFormToLogin = 'Complete form to login';
+  static const String loggingIn = 'Logging in...';
 
   
   // Color names for avatar generation
@@ -574,4 +664,33 @@ class AppStrings {
   static const String wow = 'Wow';
   static const String sad = 'Sad';
   static const String angry = 'Angry';
+  
+  // Additional strings found in UI
+  static const String searchFollowers = 'Search followers...';
+  static const String searchFollowing = 'Search following...';
+  static const String editAccountDetails = 'Edit Account Details';
+  static const String notification = 'Notification';
+  static const String enableOrDisableNotifications = 'Enable or disable notifications';
+  static const String privacySettingsPro = 'Privacy Settings PRO';
+  static const String includingAnonymousToggle = 'Including Anonymous toggle';
+  static const String badges = 'Badges';
+  static const String others = 'Others';
+  static const String howToUse = 'How to use ?';
+  static const String rateUs = 'Rate Us';
+  static const String shareApp = 'Share App';
+
+  static const String termsAndConditions = 'Terms & Conditions';
+  static const String postJob = 'POST JOB';
+
+  static const String leaderBoardTitle = 'Leader board';
+
+  static const String selectedFilter = 'Selected Filter';
+  static const String userReactedWith = 'User reacted with';
+ 
+  static const String anonymousFeature1 = '• Users can join anonymously and remain hidden';
+  static const String anonymousFeature2 = '• Posts and comments will show as \'Anonymous\'';
+  static const String anonymousFeature3 = '• Only available to users who purchase this as an in-app premium feature.';
+  static const String joinConversation = 'Join the conversation!';
+  static const String followTopicDescription = 'Follow this topic to receive notifications when people respond.';
+  static const String allPosts = 'All Posts';
 }

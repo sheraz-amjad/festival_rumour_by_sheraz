@@ -68,10 +68,10 @@ class NotificationView extends BaseView<NotificationViewModel> {
           
           /// Title
           const ResponsiveTextWidget(
-            'Notifications',
+            AppStrings.notifications,
             textType: TextType.body, 
               color: AppColors.white,
-              fontSize: 20,
+              fontSize: AppDimensions.textL,
               fontWeight: FontWeight.bold,
             ),
           
@@ -94,11 +94,11 @@ class NotificationView extends BaseView<NotificationViewModel> {
                 color: AppColors.accent,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
-              child: const ResponsiveTextWidget(
-                'Mark All Read',
+              child: ResponsiveTextWidget(
+                AppStrings.markAllRead,
                 textType: TextType.body, 
                   color: AppColors.black,
-                  fontSize: 12,
+                  fontSize: AppDimensions.textS,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -110,12 +110,12 @@ class NotificationView extends BaseView<NotificationViewModel> {
 
   Widget _buildNotificationsList(BuildContext context, NotificationViewModel viewModel) {
     if (viewModel.notifications.isEmpty) {
-      return const Center(
+      return  Center(
         child: ResponsiveTextWidget(
-          'No notifications yet',
+          AppStrings.noNotifications,
           textType: TextType.body, 
             color: AppColors.white,
-            fontSize: 16,
+            fontSize: AppDimensions.textL,
           ),
         );
     }
@@ -144,7 +144,7 @@ class NotificationView extends BaseView<NotificationViewModel> {
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         border: notification.isRead 
           ? null 
-          : Border.all(color: AppColors.accent, width: 1),
+          : Border.all(color: AppColors.accent, width: AppDimensions.borderWidthS),
       ),
       child: Material(
         color: Colors.transparent,
@@ -166,8 +166,8 @@ class NotificationView extends BaseView<NotificationViewModel> {
               children: [
                 /// Icon
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: AppDimensions.imageM,
+                  height: AppDimensions.imageM,
                   decoration: BoxDecoration(
                     color: Color(notification.iconColor).withOpacity(0.8),
                     borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -175,7 +175,7 @@ class NotificationView extends BaseView<NotificationViewModel> {
                   child: Icon(
                     notification.icon,
                     color: AppColors.white,
-                    size: 24,
+                    size: 20,
                   ),
                 ),
                 
@@ -189,24 +189,24 @@ class NotificationView extends BaseView<NotificationViewModel> {
                       /// Title
                       ResponsiveTextWidget(
                         notification.title,
-                        textType: TextType.body, 
+                        textType: TextType.body,
                           color: AppColors.white,
-                          fontSize: 16,
+                          fontSize: AppDimensions.textL,
                           fontWeight: notification.isRead 
                             ? FontWeight.w500 
                             : FontWeight.bold,
                         ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: AppDimensions.spaceXS),
                       
                       /// Message
                       ResponsiveTextWidget(
                         notification.message,
-                        textType: TextType.body, 
+                        textType: TextType.body,
                           color: AppColors.white.withOpacity(0.8),
-                          fontSize: 14,
+                          fontSize: AppDimensions.textM,
                         ),
 
-                      const SizedBox(height: 8),
+                      SizedBox(height: AppDimensions.spaceS),
                       
                       /// Time and Status
                       Row(
@@ -216,12 +216,12 @@ class NotificationView extends BaseView<NotificationViewModel> {
                             notification.time,
                             textType: TextType.body, 
                               color: AppColors.white.withOpacity(0.6),
-                              fontSize: 12,
+                              fontSize: AppDimensions.textS,
                             ),
                           if (!notification.isRead)
                             Container(
-                              width: 8,
-                              height: 8,
+                              width: AppDimensions.spaceS,
+                              height: AppDimensions.spaceS,
                               decoration: const BoxDecoration(
                                 color: AppColors.accent,
                                 shape: BoxShape.circle,

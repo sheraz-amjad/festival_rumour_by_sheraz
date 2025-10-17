@@ -4,6 +4,8 @@ import 'package:festival_rumour/ui/views/Profile/profilelist/widgets/following_t
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/backbutton.dart';
 import '../../../../core/utils/base_view.dart';
 import '../../../../shared/widgets/responsive_text_widget.dart';
@@ -67,7 +69,7 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                         style: const TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: AppDimensions.textL,
                         ),
                       ),
                       IconButton(
@@ -78,7 +80,7 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: AppDimensions.paddingS),
 
                 /// 🔹 Tabs Row
                 SingleChildScrollView(
@@ -87,17 +89,17 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                   child: Row(
                     children: [
                       _buildTabButton(
-                        label: "Followers",
+                        label: AppStrings.followers,
                         isActive: viewModel.currentTab == 0,
                         onTap: () => viewModel.setTab(0),
                       ),
                       _buildTabButton(
-                        label: "Following",
+                        label: AppStrings.following,
                         isActive: viewModel.currentTab == 1,
                         onTap: () => viewModel.setTab(1),
                       ),
                       _buildTabButton(
-                        label: "Festivals",
+                        label: AppStrings.festivals,
                         isActive: viewModel.currentTab == 2,
                         onTap: () => viewModel.setTab(2),
                       ),
@@ -105,7 +107,7 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: AppDimensions.paddingS),
 
                 /// 🔹 Tab View
                 Expanded(

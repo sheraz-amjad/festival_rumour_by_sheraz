@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_colors.dart';
@@ -20,9 +21,17 @@ class ToiletView extends BaseView<ToiletViewModel> {
       return _buildToiletDetail(context, viewModel);
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      body: Stack(
+    return WillPopScope(
+      onWillPop: () async {
+        if (onBack != null) {
+          onBack!();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.black,
+        body: Stack(
         children: [
           // Dark background
           Positioned.fill(
@@ -48,6 +57,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -59,10 +69,15 @@ class ToiletView extends BaseView<ToiletViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(onTap: onBack ?? () {}),
+          CustomBackButton(
+            onTap: onBack ?? () {
+              // Navigate back to discover screen
+              Navigator.pop(context);
+            },
+          ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
-            'Toilets',
+            AppStrings.toilets,
             textType: TextType.title,
             color: AppColors.white,
             fontWeight: FontWeight.bold,
@@ -94,14 +109,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
       decoration: BoxDecoration(
         color: AppColors.onPrimary.withOpacity(0.7),
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-        border: Border.all(color: AppColors.grey600, width: 1),
+        border: Border.all(color: AppColors.grey600, width: AppDimensions.borderWidthS),
       ),
       child: Row(
         children: [
           // Toilet image
           Container(
-            width: 80,
-            height: 80,
+            width: AppDimensions.imageL,
+            height: AppDimensions.imageL,
             // child: ClipRRect(
             //   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
             child: Container(
@@ -133,9 +148,8 @@ class ToiletView extends BaseView<ToiletViewModel> {
           // View Detail button
           GestureDetector(
             onTap: () {
-              viewModel.selectedToilet = toilet;
-              viewModel.showToiletDetail = true;
-              viewModel.notifyListeners();
+              // Navigate to toilet detail using ViewModel
+              viewModel.navigateToDetail(toilet);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(
@@ -147,7 +161,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: const ResponsiveTextWidget(
-                'View Detail',
+                AppStrings.viewDetail,
                 textType: TextType.body,
                 color: AppColors.black,
                 fontSize: AppDimensions.textM,
@@ -222,13 +236,13 @@ class ToiletView extends BaseView<ToiletViewModel> {
         children: [
           CustomBackButton(
             onTap: () {
-              viewModel.showToiletDetail = false;
-              viewModel.notifyListeners();
+              // Navigate back to toilet list using ViewModel
+              viewModel.navigateBackToList();
             },
           ),
           const SizedBox(width: AppDimensions.spaceM),
           ResponsiveTextWidget(
-            viewModel.selectedToilet?.name ?? 'Toilet Detail',
+            viewModel.selectedToilet?.name ?? AppStrings.toiletDetail,
             style: const TextStyle(
               color: AppColors.white,
               fontSize: AppDimensions.textL,
@@ -245,12 +259,12 @@ class ToiletView extends BaseView<ToiletViewModel> {
     ToiletItem toilet,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
       child: ResponsiveTextWidget(
-        'Festival Information', // 👈 your display text
+        AppStrings.festivalInformation, // 👈 your display text
         style: const TextStyle(
-          color: Colors.white, // or AppColors.primary if preferred
-          fontSize: 18,
+          color: AppColors.white, // or AppColors.primary if preferred
+          fontSize: AppDimensions.textL,
           fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center, // optional: center or left alignment
@@ -267,7 +281,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
       '',
       Column(
         children: [
-          _buildInfoRow(context, Icons.people, 'Festival Name', 'Magic show'),
+          _buildInfoRow(context, Icons.people, AppStrings.festivalName, 'Magic show'),
         ],
       ),
     );
@@ -282,7 +296,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
       '',
       Column(
         children: [
-          _buildInfoRow(context, Icons.wc, 'Toilet Category', 'Magic show'),
+          _buildInfoRow(context, Icons.wc, AppStrings.toiletCategory, 'Magic show'),
         ],
       ),
     );
@@ -291,9 +305,9 @@ class ToiletView extends BaseView<ToiletViewModel> {
   Widget _buildImageSection(BuildContext context, ToiletItem toilet) {
     return _buildWhiteCard(
       context,
-      'Image',
+      AppStrings.image,
       Container(
-        height: 200,
+        height: AppDimensions.imageXXL,
         decoration: BoxDecoration(
           //color: toilet.color,
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -316,14 +330,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
 
   Widget _buildLocationSection(BuildContext context, ToiletItem toilet) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const ResponsiveTextWidget(
-                'Location',
+                AppStrings.location,
                 textType: TextType.body,
                 color: AppColors.primary,
                 fontSize: AppDimensions.textL,
@@ -338,7 +352,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
               child: Row(
                 children: [
                   const ResponsiveTextWidget(
-                    'Open Map',
+                    AppStrings.openMap,
                     textType: TextType.body,
                     color: AppColors.primary,
                     fontSize: AppDimensions.textS,
@@ -364,11 +378,11 @@ class ToiletView extends BaseView<ToiletViewModel> {
       '',
       Column(
         children: [
-          _buildInfoRow(context, Icons.location_on, 'Latitude', 'Lorem Ipsum'),
+          _buildInfoRow(context, Icons.location_on, AppStrings.latitude, 'Lorem Ipsum'),
           const SizedBox(height: AppDimensions.spaceM),
-          _buildInfoRow(context, Icons.location_on, 'Longitude', 'Lorem Ipsum'),
+          _buildInfoRow(context, Icons.location_on, AppStrings.longitude, 'Lorem Ipsum'),
           const SizedBox(height: AppDimensions.spaceM),
-          _buildInfoRow(context, Icons.location_on, 'What3word', 'Lorem Ipsum'),
+          _buildInfoRow(context, Icons.location_on, AppStrings.what3word, 'Lorem Ipsum'),
         ],
       ),
     );
@@ -384,7 +398,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

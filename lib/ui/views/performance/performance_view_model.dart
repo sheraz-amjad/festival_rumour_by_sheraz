@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/constants/app_strings.dart';
 import 'performance_view.dart';
 
 class PerformanceViewModel extends BaseViewModel {
@@ -18,23 +19,23 @@ class PerformanceViewModel extends BaseViewModel {
   void _loadPerformanceCategories() {
     _performanceCategories = [
       PerformanceCategory(
-        name: 'Music Concerts',
-        description: 'Live music performances',
+        name: AppStrings.music,
+        description: AppStrings.liveMusicPerformances,
         icon: Icons.music_note,
       ),
       PerformanceCategory(
-        name: 'Sports And Games',
-        description: 'Sports activities and games',
+        name: AppStrings.sportsAndGames,
+        description: AppStrings.sportsActivitiesAndGames,
         icon: Icons.sports_soccer,
       ),
       PerformanceCategory(
-        name: 'Exhibitions And Art Displays',
-        description: 'Art exhibitions and displays',
+        name: AppStrings.exhibitionsAndArtDisplays,
+        description: AppStrings.artExhibitionsAndDisplays,
         icon: Icons.palette,
       ),
       PerformanceCategory(
-        name: 'Cultural Performances',
-        description: 'Traditional cultural performances',
+        name: AppStrings.culturalPerformances,
+        description: AppStrings.traditionalCulturalPerformances,
         icon: Icons.theater_comedy,
       ),
     ];

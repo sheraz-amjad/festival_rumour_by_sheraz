@@ -71,7 +71,7 @@ class LoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Container(
-            color: backgroundColor ?? Colors.black.withOpacity(0.5),
+            color: backgroundColor ?? AppColors.black.withOpacity(0.5),
             child: LoadingWidget(
               message: loadingMessage,
               showMessage: loadingMessage != null,

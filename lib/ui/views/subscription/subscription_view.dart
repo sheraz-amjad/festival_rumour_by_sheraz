@@ -96,8 +96,8 @@ class _Title extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.diamond, color: Colors.white, size: 40),
-                const SizedBox(width: 8),
+                const Icon(Icons.diamond, color: AppColors.white, size: 40),
+                const SizedBox(width: AppDimensions.spaceS),
 
                 /// ✅ Wrap long text safely
                 Flexible(
@@ -106,7 +106,7 @@ class _Title extends StatelessWidget {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: AppDimensions.textDisplay,
                       fontWeight: FontWeight.bold,
                     ),
@@ -145,11 +145,11 @@ class _BottomSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _PlanTiles(viewModel: viewModel),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppDimensions.paddingL),
               const _SubscriptionDetails(),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppDimensions.paddingL),
               _SubscribeButton(viewModel: viewModel),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.paddingS),
               const _PrivacyText(),
             ],
           ),
@@ -205,10 +205,10 @@ class _SubscriptionDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: const ResponsiveTextWidget(
-        "Subscription Details\n"
-            "• Users can join anonymously and remain hidden\n"
-            "• Posts and comments will show as 'Anonymous'\n"
-            "• Only available to users who purchase this as an in-app premium feature.",
+        "${AppStrings.subscriptionDetails}\n"
+            "${AppStrings.anonymousFeature1}\n"
+            "${AppStrings.anonymousFeature2}\n"
+            "${AppStrings.anonymousFeature3}",
         textType: TextType.body, 
           color: AppColors.white,
           fontSize: AppDimensions.textS,
@@ -252,14 +252,14 @@ class _PrivacyText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         text: 'By continuing you agree with the ',
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: AppColors.white),
         children: [
           TextSpan(
             text: 'Privacy Policy.',
             style: const TextStyle(
               decoration: TextDecoration.underline,
-              decorationColor: Colors.white,
-              color: Colors.white,
+              decorationColor: AppColors.white,
+              color: AppColors.white,
             ),
           ),
         ],

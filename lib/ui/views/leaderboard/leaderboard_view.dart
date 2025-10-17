@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import 'leaderboard_view_model.dart';
@@ -27,7 +28,7 @@ class LeaderboardView extends BaseView<LeaderboardViewModel> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 LeaderboardWidgets.buildTitle(),
-                const SizedBox(height: 10),
+                const SizedBox(height: AppDimensions.paddingS),
                 ...viewModel.leaders.map(
                       (leader) => LeaderboardWidgets.buildLeaderCard(
                     rank: leader['rank'],
@@ -73,7 +74,7 @@ class LeaderboardWidgets {
             ),
 
             const ResponsiveTextWidget(
-              "Leader board",
+              AppStrings.leaderBoard,
               textType: TextType.body, 
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -91,13 +92,13 @@ class LeaderboardWidgets {
                 children: [
                   Icon(Icons.workspace_premium,
                       color: Colors.white, size: 16),
-                  SizedBox(width: 4),
+                  SizedBox(width: AppDimensions.spaceXS),
                   ResponsiveTextWidget(
-                    "PRO",
+                    AppStrings.pro,
                     textType: TextType.body, 
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: AppDimensions.textS,
                     ),
                 ],
               ),
@@ -124,7 +125,7 @@ class LeaderboardWidgets {
   static Widget buildTitle() {
     return Container(
       width: double.infinity,
-      height: 100,
+      height: AppDimensions.imageXL,
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
@@ -135,11 +136,11 @@ class LeaderboardWidgets {
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
       ),
         child: ResponsiveTextWidget(
-      "Luna Fest 2025",
+      AppStrings.lunaFest2025,
       textType: TextType.body, 
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 24,
+        fontSize: AppDimensions.textXL,
       ),
     );
   }
@@ -171,13 +172,13 @@ class LeaderboardWidgets {
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppDimensions.paddingM),
           CircleAvatar(
-            radius: 22,
+            radius: AppDimensions.avatarM,
             backgroundColor: iconColor.withOpacity(0.2),
             child: Icon(Icons.emoji_events, color: iconColor, size: 28),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppDimensions.paddingM),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

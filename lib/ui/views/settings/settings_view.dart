@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -41,7 +42,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
           GestureDetector(
             onTap: viewModel.goToSubscription,
             child: Container(
-              margin: const EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(right: AppDimensions.paddingM),
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDimensions.paddingS,
                 vertical: 4,
@@ -61,105 +62,105 @@ class SettingsView extends BaseView<SettingsViewModel> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// 🔹 General Section
             const ResponsiveTextWidget(
-              "General",
+              AppStrings.general,
               textType: TextType.body,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: AppDimensions.textM,
                 color: AppColors.grey700,
               ),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppDimensions.paddingS),
 
             _buildTile(
               icon: Icons.person_outline,
-              iconColor: Colors.amber,
-              title: "Edit Account Details",
+              iconColor: AppColors.amber,
+              title: AppStrings.editAccountDetails,
               onTap: viewModel.editAccount,
             ),
             _buildSwitchTile(
               icon: Icons.notifications_none,
-              iconColor: Colors.teal,
-              title: "Notification",
+              iconColor: AppColors.teal,
+              title: AppStrings.notification,
               value: viewModel.notifications,
               onChanged: viewModel.toggleNotifications,
-              subtitle: "Enable or disable notifications",
+              subtitle: AppStrings.enableOrDisableNotifications,
             ),
             _buildSwitchTile(
               icon: Icons.lock_outline,
-              iconColor: Colors.purple,
-              title: "Privacy Settings PRO",
-              subtitle: "Including Anonymous toggle",
+              iconColor: AppColors.purple,
+              title: AppStrings.privacySettingsPro,
+              subtitle: AppStrings.includingAnonymousToggle,
               value: viewModel.privacy,
               onChanged: viewModel.togglePrivacy,
             ),
             _buildTile(
               icon: Icons.military_tech_outlined,
-              iconColor: Colors.orange,
-              title: "Badges",
+              iconColor: AppColors.orange,
+              title: AppStrings.badges,
               trailing: const Icon(Icons.arrow_forward_ios,
-                  size: 18, color: AppColors.grey600),
+                  size: AppDimensions.iconS, color: AppColors.grey600),
               onTap: () => _showBadgesDialog(context),
             ),
             _buildTile(
               icon: Icons.leaderboard_outlined,
-              iconColor: Colors.brown,
-              title: "Leader board",
+              iconColor: AppColors.brown,
+              title: AppStrings.leaderBoard,
               trailing: const Icon(Icons.arrow_forward_ios,
-                  size: 18, color: AppColors.grey600),
+                  size: AppDimensions.iconS, color: AppColors.grey600),
               onTap: viewModel.openLeaderboard,
             ),
             _buildTile(
               icon: Icons.logout,
-              iconColor: Colors.red,
-              title: "Logout",
-              titleColor: Colors.red,
+              iconColor: AppColors.red,
+              title: AppStrings.logout,
+              titleColor: AppColors.red,
               onTap: viewModel.logout,
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: AppDimensions.paddingL),
 
             /// 🔹 Others Section
             const ResponsiveTextWidget(
-              "Others",
+              AppStrings.others,
               textType: TextType.body,
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: AppDimensions.textM,
                 color: AppColors.grey700,
               ),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppDimensions.paddingS),
             _buildTile(
               icon: Icons.help_outline,
-              iconColor: Colors.cyan,
-              title: "How to use ?",
+              iconColor: AppColors.cyan,
+              title: AppStrings.howToUse,
               onTap: viewModel.openHelp,
             ),
             _buildTile(
               icon: Icons.star_outline,
-              iconColor: Colors.yellow.shade700,
-              title: "Rate Us",
+              iconColor: AppColors.yellow,
+              title: AppStrings.rateUs,
               onTap: viewModel.rateApp,
             ),
             _buildTile(
               icon: Icons.share_outlined,
-              iconColor: Colors.blueAccent,
-              title: "Share App",
+              iconColor: AppColors.blueAccent,
+              title: AppStrings.shareApp,
               onTap: viewModel.shareApp,
             ),
             _buildTile(
               icon: Icons.privacy_tip_outlined,
-              iconColor: Colors.pink,
-              title: "Privacy Policy",
+              iconColor: AppColors.pink,
+              title: AppStrings.privacyPolicy,
               onTap: viewModel.openPrivacyPolicy,
             ),
             _buildTile(
               icon: Icons.article_outlined,
-              iconColor: Colors.deepOrange,
-              title: "Terms & Conditions",
+              iconColor: AppColors.deepOrange,
+              title: AppStrings.termsAndConditions,
               onTap: viewModel.openTerms,
             ),
         ]
@@ -178,7 +179,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
     VoidCallback? onTap,
   }) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(vertical: AppDimensions.spaceXS),
       leading: CircleAvatar(
         backgroundColor: iconColor.withOpacity(0.15),
         child: Icon(icon, color: iconColor),
@@ -204,7 +205,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
     required ValueChanged<bool> onChanged,
   }) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(vertical: AppDimensions.spaceXS),
       leading: CircleAvatar(
         backgroundColor: iconColor.withOpacity(0.15),
         child: Icon(icon, color: iconColor),
@@ -237,24 +238,24 @@ class SettingsView extends BaseView<SettingsViewModel> {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           ),
           backgroundColor: Colors.white,
           elevation: 8,
           child: Container(
-            padding: const EdgeInsets.all(20),
-            width: MediaQuery.of(context).size.width * 0.85,
+            padding: const EdgeInsets.all(AppDimensions.paddingL),
+            width: context.screenWidth * 0.85,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const ResponsiveTextWidget(
-                  "Badges",
+                  AppStrings.badges,
                   textType: TextType.body,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: AppDimensions.textXL,
                     color: AppColors.onPrimary,
                   ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppDimensions.paddingL),
 
                 // 🏅 Each badge item
                 _buildBadgeItem(
@@ -276,15 +277,15 @@ class SettingsView extends BaseView<SettingsViewModel> {
                   color: Colors.amber,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.paddingM),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.onPrimary,
                   ),
                   child: const ResponsiveTextWidget(
-                    "Close",
-                    textType: TextType.body,fontSize: 16, fontWeight: FontWeight.bold),
+                    AppStrings.close,
+                    textType: TextType.body, fontSize: AppDimensions.textM, fontWeight: FontWeight.bold),
                   ),
               ],
             ),
@@ -300,18 +301,18 @@ class SettingsView extends BaseView<SettingsViewModel> {
     required Color color,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingS),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // 👈 text left-aligned
         children: [
           Center( // 👈 icon stays centered
             child: CircleAvatar(
-              radius: 26,
+              radius: AppDimensions.avatarL,
               backgroundColor: color.withOpacity(0.15),
-              child: Icon(icon, color: color, size: 50),
+              child: Icon(icon, color: color, size: AppDimensions.iconXXL),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppDimensions.paddingS),
           ResponsiveTextWidget(
             title,
             textAlign: TextAlign.left,

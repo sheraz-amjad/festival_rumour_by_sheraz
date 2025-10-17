@@ -105,34 +105,34 @@ class _PostWidgetState extends State<PostWidget> {
                           child: Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.black.withOpacity(0.6),
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                             ),
                             child: Row(
                               children: [
                                 _selectedReaction == null
                                     ? Icon(Icons.thumb_up,
-                                    color: Colors.white, 
+                                    color: AppColors.white, 
                                     size: context.isLargeScreen ? 24 : context.isMediumScreen ? 22 : 20)
                                     : Text(
                                   _selectedReaction!,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: AppDimensions.textL,
                                     color: _reactionColor,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: AppDimensions.spaceXS),
                                 Text("${post.likes}",
-                                    style: const TextStyle(color: Colors.white)),
+                                    style: const TextStyle(color: AppColors.white)),
                               ],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: AppDimensions.spaceS),
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
+                            color: AppColors.black.withOpacity(0.6),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child:
@@ -148,11 +148,11 @@ class _PostWidgetState extends State<PostWidget> {
                           child: Row(
                             children: [
                               Icon(Icons.comment_outlined,
-                                  color: Colors.white, 
+                                  color: AppColors.white, 
                                   size: context.isLargeScreen ? 22 : context.isMediumScreen ? 20 : 18),
-                              const SizedBox(width: 4),
+                              const SizedBox(width: AppDimensions.spaceXS),
                               Text("${post.comments}",
-                                  style: const TextStyle(color: Colors.white)),
+                                  style: const TextStyle(color: AppColors.white)),
                             ],
                           ),
                         ),
@@ -170,11 +170,11 @@ class _PostWidgetState extends State<PostWidget> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 8, horizontal: 12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: AppColors.black.withOpacity(0.2),
                               blurRadius: 8,
                             )
                           ],
@@ -213,10 +213,10 @@ class _PostWidgetState extends State<PostWidget> {
               Text("${post.likes}",style: TextStyle(color: AppColors.white),),
 
                SizedBox(width: context.isLargeScreen 
-                 ? MediaQuery.of(context).size.width * 0.4
+                 ? context.screenWidth * 0.4
                  : context.isMediumScreen 
-                   ? MediaQuery.of(context).size.width * 0.35
-                   : MediaQuery.of(context).size.width * 0.3),
+                   ? context.screenWidth * 0.35
+                   : context.screenWidth * 0.3),
 
               Text("${post.comments} ",style: TextStyle(color: AppColors.white),),
               const SizedBox(width: AppDimensions.reactionIconSpacing),
@@ -235,7 +235,7 @@ class _PostWidgetState extends State<PostWidget> {
       ));
   }
 
-  Widget _buildEmojiReaction(String emoji, String label, [Color color = Colors.black]) {
+  Widget _buildEmojiReaction(String emoji, String label, [Color color = AppColors.black]) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -249,7 +249,7 @@ class _PostWidgetState extends State<PostWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 6),
         child: Text(
           emoji,
-          style: TextStyle(fontSize: 28, color: (emoji == AppStrings.emojiLike) ? AppColors.reactionLike : null),
+          style: TextStyle(fontSize: AppDimensions.textXXL, color: (emoji == AppStrings.emojiLike) ? AppColors.reactionLike : null),
         ),
       ),
     );
@@ -338,8 +338,8 @@ class _PostWidgetState extends State<PostWidget> {
 //                           Column(
 //                             children: [
 //                               const Icon(Icons.thumb_up,
-//                                   color: Colors.white, size: 20),
-//                               const SizedBox(width: 4),
+//                                   color: AppColors.white, size: 20),
+//                               const SizedBox(width: AppDimensions.spaceXS),
 //                               Text(
 //                                 "${post.likes}",
 //                                 style: const TextStyle(color: Colors.white),
@@ -351,8 +351,8 @@ class _PostWidgetState extends State<PostWidget> {
 //                           Column(
 //                             children: [
 //                               const Icon(Icons.comment_outlined,
-//                                   color: Colors.white, size: 20),
-//                               const SizedBox(width: 4),
+//                                   color: AppColors.white, size: 20),
+//                               const SizedBox(width: AppDimensions.spaceXS),
 //                               Text(
 //                                 "${post.comments}",
 //                                 style: const TextStyle(color: Colors.white),

@@ -1,4 +1,5 @@
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/constants/app_strings.dart';
 import 'event_view.dart';
 
 class EventViewModel extends BaseViewModel {
@@ -17,24 +18,24 @@ class EventViewModel extends BaseViewModel {
   void _loadEventCategories() {
     _eventCategories = [
       EventCategory(
-        name: 'Workshops & Talks',
-        description: 'Educational workshops and speaker sessions',
+        name: AppStrings.workshopsAndTalks,
+        description: AppStrings.educationalWorkshopsAndSpeakerSessions,
       ),
       EventCategory(
-        name: 'Film Screenings',
-        description: 'Movie and documentary screenings',
+        name: AppStrings.filmScreenings,
+        description: AppStrings.movieAndDocumentaryScreenings,
       ),
       EventCategory(
-        name: 'Art Installations',
-        description: 'Interactive art displays and exhibitions',
+        name: AppStrings.artInstallations,
+        description: AppStrings.interactiveArtDisplaysAndExhibitions,
       ),
       EventCategory(
-        name: 'Charity & Community Events',
-        description: 'Community service and charity activities',
+        name: AppStrings.charityAndCommunityEvents,
+        description: AppStrings.communityServiceAndCharityActivities,
       ),
       EventCategory(
-        name: 'Music Performances',
-        description: 'Live music and entertainment shows',
+        name: AppStrings.musicPerformances,
+        description: AppStrings.liveMusicAndEntertainmentShows,
       ),
     ];
     notifyListeners();

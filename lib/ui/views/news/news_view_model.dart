@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../../core/viewmodels/base_view_model.dart';
 
 class NewsViewModel extends BaseViewModel {
@@ -56,6 +58,31 @@ class NewsViewModel extends BaseViewModel {
 
   void set showPerformancePreview(bool value) {
     _showPerformancePreview = value;
+    notifyListeners();
+  }
+
+  // Navigation methods
+  void navigateBack(BuildContext context) {
+    Navigator.pop(context);
+  }
+
+  void navigateToBulletinPreview() {
+    _showBulletinPreview = true;
+    notifyListeners();
+  }
+
+  void navigateBackFromBulletinPreview() {
+    _showBulletinPreview = false;
+    notifyListeners();
+  }
+
+  void navigateToPerformancePreview() {
+    _showPerformancePreview = true;
+    notifyListeners();
+  }
+
+  void navigateBackFromPerformancePreview() {
+    _showPerformancePreview = false;
     notifyListeners();
   }
 }

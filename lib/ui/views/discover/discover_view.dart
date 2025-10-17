@@ -29,7 +29,7 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
 
   @override
   Widget buildView(BuildContext context, DiscoverViewModel viewModel) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = context.screenWidth;
 
     return WillPopScope(
       onWillPop: () async {
@@ -104,7 +104,7 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                                         ? Icons.favorite
                                         : Icons.favorite_border,
                                     color: viewModel.isFavorited
-                                        ? Colors.red
+                                        ? AppColors.error
                                         : AppColors.primary,
                                   ),
                                 ),
@@ -151,10 +151,8 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                           onTap: () async {
                             // 👇 Trigger native social share
                             await Share.share(
-                              '🎉 Hey! Join me at LunaFest using the Festival Rumour app! '
-                                  'Let’s enjoy the vibe together 🌙🔥\n\n'
-                                  'Download now: https://festival-romour.link',
-                              subject: 'Join me at LunaFest!',
+                                  AppStrings.shareMessage,
+                              subject: AppStrings.shareSubject,
                               sharePositionOrigin: const Rect.fromLTWH(0, 0, 0, 0),
                             );
                           },
@@ -241,21 +239,21 @@ class ShareLocationPopup extends StatelessWidget {
             ),
             const Icon(Icons.location_on,
                 color: AppColors.accent, size: 60),
-            const SizedBox(height: 10),
+            SizedBox(height: AppDimensions.spaceS),
             const ResponsiveTextWidget(
-              'Share Location',
+              AppStrings.shareLocation,
               textType: TextType.body, 
                   color: AppColors.accent,
                   fontWeight: FontWeight.bold,
                   //fontSize: 20
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: AppDimensions.paddingL),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
                 SnackbarUtil.showSuccessSnackBar(
                   context,
-                  'Location Sharing Enabled',
+                  AppStrings.locationSharingEnabled,
                 );
               },
               child: Container(
@@ -266,31 +264,31 @@ class ShareLocationPopup extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const ResponsiveTextWidget(
-                  'Allow To Share Location So The Crowd Can Find You, Nothing Else',
+                  AppStrings.locationSharingDescription,
                   textAlign: TextAlign.center,
                   textType: TextType.body, 
-                      color: Colors.black,
+                      color: AppColors.black,
                       fontWeight: FontWeight.w800,
                       //fontSize: 16),
                 ),
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: AppDimensions.spaceM),
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const ResponsiveTextWidget(
-                  'Hiding My Vibe, Staying Incognito',
+                  AppStrings.hidingMyVibe,
                   textAlign: TextAlign.center,
                   textType: TextType.body, 
-                      color: Colors.black,
+                      color: AppColors.black,
                       fontWeight: FontWeight.w800,
                       //fontSize: 16
                   ),

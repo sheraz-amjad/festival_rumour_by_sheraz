@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/app_colors.dart';
+
 class GradientText extends StatelessWidget {
   final String text;
   final TextStyle style;
@@ -19,7 +21,7 @@ class GradientText extends StatelessWidget {
           gradient.createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
       child: Text(
         text,
-        style: style.copyWith(color: Colors.white), // overridden by gradient
+        style: style.copyWith(color: AppColors.white), // overridden by gradient
       ),
     );
   }

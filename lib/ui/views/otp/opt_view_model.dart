@@ -4,6 +4,7 @@ import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_durations.dart';
 
 class OtpViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -26,7 +27,7 @@ class OtpViewModel extends BaseViewModel {
     if (!_isFocusChanging && !_otpFocus.hasFocus) {
       _isFocusChanging = true;
       _otpFocus.requestFocus();
-      Future.delayed(const Duration(milliseconds: 100), () {
+      Future.delayed(AppDurations.shortDelay, () {
         _isFocusChanging = false;
       });
     }
@@ -37,7 +38,7 @@ class OtpViewModel extends BaseViewModel {
     if (!_isFocusChanging && _otpFocus.hasFocus) {
       _isFocusChanging = true;
       _otpFocus.unfocus();
-      Future.delayed(const Duration(milliseconds: 100), () {
+      Future.delayed(AppDurations.shortDelay, () {
         _isFocusChanging = false;
       });
     }
@@ -79,7 +80,7 @@ class OtpViewModel extends BaseViewModel {
       notifyListeners();
 
       // Simulate verification delay
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(AppDurations.autoSlideInterval);
 
       // TODO: Replace with actual OTP verification API call
       // For now, accept any 4-digit OTP
@@ -98,7 +99,7 @@ class OtpViewModel extends BaseViewModel {
       _isLoading = true;
       notifyListeners();
 
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(AppDurations.autoSlideInterval);
       _isLoading = false;
       notifyListeners();
     }, errorMessage: AppStrings.resendCodeError);

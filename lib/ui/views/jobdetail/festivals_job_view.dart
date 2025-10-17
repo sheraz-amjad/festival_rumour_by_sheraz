@@ -1,5 +1,8 @@
 import 'package:festival_rumour/core/constants/app_assets.dart';
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_sizes.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import 'festivals_job_view_model.dart';
@@ -24,7 +27,7 @@ class FestivalsJobView extends BaseView<FestivalsJobViewModel> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const ResponsiveTextWidget(
-          "Festivals Gizza Job",
+          AppStrings.festivalGizzaJob,
           textType: TextType.body, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       body: Stack(
@@ -63,7 +66,7 @@ class _JobCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.6),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.yellow, width: 1),
+        border: Border.all(color: AppColors.accent, width: AppDimensions.borderWidthS),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +77,7 @@ class _JobCard extends StatelessWidget {
             color: Colors.yellow,
             fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppDimensions.spaceS),
           ResponsiveTextWidget(
             job.description,
             textType: TextType.caption,
@@ -82,11 +85,11 @@ class _JobCard extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppDimensions.spaceS),
           Align(
             alignment: Alignment.bottomRight,
             child: ResponsiveTextWidget(
-              "more",
+              AppStrings.more,
               textType: TextType.caption,
               color: Colors.yellow.shade600,
             ),

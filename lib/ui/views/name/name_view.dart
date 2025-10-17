@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -18,6 +19,15 @@ class NameView extends BaseView<NameViewModel> {
 
   @override
   Widget buildView(BuildContext context, NameViewModel viewModel) {
+    // Set status bar style for dark background
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
+    
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -96,10 +106,10 @@ class NameView extends BaseView<NameViewModel> {
         hintText: AppStrings.firstNameHint,
         hintStyle: const TextStyle(color: AppColors.grey400),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onPrimary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.onPrimary, width: AppDimensions.borderWidthS),
         ),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onPrimary, width: 0.8),
+          borderSide: BorderSide(color: AppColors.onPrimary, width: AppDimensions.dividerThickness),
         ),
         errorText: viewModel.nameError,
         errorStyle: const TextStyle(
@@ -279,8 +289,8 @@ class NameView extends BaseView<NameViewModel> {
                     right: -8,
                     child: Image.asset(
                       AppAssets.welcomeback,
-                      height: 85,
-                      width: 100,
+                      height: AppDimensions.imageL,
+                      width: AppDimensions.imageL,
                       fit: BoxFit.contain,
                     ),
                   ),

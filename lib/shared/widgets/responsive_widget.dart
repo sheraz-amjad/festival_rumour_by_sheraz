@@ -324,18 +324,18 @@ class ResponsiveButton extends StatelessWidget {
       return tabletPadding!;
     } else {
       // Default responsive padding
-      if (context.isHighResolutionPhone) return const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
-      if (context.isLargeScreen) return const EdgeInsets.symmetric(horizontal: 32, vertical: 20);
-      if (context.isMediumScreen) return const EdgeInsets.symmetric(horizontal: 20, vertical: 14);
-      return const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+      if (context.isHighResolutionPhone) return EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingM);
+      if (context.isLargeScreen) return EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL, vertical: AppDimensions.paddingL);
+      if (context.isMediumScreen) return EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingM);
+      return EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.spaceM);
     }
   }
 
   double _getFontSize(BuildContext context) {
-    if (context.isHighResolutionPhone) return 16;
-    if (context.isLargeScreen) return 18;
-    if (context.isMediumScreen) return 15;
-    return 14;
+    if (context.isHighResolutionPhone) return AppDimensions.textL;
+    if (context.isLargeScreen) return AppDimensions.textXL;
+    if (context.isMediumScreen) return AppDimensions.textL;
+    return AppDimensions.textM;
   }
 }
 
@@ -407,17 +407,17 @@ class ResponsiveCard extends StatelessWidget {
       return tabletPadding!;
     } else {
       // Default responsive padding
-      if (context.isHighResolutionPhone) return const EdgeInsets.all(20);
-      if (context.isLargeScreen) return const EdgeInsets.all(24);
-      if (context.isMediumScreen) return const EdgeInsets.all(18);
-      return const EdgeInsets.all(16);
+      if (context.isHighResolutionPhone) return EdgeInsets.all(AppDimensions.paddingL);
+      if (context.isLargeScreen) return EdgeInsets.all(AppDimensions.paddingXL);
+      if (context.isMediumScreen) return EdgeInsets.all(AppDimensions.paddingL);
+      return EdgeInsets.all(AppDimensions.paddingM);
     }
   }
 
   double _getBorderRadius(BuildContext context) {
-    if (context.isHighResolutionPhone) return 16;
-    if (context.isLargeScreen) return 20;
-    if (context.isMediumScreen) return 14;
-    return 12;
+    if (context.isHighResolutionPhone) return AppDimensions.radiusM;
+    if (context.isLargeScreen) return AppDimensions.radiusL;
+    if (context.isMediumScreen) return AppDimensions.radiusM;
+    return AppDimensions.radiusS;
   }
 }

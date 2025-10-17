@@ -84,8 +84,8 @@ class HomeView extends BaseView<HomeViewModel> {
           SvgPicture.asset(
             AppAssets.logo,
             color: AppColors.primary,
-           width: 50,
-           height: 50,
+           width: AppDimensions.imageM,
+           height: AppDimensions.imageM,
            // width: _getResponsiveIconSize(context),
            //  height: _getResponsiveIconSize(context),
           ),
@@ -117,7 +117,7 @@ class HomeView extends BaseView<HomeViewModel> {
             onPressed: () => _showPostBottomSheet(context),
           ),
           
-          SizedBox(width:20),
+          SizedBox(width: AppDimensions.spaceM),
           
           // Pro Label - Flexible container
           Flexible(
@@ -280,7 +280,7 @@ class HomeView extends BaseView<HomeViewModel> {
                 dropdownColor: AppColors.onPrimary.withOpacity(0.5), // Dark gray background
                 isExpanded: false,
                 menuWidth: double.infinity,
-                menuMaxHeight: MediaQuery.of(context).size.height * 0.30,
+                menuMaxHeight: context.screenHeight * 0.30,
                 icon: Container(
                   padding: EdgeInsets.all(_getResponsivePadding(context) * 0.5),
                   decoration: const BoxDecoration(
@@ -299,24 +299,24 @@ class HomeView extends BaseView<HomeViewModel> {
                     child: Row(
                       children: [
                         Container(
-                          width: 20,
-                          height: 20,
+                          width: AppDimensions.iconS,
+                          height: AppDimensions.iconS,
                           decoration: BoxDecoration(
-                            color: viewModel.currentFilter == 'all' ? AppColors.accent : Colors.grey,
-                            borderRadius: BorderRadius.circular(4),
+                            color: viewModel.currentFilter == 'all' ? AppColors.accent : AppColors.grey600,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
                           ),
                           child: Icon(
                             Icons.grid_view,
-                            color: viewModel.currentFilter == 'all' ? Colors.black : Colors.white,
+                            color: viewModel.currentFilter == 'all' ? AppColors.black : AppColors.white,
                             size: 16,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppDimensions.spaceS),
                         Text(
-                          'All Posts',
+                          AppStrings.allPosts,
                           style: TextStyle(
-                            color: viewModel.currentFilter == 'all' ? AppColors.accent : Colors.white,
-                            fontSize: 14,
+                            color: viewModel.currentFilter == 'all' ? AppColors.accent : AppColors.white,
+                            fontSize: AppDimensions.textM,
                           ),
                         ),
                       ],
@@ -327,24 +327,24 @@ class HomeView extends BaseView<HomeViewModel> {
                     child: Row(
                       children: [
                         Container(
-                          width: 20,
-                          height: 20,
+                          width: AppDimensions.iconS,
+                          height: AppDimensions.iconS,
                           decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.live ? Colors.yellow : Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            color: viewModel.currentFilter == AppStrings.live ? AppColors.yellow : AppColors.white,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
                           ),
                           child: Icon(
                             Icons.live_tv,
-                            color: viewModel.currentFilter == AppStrings.live ? Colors.black : Colors.white,
+                            color: viewModel.currentFilter == AppStrings.live ? AppColors.black : AppColors.white,
                             size: 16,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppDimensions.spaceS),
                         Text(
                           AppStrings.live,
                           style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.live ? Colors.yellow : Colors.white,
-                            fontSize: 14,
+                            color: viewModel.currentFilter == AppStrings.live ? AppColors.yellow : AppColors.white,
+                            fontSize: AppDimensions.textM,
                           ),
                         ),
                       ],
@@ -355,24 +355,24 @@ class HomeView extends BaseView<HomeViewModel> {
                     child: Row(
                       children: [
                         Container(
-                          width: 20,
-                          height: 20,
+                          width: AppDimensions.iconS,
+                          height: AppDimensions.iconS,
                           decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.yellow : Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.yellow : AppColors.white,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
                           ),
                           child: Icon(
                             Icons.schedule,
-                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.black : Colors.white,
+                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.black : AppColors.white,
                             size: 16,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppDimensions.spaceS),
                         Text(
                           AppStrings.upcoming,
                           style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.upcoming ? Colors.yellow : Colors.white,
-                            fontSize: 14,
+                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.yellow : AppColors.white,
+                            fontSize: AppDimensions.textM,
                           ),
                         ),
                       ],
@@ -383,24 +383,24 @@ class HomeView extends BaseView<HomeViewModel> {
                     child: Row(
                       children: [
                         Container(
-                          width: 20,
-                          height: 20,
+                          width: AppDimensions.iconS,
+                          height: AppDimensions.iconS,
                           decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.past ? Colors.yellow : Colors.white,
-                            borderRadius: BorderRadius.circular(4),
+                            color: viewModel.currentFilter == AppStrings.past ? AppColors.yellow : AppColors.white,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
                           ),
                           child: Icon(
                             Icons.history,
-                            color: viewModel.currentFilter == AppStrings.past ? Colors.black : Colors.white,
+                            color: viewModel.currentFilter == AppStrings.past ? AppColors.black : AppColors.white,
                             size: 16,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppDimensions.spaceS),
                         Text(
                           AppStrings.past,
                           style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.past ? Colors.yellow : Colors.white,
-                            fontSize: 14,
+                            color: viewModel.currentFilter == AppStrings.past ? AppColors.yellow : AppColors.white,
+                            fontSize: AppDimensions.textM,
                           ),
                         ),
                       ],
@@ -463,7 +463,7 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
       builder: (_) {
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppDimensions.paddingM),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,33 +472,33 @@ class HomeView extends BaseView<HomeViewModel> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: ResponsiveTextWidget(
-                    "JOB Details",
+                    AppStrings.jobDetails,
                     textType: TextType.title,
-                    color: Colors.yellow,
-                    fontSize: 16,
+                    color: AppColors.yellow,
+                    fontSize: AppDimensions.textL,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               _buildJobTile(
                 image: AppAssets.job1,
-                title: "Festival Gizza Job",
+                title: AppStrings.festivalGizzaJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                   // Navigate to add job screen if needed
                 },
               ),
               const Divider(color: Colors.yellow, thickness: 1),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.spaceS),
               _buildJobTile(
                 image: AppAssets.job2,
-                title: "FestieHeros Job",
+                title: AppStrings.festieHerosJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                   // Navigate to another add post screen if needed
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.paddingS),
             ],
           ),
         );
@@ -514,8 +514,8 @@ class HomeView extends BaseView<HomeViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: AppDimensions.spaceXS),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS, vertical: AppDimensions.paddingS),
         decoration: BoxDecoration(
           // color: Colors.white.withOpacity(0.1),
           // borderRadius: BorderRadius.circular(10),
@@ -533,16 +533,16 @@ class HomeView extends BaseView<HomeViewModel> {
 
                   /// Image
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                     child: Image.asset(
                       image,
-                      width: 50,
-                      height: 50,
+                      width: AppDimensions.imageM,
+                      height: AppDimensions.imageM,
                       fit: BoxFit.cover,
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.paddingS),
 
                   /// Text — flexible and ellipsis
                   Expanded(
@@ -551,7 +551,7 @@ class HomeView extends BaseView<HomeViewModel> {
                       textType: TextType.body,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: AppDimensions.textL,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

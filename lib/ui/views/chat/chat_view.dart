@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/backbutton.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_assets.dart';
@@ -17,9 +18,17 @@ class ChatView extends BaseView<ChatViewModel> {
 
   @override
   Widget buildView(BuildContext context, ChatViewModel viewModel) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      body: Stack(
+    return WillPopScope(
+      onWillPop: () async {
+        if (onBack != null) {
+          onBack!();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.black,
+        body: Stack(
         children: [
           // Background image
           Positioned.fill(
@@ -57,6 +66,7 @@ class ChatView extends BaseView<ChatViewModel> {
               ),
             )
           : null,
+    ),
     );
   }
 
@@ -64,7 +74,7 @@ class ChatView extends BaseView<ChatViewModel> {
     return Stack(
       children: [
         // App bar (extends into status bar)
-        _buildAppBar(context),
+        _buildAppBar(context, viewModel),
         
         // Main content (below app bar)
         Positioned(
@@ -75,7 +85,7 @@ class ChatView extends BaseView<ChatViewModel> {
           child: Column(
             children: [
               _buildSegmentedControl(context, viewModel),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppDimensions.spaceL),
               Expanded(
                 child: _buildChatRooms(context, viewModel),
               ),
@@ -100,7 +110,7 @@ class ChatView extends BaseView<ChatViewModel> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, ChatViewModel viewModel) {
     return Positioned(
       top: 0,
       left: 0,
@@ -117,9 +127,11 @@ class ChatView extends BaseView<ChatViewModel> {
         ),
         child: Row(
           children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.white),
-              onPressed: onBack ?? () => Navigator.pop(context),
+            CustomBackButton(
+              onTap: onBack ?? () {
+                // Navigate back to discover screen using ViewModel
+                viewModel.navigateBack(context);
+              },
             ),
             Expanded(
               child: ResponsiveTextWidget(
@@ -138,10 +150,10 @@ class ChatView extends BaseView<ChatViewModel> {
 
   Widget _buildSegmentedControl(BuildContext context, ChatViewModel viewModel) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
       decoration: BoxDecoration(
         color: AppColors.black,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
       ),
       child: Row(
         children: [
@@ -149,21 +161,21 @@ class ChatView extends BaseView<ChatViewModel> {
             child: GestureDetector(
               onTap: () => viewModel.setSelectedTab(0),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingS, horizontal: AppDimensions.paddingM),
                 decoration: BoxDecoration(
                   color: viewModel.selectedTab == 0 ? AppColors.accent : Colors.transparent,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       AppAssets.public,
-                      width: 20,
-                      height: 20,
+                      width: AppDimensions.iconS,
+                      height: AppDimensions.iconS,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppDimensions.spaceS),
                     ResponsiveTextWidget(
                       AppStrings.public,
                       textType: TextType.body,
@@ -179,21 +191,21 @@ class ChatView extends BaseView<ChatViewModel> {
             child: GestureDetector(
               onTap: () => viewModel.setSelectedTab(1),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingS, horizontal: AppDimensions.paddingM),
                 decoration: BoxDecoration(
                   color: viewModel.selectedTab == 1 ? AppColors.accent : Colors.transparent,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       AppAssets.private,
-                      width: 20,
-                      height: 20,
+                      width: AppDimensions.iconS,
+                      height: AppDimensions.iconS,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppDimensions.spaceS),
                     ResponsiveTextWidget(
                       AppStrings.private,
                       textType: TextType.body,
@@ -217,7 +229,7 @@ class ChatView extends BaseView<ChatViewModel> {
     } else {
       // Public chat rooms - show grid view
       return GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingS),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 cards per row
           crossAxisSpacing: 16,
@@ -233,11 +245,11 @@ class ChatView extends BaseView<ChatViewModel> {
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                 color: AppColors.onPrimary.withOpacity(0.3),
                 border: Border.all(
                   color: AppColors.white.withOpacity(0.2),
-                  width: 1,
+                  width: AppDimensions.dividerThickness,
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -264,9 +276,9 @@ class ChatView extends BaseView<ChatViewModel> {
 
                   // Text section
                   Padding(
-                    padding: const EdgeInsets.all(6.0),
+                    padding: EdgeInsets.all(AppDimensions.spaceS),
                     child: ResponsiveTextWidget(
-                      room['name'] ?? 'Luna Festival Community',
+                      room['name'] ?? AppStrings.lunaCommunityRoom,
                       textAlign: TextAlign.center,
                       textType: TextType.caption,
                       color: AppColors.white,
@@ -284,7 +296,7 @@ class ChatView extends BaseView<ChatViewModel> {
 
   Widget _buildPrivateChatList(BuildContext context, ChatViewModel viewModel) {
     return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingS),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // 2 cards per row
         crossAxisSpacing: 16,
@@ -308,11 +320,11 @@ class ChatView extends BaseView<ChatViewModel> {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           color: AppColors.onPrimary.withOpacity(0.3),
           border: Border.all(
             color: AppColors.white.withOpacity(0.2),
-            width: 1,
+            width: AppDimensions.dividerThickness,
           ),
           boxShadow: [
             BoxShadow(
@@ -325,94 +337,27 @@ class ChatView extends BaseView<ChatViewModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Avatar section
+            // Image section - same as public chat
             Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundImage: AssetImage(chat['avatar'] ?? AppAssets.profile),
-                        backgroundColor: AppColors.onPrimary,
-                      ),
-                    ),
-                    if (chat['unreadCount'] > 0)
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: const BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: ResponsiveTextWidget(
-                              '${chat['unreadCount']}',
-                              textType: TextType.caption,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (chat['isActive'] == true)
-                      Positioned(
-                        bottom: 8,
-                        right: 8,
-                        child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: const BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                  ],
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                child: Image.asset(
+                  chat['image'] ?? AppAssets.post1,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
               ),
             ),
 
-            // Text section
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ResponsiveTextWidget(
-                      chat['name'] ?? AppStrings.chatName,
-                      textAlign: TextAlign.center,
-                      textType: TextType.caption,
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w600,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    ResponsiveTextWidget(
-                      chat['lastMessage'] ?? AppStrings.noMessages,
-                      textAlign: TextAlign.center,
-                      textType: TextType.caption,
-                      color: AppColors.grey600,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    ResponsiveTextWidget(
-                      chat['timestamp'] ?? '12:00',
-                      textType: TextType.caption,
-                      color: AppColors.grey600,
-                    ),
-                  ],
-                ),
+            // Text section - same as public chat
+            Padding(
+              padding: EdgeInsets.all(AppDimensions.spaceS),
+              child: ResponsiveTextWidget(
+                chat['name'] ?? AppStrings.chatName,
+                textAlign: TextAlign.center,
+                textType: TextType.caption,
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -457,7 +402,7 @@ class ChatView extends BaseView<ChatViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 220,
+        height: AppDimensions.imageXXL,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           boxShadow: [
@@ -485,10 +430,10 @@ class ChatView extends BaseView<ChatViewModel> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: 220 * 0.3, // 30% of container height
+                height: AppDimensions.imageXXL * 0.3, // 30% of container height
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.6),
+                    color: AppColors.black.withOpacity(0.6),
                   ),
                 ),
               ),
@@ -517,14 +462,17 @@ class ChatView extends BaseView<ChatViewModel> {
 
   Widget _buildChatRoomAppBar(BuildContext context, ChatViewModel viewModel) {
     return Container(
-      height: 60,
+      height: AppDimensions.buttonHeightM,
       color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.spaceS),
       child: Row(
         children: [
           IconButton(
             icon: const Icon(Icons.arrow_back, color: AppColors.white),
-            onPressed: () => viewModel.exitChatRoom(),
+            onPressed: () {
+              // Exit chat room and navigate back to chat list
+              viewModel.exitChatRoom();
+            },
           ),
           Expanded(
             child: ResponsiveTextWidget(
@@ -564,15 +512,15 @@ class ChatView extends BaseView<ChatViewModel> {
         children: [
           // FestivalRumour logo and timestamp
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppDimensions.paddingM),
             child: Row(
               children: [
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: AppDimensions.imageS,
+                  height: AppDimensions.imageS,
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                   ),
                   child: const Center(
                     child: ResponsiveTextWidget(
@@ -583,7 +531,7 @@ class ChatView extends BaseView<ChatViewModel> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppDimensions.paddingS),
                 const ResponsiveTextWidget(
                   AppStrings.festivalRumourTimestamp,
                   textType: TextType.caption,
@@ -595,38 +543,38 @@ class ChatView extends BaseView<ChatViewModel> {
           
           // Welcome message bubble
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.paddingM),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const                   ResponsiveTextWidget(
-                    'Join the conversation!',
+                  const ResponsiveTextWidget(
+                    AppStrings.joinConversation,
                     textType: TextType.body,
                     color: AppColors.black,
                     fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spaceS),
                   const ResponsiveTextWidget(
-                    'Follow this topic to receive notifications when people respond.',
+                    AppStrings.followTopicDescription,
                     textType: TextType.caption,
                     color: AppColors.grey600,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppDimensions.paddingM),
                   GestureDetector(
                     onTap: () => viewModel.inviteFriends(),
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: AppDimensions.spaceM),
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primary, width: 2),
-                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppColors.primary, width: AppDimensions.borderWidthS),
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                       ),
                       child: const Center(
                         child: ResponsiveTextWidget(
@@ -652,15 +600,15 @@ class ChatView extends BaseView<ChatViewModel> {
   Widget _buildInputSection(BuildContext context, ChatViewModel viewModel) {
     return Container(
       color: Colors.transparent,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppDimensions.paddingM),
       child: Column(
         children: [
           // Input field row
           Row(
             children: [
               Container(
-                width: 32,
-                height: 32,
+                width: AppDimensions.iconM,
+                height: AppDimensions.iconM,
                 decoration: const BoxDecoration(
                   color: AppColors.white,
                   shape: BoxShape.circle,
@@ -671,14 +619,14 @@ class ChatView extends BaseView<ChatViewModel> {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.paddingS),
               Expanded(
                 child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  height: AppDimensions.imageS,
+                  padding: EdgeInsets.symmetric(horizontal: AppDimensions.spaceM),
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                   ),
                   child: TextField(
                     controller: viewModel.messageController,
@@ -692,12 +640,12 @@ class ChatView extends BaseView<ChatViewModel> {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.paddingS),
               GestureDetector(
                 onTap: () => viewModel.sendMessage(),
                 child: Container(
-                  width: 32,
-                  height: 32,
+                  width: AppDimensions.iconM,
+                  height: AppDimensions.iconM,
                   decoration: const BoxDecoration(
                     color: AppColors.primary,
                     shape: BoxShape.circle,

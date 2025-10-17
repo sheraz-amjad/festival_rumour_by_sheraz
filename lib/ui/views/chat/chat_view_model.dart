@@ -149,6 +149,24 @@ class ChatViewModel extends BaseViewModel {
     print(AppStrings.invitingFriendsToChatRoom);
   }
 
+  // Navigation methods
+  void navigateBack(BuildContext context) {
+    Navigator.pop(context);
+  }
+
+  void navigateToChatRoom(Map<String, dynamic> room) {
+    _currentChatRoom = room;
+    _isInChatRoom = true;
+    notifyListeners();
+  }
+
+  void navigateBackFromChatRoom() {
+    _isInChatRoom = false;
+    _currentChatRoom = null;
+    messageController.clear();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     messageController.dispose();

@@ -11,8 +11,32 @@ import '../../../shared/widgets/responsive_text_widget.dart';
 import 'username_view_model.dart';
 
 
-class UsernameView extends StatelessWidget {
+class UsernameView extends StatefulWidget {
   const UsernameView({super.key});
+
+  @override
+  State<UsernameView> createState() => _UsernameViewState();
+}
+
+class _UsernameViewState extends State<UsernameView> {
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Auto-focus on email field when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _emailFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,30 +131,67 @@ class UsernameView extends StatelessWidget {
                                   onFocusChange: viewModel.onUsernameFocusChange,
                                   child: TextField(
                                     controller: viewModel.emailController,
+                                    focusNode: _emailFocusNode,
                                     cursorColor: AppColors.white,
-
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
                                     onChanged: viewModel.onUsernameChanged,
+                                    onSubmitted: (_) {
+                                      // Move focus to password field when user presses next
+                                      _passwordFocusNode.requestFocus();
+                                    },
                                     style: const TextStyle(color: AppColors.white),
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: AppColors.primary.withOpacity(0.3),
+                                      fillColor: viewModel.isEmailValid 
+                                        ? AppColors.success.withOpacity(0.1)
+                                        : AppColors.primary.withOpacity(0.3),
                                       hintText: AppStrings.enterYourEmail,
                                       hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.emailError,
                                       errorStyle: const TextStyle(
-                                        color: AppColors.accent, // ✅ white validation message
+                                        color: AppColors.error,
                                         fontSize: AppDimensions.textS,
                                         fontWeight: FontWeight.w500,
                                       ),
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: viewModel.isEmailValid 
+                                          ? AppColors.success 
+                                          : AppColors.white70,
+                                        size: AppDimensions.iconS,
+                                      ),
+                                      suffixIcon: viewModel.isEmailValid
+                                        ? const Icon(
+                                            Icons.check_circle,
+                                            color: AppColors.success,
+                                            size: AppDimensions.iconS,
+                                          )
+                                        : null,
                                       focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide:
-                                        const BorderSide(color: AppColors.white, width: 2),
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: BorderSide(
+                                          color: viewModel.isEmailValid 
+                                            ? AppColors.success 
+                                            : AppColors.white, 
+                                          width: AppDimensions.borderWidthS,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide:
-                                        const BorderSide(color: AppColors.white60, width: 1),
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: BorderSide(
+                                          color: viewModel.isEmailValid 
+                                            ? AppColors.success 
+                                            : AppColors.white60, 
+                                          width: AppDimensions.dividerThickness,
+                                        ),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: const BorderSide(
+                                          color: AppColors.error, 
+                                          width: AppDimensions.borderWidthS,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -161,40 +222,97 @@ class UsernameView extends StatelessWidget {
                                   onFocusChange: viewModel.onPasswordFocusChange,
                                   child: TextField(
                                     controller: viewModel.passwordController,
+                                    focusNode: _passwordFocusNode,
                                     obscureText: !viewModel.isPasswordVisible,
                                     cursorColor: AppColors.white,
+                                    textInputAction: TextInputAction.done,
                                     onChanged: viewModel.onPasswordChanged,
+                                    onSubmitted: (_) {
+                                      // Attempt login when user presses done on password field
+                                      if (viewModel.isFormValid && !viewModel.isLoading) {
+                                        viewModel.validateAndLogin(context);
+                                      }
+                                    },
                                     style: const TextStyle(color: AppColors.white),
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: AppColors.primary.withOpacity(0.3),
+                                      fillColor: viewModel.isPasswordValid 
+                                        ? AppColors.success.withOpacity(0.1)
+                                        : AppColors.primary.withOpacity(0.3),
                                       hintText: AppStrings.passwordPlaceholder,
                                       hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.passwordError,
                                       errorStyle: const TextStyle(
-                                        color: AppColors.accent, // ✅ white validation message
+                                        color: AppColors.error,
                                         fontSize: AppDimensions.textS,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          viewModel.isPasswordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.white70,
-                                          size: 20,
-                                        ),
-                                        onPressed: viewModel.togglePasswordVisibility,
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        color: viewModel.isPasswordValid 
+                                          ? AppColors.success 
+                                          : AppColors.white70,
+                                        size: AppDimensions.iconS,
+                                      ),
+                                      suffixIcon: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (viewModel.passwordStrength.isNotEmpty)
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: AppDimensions.paddingXS,
+                                                vertical: AppDimensions.paddingXS,
+                                              ),
+                                              margin: const EdgeInsets.only(right: AppDimensions.spaceXS),
+                                              decoration: BoxDecoration(
+                                                color: viewModel.passwordStrengthColor.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                                              ),
+                                              child: Text(
+                                                viewModel.passwordStrength,
+                                                style: TextStyle(
+                                                  color: viewModel.passwordStrengthColor,
+                                                  fontSize: AppDimensions.textXS,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          IconButton(
+                                            icon: Icon(
+                                              viewModel.isPasswordVisible
+                                                  ? Icons.visibility
+                                                  : Icons.visibility_off,
+                                              color: AppColors.white70,
+                                              size: AppDimensions.iconS,
+                                            ),
+                                            onPressed: viewModel.togglePasswordVisibility,
+                                          ),
+                                        ],
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide:
-                                        const BorderSide(color: AppColors.white, width: 2),
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: BorderSide(
+                                          color: viewModel.isPasswordValid 
+                                            ? AppColors.success 
+                                            : AppColors.white, 
+                                          width: AppDimensions.borderWidthS,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide:
-                                        const BorderSide(color: AppColors.white60, width: 1),
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: BorderSide(
+                                          color: viewModel.isPasswordValid 
+                                            ? AppColors.success 
+                                            : AppColors.white60, 
+                                          width: AppDimensions.dividerThickness,
+                                        ),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                        borderSide: const BorderSide(
+                                          color: AppColors.error, 
+                                          width: AppDimensions.borderWidthS,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -233,24 +351,61 @@ class UsernameView extends StatelessWidget {
                                 /// Login Button
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.accent,
-                                    padding: const EdgeInsets.all(10),
+                                    backgroundColor: viewModel.isFormValid 
+                                      ? AppColors.accent 
+                                      : AppColors.grey600,
+                                    padding: const EdgeInsets.all(AppDimensions.paddingM),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                                    ),
+                                    elevation: viewModel.isFormValid ? 4 : 0,
                                   ),
                                   onPressed: viewModel.isLoading
                                       ? null
                                       : () => viewModel.validateAndLogin(context),
                                   child: viewModel.isLoading
-                                      ? const CircularProgressIndicator(
-                                    color: AppColors.accent,
-                                  )
-                                      : const ResponsiveTextWidget(
-                                    AppStrings.login,
-                                    textType: TextType.body,
-                                      color: AppColors.onPrimary,
-                                     // fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                      ? Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const SizedBox(
+                                              width: AppDimensions.iconS,
+                                              height: AppDimensions.iconS,
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.white,
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                            const SizedBox(width: AppDimensions.spaceS),
+                                            const ResponsiveTextWidget(
+                                              AppStrings.loggingIn,
+                                              textType: TextType.body,
+                                              color: AppColors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              viewModel.isFormValid 
+                                                ? Icons.login 
+                                                : Icons.lock,
+                                              color: AppColors.white,
+                                              size: AppDimensions.iconS,
+                                            ),
+                                            const SizedBox(width: AppDimensions.spaceS),
+                                            ResponsiveTextWidget(
+                                              viewModel.isFormValid 
+                                                ? AppStrings.login 
+                                                : AppStrings.completeFormToLogin,
+                                              textType: TextType.body,
+                                              color: AppColors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ],
+                                        ),
+                                ),
 
                                 const SizedBox(height: AppDimensions.spaceM),
 
@@ -263,7 +418,7 @@ class UsernameView extends StatelessWidget {
                                       AppStrings.dontHaveAccount,
                                       textType: TextType.body,
                                       color: AppColors.primary),
-                                    const SizedBox(width: 6),
+                                    const SizedBox(width: AppDimensions.spaceXS),
                                     GestureDetector(
                                       onTap: () => viewModel.goToSignUp(context),
                                       child: const ResponsiveTextWidget(

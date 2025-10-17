@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_sizes.dart';
 import 'SplashViewModel.dart';
 import 'package:festival_rumour/ui/views/welcome/welcome_view.dart';
 
@@ -25,8 +26,8 @@ class SplashView extends BaseView<SplashViewModel> {
           // 🔹 SVG Logo
           SvgPicture.asset(
           AppAssets.logo,      // path from your AppAssets
-            height: 120,         // adjust size
-            width: 120,
+            height: AppDimensions.imageXXL,
+            width: AppDimensions.imageXXL,
           ),
              // FlutterLogo(size: 120, style: FlutterLogoStyle.markOnly),
             ],

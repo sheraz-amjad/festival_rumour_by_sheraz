@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/festival/widgets/festivalcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
                         return TextField(
                           focusNode: viewModel.searchFocusNode,
                           decoration: InputDecoration(
-                            hintText: "Search festivals...",
+                            hintText: AppStrings.searchFestivals,
                             hintStyle: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
@@ -170,7 +171,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
                       dropdownColor: AppColors.onPrimary.withOpacity(0.5),
                       isExpanded: false,
                       menuWidth: double.infinity,
-                      menuMaxHeight: MediaQuery.of(context).size.height * 0.30,
+                      menuMaxHeight: context.screenHeight * 0.30,
                   icon: Container(
                     padding: const EdgeInsets.all(AppDimensions.paddingXS),
                     decoration: const BoxDecoration(
@@ -185,23 +186,23 @@ class FestivalView extends BaseView<FestivalViewModel> {
                           child: Row(
                             children: [
                               Container(
-                                width: 20,
-                                height: 20,
+                                width: AppDimensions.iconS,
+                                height: AppDimensions.iconS,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: AppColors.grey600,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: const Icon(
                                   Icons.grid_view,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 16,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: AppDimensions.spaceS),
                               const ResponsiveTextWidget(
-                                'All Festivals',
+                                AppStrings.allFestivals,
                                 textType: TextType.caption,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ],
                           ),
@@ -211,23 +212,23 @@ class FestivalView extends BaseView<FestivalViewModel> {
                           child: Row(
                             children: [
                               Container(
-                                width: 20,
-                                height: 20,
+                                width: AppDimensions.iconS,
+                                height: AppDimensions.iconS,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: AppColors.grey600,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: const Icon(
                                   Icons.live_tv,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 16,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: AppDimensions.spaceS),
                               const ResponsiveTextWidget(
-                                'Live',
+                                AppStrings.live,
                                 textType: TextType.caption,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ],
                           ),
@@ -237,23 +238,23 @@ class FestivalView extends BaseView<FestivalViewModel> {
                           child: Row(
                             children: [
                               Container(
-                                width: 20,
-                                height: 20,
+                                width: AppDimensions.iconS,
+                                height: AppDimensions.iconS,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: AppColors.grey600,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: const Icon(
                                   Icons.schedule,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 16,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: AppDimensions.spaceS),
                               const ResponsiveTextWidget(
-                                'Upcoming',
+                                AppStrings.upcoming,
                                 textType: TextType.caption,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ],
                           ),
@@ -263,23 +264,23 @@ class FestivalView extends BaseView<FestivalViewModel> {
                           child: Row(
                             children: [
                               Container(
-                                width: 20,
-                                height: 20,
+                                width: AppDimensions.iconS,
+                                height: AppDimensions.iconS,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: AppColors.grey600,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: const Icon(
                                   Icons.history,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   size: 16,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: AppDimensions.spaceS),
                               const ResponsiveTextWidget(
-                                'Past',
+                                AppStrings.past,
                                 textType: TextType.caption,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ],
                           ),
@@ -323,7 +324,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
             const SizedBox(height: AppDimensions.spaceM),
             ResponsiveTextWidget(
               viewModel.searchQuery.isNotEmpty 
-                ? "No festivals found for '${viewModel.searchQuery}'"
+                ? "${AppStrings.noFestivalsAvailable} for '${viewModel.searchQuery}'"
                 : AppStrings.noFestivalsAvailable,
               textType: TextType.body,
               color: AppColors.onSurfaceVariant,
@@ -334,7 +335,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
               TextButton(
                 onPressed: () => viewModel.clearSearch(),
                 child: const ResponsiveTextWidget(
-                  "Clear search",
+                  AppStrings.clearSearch,
                   textType: TextType.body, color: AppColors.primary),
                 ),
             ],

@@ -62,7 +62,7 @@ class GridOption extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: AppColors.white,
-                      fontSize: 25,
+                      fontSize: AppDimensions.textL,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

@@ -20,9 +20,17 @@ class DetailView extends BaseView<DetailViewModel> {
 
   @override
   Widget buildView(BuildContext context, DetailViewModel viewModel) {
-    return Scaffold(
-      backgroundColor: AppColors.black,
-      body: Stack(
+    return WillPopScope(
+      onWillPop: () async {
+        if (onBack != null) {
+          onBack!();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.black,
+        body: Stack(
         children: [
           // Background image (same as profile view)
           Positioned.fill(
@@ -41,7 +49,7 @@ class DetailView extends BaseView<DetailViewModel> {
           SafeArea(
             child: Column(
               children: [
-                _buildAppBar(context),
+                _buildAppBar(context, viewModel),
                 const SizedBox(height: AppDimensions.spaceXL),
                 Expanded(
                   child: _buildContentCards(context),
@@ -51,10 +59,11 @@ class DetailView extends BaseView<DetailViewModel> {
           ),
         ],
       ),
+    ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, DetailViewModel viewModel) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
@@ -63,7 +72,10 @@ class DetailView extends BaseView<DetailViewModel> {
       child: Row(
         children: [
           CustomBackButton(
-            onTap: onBack ?? () => Navigator.pop(context),
+            onTap: onBack ?? () {
+              // Navigate back to discover screen using ViewModel
+              viewModel.navigateBack(context);
+            },
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
@@ -143,7 +155,7 @@ class DetailView extends BaseView<DetailViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 220,
+        height: AppDimensions.imageXXL,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           boxShadow: [
@@ -171,10 +183,10 @@ class DetailView extends BaseView<DetailViewModel> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: 220 * 0.3, // 30% of container height
+                height: AppDimensions.imageXXL * 0.3, // 30% of container height
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.6),
+                    color: AppColors.black.withOpacity(0.6),
                   ),
                 ),
               ),

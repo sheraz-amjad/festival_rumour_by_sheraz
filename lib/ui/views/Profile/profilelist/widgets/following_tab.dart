@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_sizes.dart';
+import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/router/app_router.dart';
 import '../profile_list_view_model.dart';
 
@@ -17,7 +19,7 @@ class FollowingTab extends StatelessWidget {
             style: const TextStyle(color: AppColors.primary),
             cursorColor: AppColors.primary,
             decoration: InputDecoration(
-              hintText: "Search following...",
+              hintText: AppStrings.searchFollowing,
               hintStyle: const TextStyle(color: AppColors.primary),
               prefixIcon: const Icon(Icons.search, color: AppColors.primary),
               filled: true,
@@ -43,17 +45,17 @@ class FollowingTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: AppColors.white,
-                    width: 1,
+                    width: AppDimensions.dividerThickness,
                   ),
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: 24,
+                      radius: AppDimensions.avatarM,
                       backgroundImage: AssetImage(following['image'] ?? ''),
                       backgroundColor: AppColors.primary.withOpacity(0.1),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppDimensions.paddingS),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,23 +64,23 @@ class FollowingTab extends StatelessWidget {
                             following['name'] ?? 'Unknown User',
                             style: const TextStyle(
                               color: AppColors.white,
-                              fontSize: 16,
+                              fontSize: AppDimensions.textL,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppDimensions.spaceXS),
                           Text(
                             following['username'] ?? '',
                             style: const TextStyle(
                               color: AppColors.grey600,
-                              fontSize: 14,
+                              fontSize: AppDimensions.textM,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      height: 32,
+                      height: AppDimensions.buttonHeightS,
                       margin: const EdgeInsets.only(right: 8),
                       child: ElevatedButton(
                         onPressed: () {
@@ -96,7 +98,7 @@ class FollowingTab extends StatelessWidget {
                         child: const Text(
                           'Message',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppDimensions.textS,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -119,15 +121,15 @@ class FollowingTab extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.person_remove,
-                                color: Colors.red,
-                                size: 20,
+                                color: AppColors.red,
+                                size: AppDimensions.iconS,
                               ),
-                              SizedBox(width: 8),
+                              SizedBox(width: AppDimensions.spaceS),
                               Text(
-                                'Unfollow',
+                                AppStrings.unfollow,
                                 style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
+                                  color: AppColors.red,
+                                  fontSize: AppDimensions.textM,
                                 ),
                               ),
                             ],

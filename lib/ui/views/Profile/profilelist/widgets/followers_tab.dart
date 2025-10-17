@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_sizes.dart';
+import '../../../../../core/constants/app_strings.dart';
 import '../profile_list_view_model.dart';
 
 class FollowersTab extends StatelessWidget {
@@ -12,18 +14,18 @@ class FollowersTab extends StatelessWidget {
       children: [
         /// 🔹 Search Bar
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
           child: TextField(
             style: const TextStyle(color: AppColors.primary),
             cursorColor: AppColors.primary,
             decoration: InputDecoration(
-              hintText: "Search followers...",
+              hintText: AppStrings.searchFollowers,
               hintStyle: const TextStyle(color: AppColors.primary),
               prefixIcon: const Icon(Icons.search, color: AppColors.primary),
               filled: true,
               fillColor: AppColors.onPrimary.withOpacity(0.3),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
               ),
             ),
             onChanged: viewModel.searchFollowers,
@@ -33,29 +35,29 @@ class FollowersTab extends StatelessWidget {
         /// 🔹 List
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             itemCount: viewModel.followers.length,
             itemBuilder: (context, index) {
               final follower = viewModel.followers[index];
               return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: AppDimensions.paddingS),
+                padding: const EdgeInsets.all(AppDimensions.paddingM),
                 decoration: BoxDecoration(
                   color: AppColors.black,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                   border: Border.all(
                     color: AppColors.white,
-                    width: 1,
+                    width: AppDimensions.dividerThickness,
                   ),
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: 24,
+                      radius: AppDimensions.avatarM,
                       backgroundImage: AssetImage(follower['image'] ?? ''),
                       backgroundColor: AppColors.primary.withOpacity(0.1),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppDimensions.paddingS),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,24 +66,24 @@ class FollowersTab extends StatelessWidget {
                             follower['name'] ?? 'Unknown User',
                             style: const TextStyle(
                               color: AppColors.white,
-                              fontSize: 16,
+                              fontSize: AppDimensions.textL,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppDimensions.spaceXS),
                           Text(
                             follower['username'] ?? '',
                             style: const TextStyle(
                               color: AppColors.grey600,
-                              fontSize: 14,
+                              fontSize: AppDimensions.textM,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      height: 32,
-                      margin: const EdgeInsets.only(right: 8),
+                      height: AppDimensions.buttonHeightS,
+                      margin: const EdgeInsets.only(right: AppDimensions.spaceS),
                       child: ElevatedButton(
                         onPressed: () {
                           // Remove user from followers list
@@ -90,15 +92,15 @@ class FollowersTab extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.accent,
                           foregroundColor: AppColors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                           ),
                         ),
                         child: const Text(
                           'Unfollow',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppDimensions.textS,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

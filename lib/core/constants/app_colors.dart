@@ -90,7 +90,7 @@ class AppColors {
   static const Color scrim = Color(0xFF000000);
 
   // Custom App Colors
-  static const Color success = Color(0xFF4CAF50);  // Green
+  static const Color success = accent;  // Green
   static const Color warning = Color(0xFFFF9800);  // Orange
   static const Color info = Color(0xFF2196F3);     // Blue
   static const Color buttonYellow = Color(0xFFFECD00); // Yellow for buttons
@@ -140,6 +140,34 @@ class AppColors {
   static const Color lightGreen = Color(0xFFE8F5E8);
   static const Color greenBackground = Color(0xFF4CAF50);
   static const Color lightBlue = Color(0xFFE3F2FD);
+  
+  // Additional colors for news and UI
+  static const Color newsGreen = Color(0xFF4CAF50);
+  static const Color newsLightGreen = Color(0xFFE8F5E8);
+  static const Color newsLightBlue = Color(0xFFE3F2FD);
+
+  // Performance specific colors
+  static const Color performanceGreen = Color(0xFF4CAF50);
+  static const Color performanceLightBlue = Color(0xFFE3F2FD);
+
+  // Event specific colors
+  static const Color eventGreen = Color(0xFF4CAF50);
+  static const Color eventLightGreen = Color(0xFFE8F5E8);
+  static const Color eventLightBlue = Color(0xFFE3F2FD);
+  
+  // Additional colors found in UI
+  static const Color amber = Color(0xFFFFC107);
+  static const Color teal = Color(0xFF009688);
+  static const Color purple = Color(0xFF9C27B0);
+  static const Color orange = Color(0xFFFF9800);
+  static const Color brown = Color(0xFF795548);
+  static const Color red = Color(0xFFF44336);
+  static const Color cyan = Color(0xFF00BCD4);
+  static const Color yellow = Color(0xFFFFEB3B);
+  static const Color blue = Color(0xFF2196F3);
+  static const Color pink = Color(0xFFE91E63);
+  static const Color deepOrange = Color(0xFFFF5722);
+  static const Color blueAccent = Color(0xFF03A9F4);
   
   // Reaction colors
 

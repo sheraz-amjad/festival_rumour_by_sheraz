@@ -6,6 +6,7 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_durations.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -21,6 +22,15 @@ class OtpView extends BaseView<OtpViewModel> {
 
   @override
   Widget buildView(BuildContext context, OtpViewModel viewModel) {
+    // Set status bar style for dark background
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
+    
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true, // ✅ allows background to move when keyboard opens
@@ -29,14 +39,14 @@ class OtpView extends BaseView<OtpViewModel> {
             Positioned.fill(
               child: ResponsiveContainer(
                 mobileMaxWidth: double.infinity,
-                tabletMaxWidth: 600,
-                desktopMaxWidth: 800,
+                tabletMaxWidth: double.infinity,
+                desktopMaxWidth: double.infinity,
                 child: Container(
                   padding: context.isLargeScreen
-                      ? const EdgeInsets.symmetric(horizontal: 50, vertical: 50)
+                      ? EdgeInsets.symmetric(horizontal: AppDimensions.paddingXXL, vertical: AppDimensions.paddingXXL)
                       : context.isMediumScreen
-                      ? const EdgeInsets.symmetric(horizontal: 40, vertical: 40)
-                      : const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+                      ? EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL, vertical: AppDimensions.paddingXL)
+                      : EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingM),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(AppAssets.bottomsheet),
@@ -47,29 +57,29 @@ class OtpView extends BaseView<OtpViewModel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 60),
+                        const SizedBox(height: AppDimensions.spaceXXL),
                         const ResponsiveTextWidget(
                           AppStrings.enterCode,
                           textType: TextType.body, 
-                            fontSize: 22,
+                            fontSize: AppDimensions.textXL,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         const SizedBox(height: AppDimensions.spaceS),
                         const ResponsiveTextWidget(
                           "${AppStrings.enterOtpDescription}\n+62 873 7764 2922",
-                          textType: TextType.body, color: AppColors.primary, fontSize: 15),
+                          textType: TextType.body, color: AppColors.primary, fontSize: AppDimensions.textM),
 
                         const SizedBox(height: AppDimensions.paddingL),
                         _buildOtpInput(context, viewModel),
 
                         if (viewModel.errorText != null) ...[
-                          const SizedBox(height: 10),
+                          const SizedBox(height: AppDimensions.paddingS),
                           ResponsiveTextWidget(
                             viewModel.errorText!,
                             style: const TextStyle(
                               color: AppColors.accent,
-                              fontSize: 14,
+                              fontSize: AppDimensions.textM,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -86,8 +96,8 @@ class OtpView extends BaseView<OtpViewModel> {
               ),
             ),
             Positioned(
-              top: 16,
-              left: 16,
+              left: AppDimensions.paddingM,
+              top: AppDimensions.spaceXL,
               child: CustomBackButton(onTap: () => context.pop()),
             ),
           ],
@@ -112,17 +122,17 @@ class OtpView extends BaseView<OtpViewModel> {
         inactiveFillColor: AppColors.onPrimary,
         activeFillColor: AppColors.onPrimary,
         selectedFillColor: AppColors.onPrimary,
-        inactiveColor: Colors.white, // ✅ white border
+        inactiveColor: AppColors.white, // ✅ white border
         selectedColor: AppColors.primary,
         activeColor: AppColors.primary,
       ),
       textStyle: const TextStyle(
         color: AppColors.primary,
-        fontSize: 30,
+        fontSize: AppDimensions.textXXL,
         fontWeight: FontWeight.bold,
       ),
       cursorColor: AppColors.primary,
-      animationDuration: const Duration(milliseconds: 200),
+      animationDuration: AppDurations.otpAnimationDuration,
       enableActiveFill: true,
       onChanged: viewModel.onCodeChanged,
       onCompleted: (_) {
@@ -157,7 +167,7 @@ class OtpView extends BaseView<OtpViewModel> {
           height: AppDimensions.iconS,
           child: CircularProgressIndicator(
             color: AppColors.accent,
-            strokeWidth: 2,
+            strokeWidth: AppDimensions.borderWidthS,
           ),
         )
             : const ResponsiveTextWidget(

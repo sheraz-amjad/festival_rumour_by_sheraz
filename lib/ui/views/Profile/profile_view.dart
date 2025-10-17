@@ -76,8 +76,8 @@ class _ProfileViewState extends State<ProfileView> {
                   pinned: true,
                   delegate: _ProfileTabsDelegate(
                     child: Container(
-                      height: 56.0, // Match the actual content height
-                      color: Colors.black.withOpacity(0.8),
+                      height: AppDimensions.buttonHeightXL, // Match the actual content height
+                      color: AppColors.black.withOpacity(0.8),
                       child: _profileTabs(),
                     ),
                   ),
@@ -86,7 +86,7 @@ class _ProfileViewState extends State<ProfileView> {
                 /// Dynamic Content
                 SliverToBoxAdapter(
                   child: Container(
-                    color: Colors.black.withOpacity(0.8),
+                    color: AppColors.black.withOpacity(0.8),
                     child: _buildDynamicContent(),
                   ),
                 ),
@@ -133,14 +133,14 @@ class _ProfileViewState extends State<ProfileView> {
                       textType: TextType.title,
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: AppDimensions.textL,
                     ),
                     SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
                     // Stats aligned with profile picture width
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _buildClickableStat("120", "Posts", () {
+                        _buildClickableStat("120", AppStrings.posts, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('posts');
                           } else {
@@ -148,7 +148,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("5.4K", "Followers", () {
+                        _buildClickableStat("5.4K", AppStrings.followers, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('followers');
                           } else {
@@ -157,7 +157,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("340", "Following", () {
+                        _buildClickableStat("340", AppStrings.following, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('following');
                           } else {
@@ -166,7 +166,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("3", "Festivals", () {
+                        _buildClickableStat("3", AppStrings.festivals, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('festivals');
                           } else {
@@ -186,10 +186,10 @@ class _ProfileViewState extends State<ProfileView> {
 
           /// Bio / Description below profile picture
           ResponsiveTextWidget(
-            "Bringing people together through music, color, and culture!",
+            AppStrings.bioDescription,
             textType: TextType.body,
             color: AppColors.white,
-            fontSize: 16,
+            fontSize: AppDimensions.textL,
             textAlign: TextAlign.left,
           ),
         ],
@@ -201,7 +201,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildDynamicContent() {
     return Column(
       children: [
-        SizedBox(height: context.isLargeScreen ? 20 : context.isMediumScreen ? 16 : 12),
+       // SizedBox(height: context.isLargeScreen ? 20 : context.isMediumScreen ? 16 : 12),
         if (selectedTab == 0) _profileGridWidget(),
         if (selectedTab == 1) _profileReelsWidget(),
         if (selectedTab == 2) _profileRepostsWidget(),
@@ -238,14 +238,14 @@ class _ProfileViewState extends State<ProfileView> {
                       textType: TextType.title,
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: AppDimensions.textL,
                     ),
                     SizedBox(height: context.isLargeScreen ? 12 : context.isMediumScreen ? 10 : 8),
                     // Stats aligned with profile picture width
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _buildClickableStat("120", "Posts", () {
+                        _buildClickableStat("120", AppStrings.posts, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('posts');
                           } else {
@@ -253,7 +253,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("5.4K", "Followers", () {
+                        _buildClickableStat("5.4K", AppStrings.followers, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('followers');
                           } else {
@@ -262,7 +262,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("340", "Following", () {
+                        _buildClickableStat("340", AppStrings.following, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('following');
                           } else {
@@ -271,7 +271,7 @@ class _ProfileViewState extends State<ProfileView> {
                           }
                         }),
                         SizedBox(width: context.isLargeScreen ? 8 : context.isMediumScreen ? 6 : 4),
-                        _buildClickableStat("3", "Festivals", () {
+                        _buildClickableStat("3", AppStrings.festivals, () {
                           if (widget.onNavigateToSub != null) {
                             widget.onNavigateToSub!('festivals');
                           } else {
@@ -292,10 +292,10 @@ class _ProfileViewState extends State<ProfileView> {
 
           /// Bio / Description below profile picture
           ResponsiveTextWidget(
-            "Bringing people together through music, color, and culture!",
+            AppStrings.bioDescription,
             textType: TextType.body,
             color: AppColors.white,
-            fontSize: 14,
+            fontSize: AppDimensions.textM,
             textAlign: TextAlign.left,
           ),
         ],
@@ -321,11 +321,11 @@ class _ProfileViewState extends State<ProfileView> {
 
           /// Profile title
           ResponsiveTextWidget(
-            "Profile",
+            AppStrings.profile,
             textType: TextType.title,
             color: AppColors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: AppDimensions.textL,
           ),
 
           /// Spacer to push icons to the right
@@ -412,12 +412,6 @@ class _ProfileViewState extends State<ProfileView> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Center(
-        child: ResponsiveTextWidget(
-          "Reels Section",
-          textType: TextType.body,
-          color: AppColors.white,
-          fontSize: 16,
-        ),
       ),
     );
   }
@@ -426,12 +420,6 @@ class _ProfileViewState extends State<ProfileView> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Center(
-        child: ResponsiveTextWidget(
-          "Reposts Section",
-          textType: TextType.body,
-          color: AppColors.white,
-          fontSize: 16,
-        ),
       ),
     );
   }
@@ -484,16 +472,16 @@ class _ProfileViewState extends State<ProfileView> {
             style: const TextStyle(
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 14)),
+                fontSize: AppDimensions.textM)),
         Text(label,
-            style: const TextStyle(color: AppColors.white, fontSize: 11)),
+            style: const TextStyle(color: AppColors.white, fontSize: AppDimensions.textXS)),
       ],
     );
   }
 
   Widget _profileTabs() {
     return Container(
-      height: 56.0,
+      height: AppDimensions.buttonHeightXL,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -533,7 +521,7 @@ class _ProfileViewState extends State<ProfileView> {
       MaterialPageRoute(
         builder: (_) =>
             Scaffold(
-              backgroundColor: Colors.black,
+              backgroundColor: AppColors.black,
               body: Stack(
                 children: [
                   Center(
@@ -546,7 +534,7 @@ class _ProfileViewState extends State<ProfileView> {
                     left: 20,
                     child: IconButton(
                       icon: const Icon(
-                          Icons.close, color: Colors.white, size: 30),
+                          Icons.close, color: AppColors.white, size: 30),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -576,10 +564,10 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: Text(
-                    "POST JOB",
+                    AppStrings.postJob,
                     style: TextStyle(
-                      color: Colors.yellow,
-                      fontSize: 16,
+                      color: AppColors.yellow,
+                      fontSize: AppDimensions.textL,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -587,23 +575,23 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               _buildJobTile(
                 image: AppAssets.job1,
-                title: "Festival Gizza Job",
+                title: AppStrings.festivalGizzaJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.jobpost);
                   // Navigate to add job screen if needed
                 },
               ),
-              const Divider(color: Colors.yellow, thickness: 1),
-              const SizedBox(height: 8),
+              const Divider(color: AppColors.yellow, thickness: 1),
+              const SizedBox(height: AppDimensions.spaceS),
               _buildJobTile(
                 image: AppAssets.job2,
-                title: "FestieHeros Job",
+                title: AppStrings.festieHerosJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.jobpost);
                   //d post screen if needed
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.paddingS),
             ],
           ),
         );
@@ -641,13 +629,13 @@ class _ProfileViewState extends State<ProfileView> {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
                       image,
-                      width: 50,
-                      height: 50,
+                      width: AppDimensions.imageM,
+                      height: AppDimensions.imageM,
                       fit: BoxFit.cover,
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.paddingS),
 
                   /// Text — flexible and ellipsis
                   Expanded(
@@ -656,9 +644,9 @@ class _ProfileViewState extends State<ProfileView> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: AppDimensions.textL,
                       ),
                     ),
                   ),
@@ -667,7 +655,7 @@ class _ProfileViewState extends State<ProfileView> {
             ),
 
             /// Chevron icon (outside Expanded)
-            const Icon(Icons.chevron_right, color: Colors.yellow),
+            const Icon(Icons.chevron_right, color: AppColors.yellow),
           ],
         ),
       ),

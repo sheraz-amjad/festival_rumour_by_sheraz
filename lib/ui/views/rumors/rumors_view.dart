@@ -195,7 +195,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                   child: DropdownButton<String>(
                     dropdownColor: AppColors.onPrimary,
                     isExpanded: false,
-                    menuMaxHeight: MediaQuery.of(context).size.height * 0.35,
+                    menuMaxHeight: context.screenHeight * 0.35,
                     icon: Container(
                       padding: const EdgeInsets.all(AppDimensions.paddingXS),
                       decoration: const BoxDecoration(
@@ -210,7 +210,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                         child: Row(
                           children: [
                             Icon(Icons.wifi_tethering, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
+                            SizedBox(width: AppDimensions.spaceS),
                             Text(AppStrings.live, style: TextStyle(color: AppColors.primary)),
                           ],
                         ),
@@ -220,7 +220,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                         child: Row(
                           children: [
                             Icon(Icons.schedule, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
+                            SizedBox(width: AppDimensions.spaceS),
                             Text(AppStrings.upcoming, style: TextStyle(color: AppColors.primary)),
                           ],
                         ),
@@ -230,7 +230,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
                         child: Row(
                           children: [
                             Icon(Icons.history, color: AppColors.primary, size: 20),
-                            SizedBox(width: 8),
+                            SizedBox(width: AppDimensions.spaceS),
                             Text(AppStrings.past, style: TextStyle(color: AppColors.primary)),
                           ],
                         ),
@@ -303,31 +303,31 @@ class RumorsView extends BaseView<RumorsViewModel> {
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: ResponsiveTextWidget(
-                    "POST JOB",
+                    AppStrings.postJob,
                     textType: TextType.title,
-                    color: Colors.yellow,
-                    fontSize: 16,
+                    color: AppColors.yellow,
+                    fontSize: AppDimensions.textL,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               _buildJobTile(
                 image: AppAssets.job1,
-                title: "Festival Gizza Job",
+                title: AppStrings.festivalGizzaJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                 },
               ),
-              const Divider(color: Colors.yellow, thickness: 1),
-              const SizedBox(height: 8),
+              const Divider(color: AppColors.yellow, thickness: 1),
+              const SizedBox(height: AppDimensions.spaceS),
               _buildJobTile(
                 image: AppAssets.job2,
-                title: "FestieHeros Job",
+                title: AppStrings.festieHerosJob,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.paddingS),
             ],
           ),
         );
@@ -355,25 +355,25 @@ class RumorsView extends BaseView<RumorsViewModel> {
                 children: [
                   /// Image
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                     child: Image.asset(
                       image,
-                      width: 50,
-                      height: 50,
+                      width: AppDimensions.imageM,
+                      height: AppDimensions.imageM,
                       fit: BoxFit.cover,
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.paddingS),
 
                   /// Text — flexible and ellipsis
                   Expanded(
                     child: ResponsiveTextWidget(
                       title,
                       textType: TextType.body,
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: AppDimensions.textL,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -383,7 +383,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
             ),
 
             /// Chevron icon (outside Expanded)
-            const Icon(Icons.chevron_right, color: Colors.yellow),
+            const Icon(Icons.chevron_right, color: AppColors.yellow),
           ],
         ),
       ),

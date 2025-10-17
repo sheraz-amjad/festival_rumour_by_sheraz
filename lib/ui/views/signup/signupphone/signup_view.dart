@@ -156,7 +156,7 @@ class SignupView extends BaseView<SignupViewModel> {
                 borderSide: BorderSide(color: AppColors.white),
               ),
               focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primary, width: 2),
+                borderSide: BorderSide(color: AppColors.primary, width: AppDimensions.borderWidthM),
               ),
               errorText: viewModel.phoneNumberError,
               errorStyle: const TextStyle(

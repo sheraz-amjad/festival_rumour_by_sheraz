@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_sizes.dart';
+import '../../../../../core/constants/app_strings.dart';
 import '../profile_list_view_model.dart';
 
 class FestivalsTab extends StatefulWidget {
@@ -33,7 +35,7 @@ class _FestivalsTabState extends State<FestivalsTab> {
             style: const TextStyle(color: AppColors.primary),
             cursorColor: AppColors.primary,
             decoration: InputDecoration(
-              hintText: "Search festivals...",
+              hintText: AppStrings.searchFestivals,
               hintStyle: const TextStyle(color: AppColors.primary),
               prefixIcon: const Icon(Icons.search, color: AppColors.primary),
               filled: true,
@@ -60,14 +62,14 @@ class _FestivalsTabState extends State<FestivalsTab> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: AppColors.white,
-                    width: 1,
+                    width: AppDimensions.borderWidthS,
                   ),
                 ),
                 child: Row(
                   children: [
                     Container(
-                      width: 48,
-                      height: 48,
+                      width: AppDimensions.imageM,
+                      height: AppDimensions.imageM,
                       decoration: BoxDecoration(
                         color: AppColors.accent.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(24),
@@ -78,7 +80,7 @@ class _FestivalsTabState extends State<FestivalsTab> {
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: AppDimensions.spaceM),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,24 +89,24 @@ class _FestivalsTabState extends State<FestivalsTab> {
                             festival['title'] ?? 'Unknown Festival',
                             style: const TextStyle(
                               color: AppColors.white,
-                              fontSize: 16,
+                              fontSize: AppDimensions.textL,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: AppDimensions.spaceXS),
                           Text(
                             festival['location'] ?? 'Unknown Location',
                             style: const TextStyle(
                               color: AppColors.grey600,
-                              fontSize: 14,
+                              fontSize: AppDimensions.textM,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      height: 32,
-                      width: 32,
+                      height: AppDimensions.iconM,
+                      width: AppDimensions.iconM,
                       margin: const EdgeInsets.only(right: 8),
                       child: IconButton(
                         onPressed: () => _toggleFavorite(index),
@@ -113,14 +115,14 @@ class _FestivalsTabState extends State<FestivalsTab> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                             side: BorderSide(
-                              color: isFavorite ? Colors.red : AppColors.grey600,
-                              width: 1,
+                              color: isFavorite ? AppColors.error : AppColors.grey600,
+                              width: AppDimensions.borderWidthS,
                             ),
                           ),
                         ),
                         icon: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : AppColors.grey600,
+                          color: isFavorite ? AppColors.error : AppColors.grey600,
                           size: 18,
                         ),
                       ),

@@ -115,11 +115,11 @@ class MapView extends BaseView<MapViewModel> {
       left: 50,
       top: 100,
       child: Container(
-        width: 200,
-        height: 200,
+        width: AppDimensions.imageXXL,
+        height: AppDimensions.imageXXL,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.grey.withOpacity(0.3),
+          color: AppColors.grey600.withOpacity(0.3),
         ),
         child: Center(
           child: Column(

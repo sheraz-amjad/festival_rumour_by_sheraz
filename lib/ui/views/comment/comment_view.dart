@@ -29,7 +29,7 @@ class CommentView extends BaseView<CommentViewModel> {
 
           /// 🔹 Dark overlay for readability
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.35)),
+            child: Container(color: AppColors.black.withOpacity(0.35)),
           ),
 
           /// 🔹 Main content
@@ -44,7 +44,7 @@ class CommentView extends BaseView<CommentViewModel> {
           Expanded(
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(AppDimensions.paddingL),
               decoration: BoxDecoration(
                 color: AppColors.onPrimary.withOpacity(0.3),
                 borderRadius: const BorderRadius.only(
@@ -58,13 +58,13 @@ class CommentView extends BaseView<CommentViewModel> {
                 expands: true,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: const InputDecoration(
-                  hintText: "Ask a question, gather people or share your thoughts 💡",
+                  hintText: AppStrings.commentHint,
                   hintStyle: TextStyle(color: AppColors.grey600),
                   border: InputBorder.none,
                 ),
                 style: const TextStyle(
                   color: AppColors.white,
-                  fontSize: 16,
+                  fontSize: AppDimensions.textL,
                 ),
               ),
             ),
@@ -72,12 +72,12 @@ class CommentView extends BaseView<CommentViewModel> {
           
           // Emoji bar
           Container(
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            height: AppDimensions.buttonHeightXL,
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.spaceS),
             decoration: BoxDecoration(
               color: AppColors.onPrimary.withOpacity(0.3),
               border: Border(
-                top: BorderSide(color: AppColors.grey700, width: 0.5),
+                top: BorderSide(color: AppColors.grey700, width: AppDimensions.dividerThickness),
               ),
             ),
             child: ListView.builder(
@@ -87,7 +87,7 @@ class CommentView extends BaseView<CommentViewModel> {
                 return GestureDetector(
                   onTap: () => viewModel.insertEmoji(viewModel.emojis[index]),
                   child: Container(
-                    margin: const EdgeInsets.only(right: 12),
+                    margin: EdgeInsets.only(right: AppDimensions.spaceM),
                     child: ResponsiveTextWidget(
                       viewModel.emojis[index],
                       textType: TextType.body,
@@ -197,7 +197,7 @@ class CommentView extends BaseView<CommentViewModel> {
 
   Widget _buildAppBar(BuildContext context, CommentViewModel viewModel) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.spaceS),
       child: Row(
         children: [
           IconButton(
@@ -206,7 +206,7 @@ class CommentView extends BaseView<CommentViewModel> {
           ),
           Expanded(
             child: ResponsiveTextWidget(
-              'Comment',
+              AppStrings.comments,
               textAlign: TextAlign.center,
               textType: TextType.title,
               color: AppColors.white,
@@ -219,13 +219,13 @@ class CommentView extends BaseView<CommentViewModel> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accent,
                 foregroundColor: AppColors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.spaceS),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
               child: const ResponsiveTextWidget(
-                'POST',
+                AppStrings.post,
                 textType: TextType.caption,
                 fontWeight: FontWeight.bold,
               ),
@@ -263,7 +263,7 @@ class CommentView extends BaseView<CommentViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: AppDimensions.spaceM, vertical: AppDimensions.spaceS),
         decoration: BoxDecoration(
           color: AppColors.grey700,
           borderRadius: BorderRadius.circular(16),

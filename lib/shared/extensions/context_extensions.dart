@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_sizes.dart';
+import '../../core/constants/app_strings.dart';
+
 /// Extension methods for BuildContext to provide easy access to common properties
 extension ContextExtensions on BuildContext {
   /// Get the current theme
@@ -104,8 +108,8 @@ extension ContextExtensions on BuildContext {
   void showSuccessSnackBar(String message) {
     showSnackBar(
       message,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
+      backgroundColor: AppColors.success,
+      textColor: AppColors.white,
     );
   }
 
@@ -113,8 +117,8 @@ extension ContextExtensions on BuildContext {
   void showWarningSnackBar(String message) {
     showSnackBar(
       message,
-      backgroundColor: Colors.orange,
-      textColor: Colors.white,
+      backgroundColor: AppColors.warning,
+      textColor: AppColors.white,
     );
   }
 
@@ -122,8 +126,8 @@ extension ContextExtensions on BuildContext {
   void showInfoSnackBar(String message) {
     showSnackBar(
       message,
-      backgroundColor: Colors.blue,
-      textColor: Colors.white,
+      backgroundColor: AppColors.info,
+      textColor: AppColors.white,
     );
   }
 
@@ -185,7 +189,7 @@ extension ContextExtensions on BuildContext {
           children: [
             const CircularProgressIndicator(),
             if (message != null) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: AppDimensions.paddingM),
               Text(message),
             ],
           ],
@@ -203,8 +207,8 @@ extension ContextExtensions on BuildContext {
   Future<bool?> showConfirmationDialog({
     required String title,
     required String message,
-    String confirmText = 'Confirm',
-    String cancelText = 'Cancel',
+    String confirmText = AppStrings.confirm,
+    String cancelText = AppStrings.cancel,
     Color? confirmColor,
   }) {
     return showDialog<bool>(
@@ -233,7 +237,7 @@ extension ContextExtensions on BuildContext {
   Future<void> showAlertDialog({
     required String title,
     required String message,
-    String buttonText = 'OK',
+    String buttonText = AppStrings.ok,
   }) {
     return showDialog<void>(
       context: this,

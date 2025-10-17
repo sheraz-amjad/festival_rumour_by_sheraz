@@ -112,6 +112,14 @@ class AppDimensions {
   static const double dividerThickness = 1.0;
   static const double dividerIndent = 16.0;
 
+  // Border Widths
+  static const double borderWidthS = 2.0;
+  static const double borderWidthM = 3.0;
+  static const double borderWidthL = 4.0;
+
+  // Aspect Ratios
+  static const double aspectRatio = 1.4;
+
   // Image Sizes
   static const double imageXS = 32.0;
   static const double imageS = 48.0;

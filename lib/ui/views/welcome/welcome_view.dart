@@ -67,15 +67,15 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
+                      SizedBox(height: AppDimensions.spaceM),
                       _buildGoogleLogin(viewModel,context),
-                      const SizedBox(height: 10),
+                      SizedBox(height: AppDimensions.spaceM),
                       _buildEmailLogin(viewModel),
-                      const SizedBox(height: 10),
+                      SizedBox(height: AppDimensions.spaceM),
                       _buildAppleLogin(viewModel,context),
-                      const SizedBox(height: 10),
+                      SizedBox(height: AppDimensions.spaceM),
                       _buildSignupResponsiveTextWidget(viewModel),
-                      const SizedBox(height: 15),
+                      SizedBox(height: AppDimensions.spaceM),
                     ],
                   ),
                 ),
@@ -86,7 +86,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
           /// Loader
           if (viewModel.isLoading)
             Container(
-              color: Colors.black45,
+              color: AppColors.black.withOpacity(0.45),
               alignment: Alignment.center,
               child: const CircularProgressIndicator(),
             ),
@@ -156,7 +156,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
             Expanded(
               child: ResponsiveTextWidget(
                 AppStrings.loginWithEmailPhone,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: AppColors.white),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -227,7 +227,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
         child: Text.rich(
           TextSpan(
             text: AppStrings.dontHaveAccount,
-            style: TextStyle(color: AppColors.primary, fontSize: 14),
+            style: TextStyle(color: AppColors.primary, fontSize: AppDimensions.textM),
             children: [
               TextSpan(
                 text: AppStrings.signupNow,

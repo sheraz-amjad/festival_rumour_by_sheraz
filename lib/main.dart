@@ -45,7 +45,7 @@ class FestivalRumourApp extends StatelessWidget {
 
       
       // Routing Configuration
-      initialRoute: AppRoutes.interest,
+      initialRoute: AppRoutes.splash,
       onGenerateRoute: onGenerateRoute,
       
       // Navigation Configuration
