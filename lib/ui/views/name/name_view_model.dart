@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import '../../../core/constants/app_durations.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -25,11 +27,23 @@ class NameViewModel extends BaseViewModel {
 
   /// Focus management methods
   void focusName() {
-    _nameFocus.requestFocus();
+    if (isDisposed) return;
+    
+    try {
+      _nameFocus.requestFocus();
+    } catch (e) {
+      if (kDebugMode) print('Error focusing name field: $e');
+    }
   }
 
   void unfocusName() {
-    _nameFocus.unfocus();
+    if (isDisposed) return;
+    
+    try {
+      _nameFocus.unfocus();
+    } catch (e) {
+      if (kDebugMode) print('Error unfocusing name field: $e');
+    }
   }
 
   @override
@@ -37,7 +51,9 @@ class NameViewModel extends BaseViewModel {
     super.init();
     // Auto-focus name field when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      focusName();
+      if (!isDisposed) {
+        focusName();
+      }
     });
   }
 
@@ -63,11 +79,11 @@ class NameViewModel extends BaseViewModel {
     unfocusName();
 
     await handleAsync(() async {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(AppDurations.buttonLoadingDuration);
       _showWelcome = true;
       notifyListeners();
 
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(AppDurations.buttonLoadingDuration);
     }, errorMessage: AppStrings.saveNameError);
   }
 

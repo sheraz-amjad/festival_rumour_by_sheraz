@@ -61,23 +61,54 @@ abstract class BaseViewModel extends ChangeNotifier {
     bool showLoading = true,
     String? errorMessage,
     void Function(String error)? onError,
+    Duration? minimumLoadingDuration,
   }) async {
+    // Check if ViewModel is disposed before proceeding
+    if (_isDisposed) return null;
+    
+    // Record start time for minimum loading duration
+    final startTime = DateTime.now();
+    
     try {
       if (showLoading) setLoading(true);
       clearError();
       
       final result = await operation();
       
-      if (showLoading) setLoading(false);
+      // Check if disposed after operation
+      if (_isDisposed) return null;
+      
+      // Ensure minimum loading duration if specified
+      if (minimumLoadingDuration != null) {
+        final elapsed = DateTime.now().difference(startTime);
+        if (elapsed < minimumLoadingDuration) {
+          await Future.delayed(minimumLoadingDuration - elapsed);
+        }
+      }
+      
+      if (showLoading && !_isDisposed) setLoading(false);
       return result;
     } catch (e) {
-      if (showLoading) setLoading(false);
+      // Check if disposed before error handling
+      if (_isDisposed) return null;
+      
+      // Ensure minimum loading duration even on error
+      if (minimumLoadingDuration != null) {
+        final elapsed = DateTime.now().difference(startTime);
+        if (elapsed < minimumLoadingDuration) {
+          await Future.delayed(minimumLoadingDuration - elapsed);
+        }
+      }
+      
+      if (showLoading && !_isDisposed) setLoading(false);
       
       final error = errorMessage ?? e.toString();
-      setError(error);
-      
-      if (onError != null) {
-        onError(error);
+      if (!_isDisposed) {
+        setError(error);
+        
+        if (onError != null) {
+          onError(error);
+        }
       }
       
       // Log error in debug mode

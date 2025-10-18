@@ -3,15 +3,16 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_durations.dart';
+import '../../../core/viewmodels/base_view_model.dart';
 
-class UsernameViewModel extends ChangeNotifier {
+class UsernameViewModel extends BaseViewModel {
   /// Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   /// State variables
   bool rememberMe = false;
-  bool isLoading = false;
   bool isPasswordVisible = false;
   bool isEmailValid = false;
   bool isPasswordValid = false;
@@ -169,13 +170,9 @@ class UsernameViewModel extends ChangeNotifier {
       return;
     }
 
-    // Start loading
-    isLoading = true;
-    notifyListeners();
-
-    try {
+    await handleAsync(() async {
       // Simulate API delay
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(AppDurations.loginLoadingDuration);
 
       // Simulate login validation
       if (await _performLogin(email, password)) {
@@ -185,18 +182,14 @@ class UsernameViewModel extends ChangeNotifier {
       } else {
         _showErrorSnackBar(context, AppStrings.loginFailed);
       }
-    } catch (e) {
-      _showErrorSnackBar(context, 'Login failed. Please try again.');
-    } finally {
-      // Stop loading
-      isLoading = false;
-      notifyListeners();
-    }
+    }, 
+    errorMessage: 'Login failed. Please try again.',
+    minimumLoadingDuration: AppDurations.loginLoadingDuration);
   }
 
   Future<bool> _performLogin(String email, String password) async {
     // Simulate API call
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(AppDurations.apiCallDuration);
     
     // Dummy validation - in real app, this would be an API call
     return email.isNotEmpty && password.isNotEmpty;
@@ -245,9 +238,9 @@ class UsernameViewModel extends ChangeNotifier {
   /// 🔹 Cleanup
   /// ---------------------------
   @override
-  void dispose() {
+  void onDispose() {
     emailController.dispose();
     passwordController.dispose();
-    super.dispose();
+    super.onDispose();
   }
 }

@@ -4,8 +4,17 @@ class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   /// Navigate to a new screen
-  Future<T?> navigateTo<T extends Object?>(String routeName, {Object? arguments}) {
-    return navigatorKey.currentState!.pushNamed<T>(routeName, arguments: arguments);
+  Future<T?> navigateTo<T extends Object?>(String routeName, {Object? arguments}) async {
+    try {
+      if (navigatorKey.currentState == null) {
+        print('NavigationService: Navigator state is null');
+        return null;
+      }
+      return await navigatorKey.currentState!.pushNamed<T>(routeName, arguments: arguments);
+    } catch (e) {
+      print('NavigationService: Error navigating to $routeName: $e');
+      return null;
+    }
   }
 
   /// Navigate to a new screen and replace current
@@ -36,7 +45,15 @@ class NavigationService {
 
   /// Pop current screen
   void pop<T extends Object?>([T? result]) {
-    navigatorKey.currentState!.pop<T>(result);
+    try {
+      if (navigatorKey.currentState == null) {
+        print('NavigationService: Navigator state is null');
+        return;
+      }
+      navigatorKey.currentState!.pop<T>(result);
+    } catch (e) {
+      print('NavigationService: Error popping: $e');
+    }
   }
 
   /// Pop until specific route

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/constants/app_numbers.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
@@ -6,6 +7,7 @@ import '../../../core/services/navigation_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_durations.dart';
 import 'post_model.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -28,7 +30,7 @@ class HomeViewModel extends BaseViewModel {
 
   Future<void> loadPosts() async {
     await handleAsync(() async {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(AppDurations.apiCallDuration);
 
       allPosts = [
         // 🔴 LIVE POSTS
@@ -121,7 +123,9 @@ class HomeViewModel extends BaseViewModel {
       
       // Apply initial filter
       _applyFilter();
-    }, errorMessage: AppStrings.failedToLoadPosts);
+    }, 
+    errorMessage: AppStrings.failedToLoadPosts,
+    minimumLoadingDuration: AppDurations.minimumLoadingDuration);
   }
 
   Future<void> refreshPosts() async {
@@ -198,7 +202,13 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void unfocusSearch() {
-    searchFocusNode.unfocus();
+    if (isDisposed) return;
+    
+    try {
+      searchFocusNode.unfocus();
+    } catch (e) {
+      if (kDebugMode) print('Error unfocusing search: $e');
+    }
   }
 
   String get currentSearchQuery => searchQuery;

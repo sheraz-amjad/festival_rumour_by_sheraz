@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/viewmodels/base_view_model.dart';
@@ -79,7 +80,9 @@ class FestivalViewModel extends BaseViewModel {
       // Initially show all festivals
       festivals.addAll(allFestivals);
       filteredFestivals.addAll(allFestivals);
-    }, errorMessage: AppStrings.failedToLoadFestivals);
+    }, 
+    errorMessage: AppStrings.failedToLoadFestivals,
+    minimumLoadingDuration: AppDurations.minimumLoadingDuration);
 
     if (festivals.isNotEmpty) {
       final int base = (festivals.length * AppDimensions.pageBaseMultiplier) + 1;
@@ -96,18 +99,31 @@ class FestivalViewModel extends BaseViewModel {
 
   void _startAutoSlide() {
     _autoSlideTimer?.cancel();
-    if (festivals.isEmpty) return;
+    if (festivals.isEmpty || isDisposed) {
+      return;
+    }
 
     _autoSlideTimer = Timer.periodic(AppDurations.autoSlideInterval, (_) {
-      if (pageController.positions.isEmpty) return;
-      final int nextPage = currentPage + 1;
-      pageController.animateToPage(
-        nextPage,
-        duration: AppDurations.slideAnimationDuration,
-        curve: Curves.easeInOut,
-      );
-      currentPage = nextPage;
-      notifyListeners();
+      if (isDisposed || pageController.positions.isEmpty || !pageController.hasClients) {
+        _autoSlideTimer?.cancel();
+        return;
+      }
+      
+      try {
+        final int nextPage = currentPage + 1;
+        pageController.animateToPage(
+          nextPage,
+          duration: AppDurations.slideAnimationDuration,
+          curve: Curves.easeInOut,
+        );
+        currentPage = nextPage;
+        if (!isDisposed) {
+          notifyListeners();
+        }
+      } catch (e) {
+        if (kDebugMode) print('Error in auto slide: $e');
+        _autoSlideTimer?.cancel();
+      }
     });
   }
 
@@ -120,22 +136,39 @@ class FestivalViewModel extends BaseViewModel {
   }
 
   void goToNextSlide() {
-    if (pageController.positions.isEmpty) return;
-    final int nextPage = currentPage + 1;
-    pageController.animateToPage(
-      nextPage,
-      duration: AppDurations.slideAnimationDuration,
-      curve: Curves.easeInOut,
-    );
-    currentPage = nextPage;
-    notifyListeners();
+    if (isDisposed || pageController.positions.isEmpty || !pageController.hasClients) return;
+    
+    try {
+      final int nextPage = currentPage + 1;
+      pageController.animateToPage(
+        nextPage,
+        duration: AppDurations.slideAnimationDuration,
+        curve: Curves.easeInOut,
+      );
+      currentPage = nextPage;
+      if (!isDisposed) {
+        notifyListeners();
+      }
+    } catch (e) {
+      if (kDebugMode) print('Error in goToNextSlide: $e');
+    }
   }
 
   void _jumpToInitialWhenReady(int page) {
+    if (isDisposed) return;
+    
     if (pageController.hasClients) {
-      pageController.jumpToPage(page);
+      try {
+        pageController.jumpToPage(page);
+      } catch (e) {
+        if (kDebugMode) print('Error jumping to page: $e');
+      }
     } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _jumpToInitialWhenReady(page));
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!isDisposed) {
+          _jumpToInitialWhenReady(page);
+        }
+      });
     }
   }
 
@@ -153,7 +186,13 @@ class FestivalViewModel extends BaseViewModel {
   }
 
   void unfocusSearch() {
-    searchFocusNode.unfocus();
+    if (isDisposed) return;
+    
+    try {
+      searchFocusNode.unfocus();
+    } catch (e) {
+      if (kDebugMode) print('Error unfocusing search: $e');
+    }
   }
 
   void _applySearchFilter() {

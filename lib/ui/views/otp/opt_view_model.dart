@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -24,23 +25,37 @@ class OtpViewModel extends BaseViewModel {
 
   /// Auto-focus OTP field when screen loads
   void focusOtpField() {
-    if (!_isFocusChanging && !_otpFocus.hasFocus) {
+    if (isDisposed || _isFocusChanging || _otpFocus.hasFocus) return;
+    
+    try {
       _isFocusChanging = true;
       _otpFocus.requestFocus();
       Future.delayed(AppDurations.shortDelay, () {
-        _isFocusChanging = false;
+        if (!isDisposed) {
+          _isFocusChanging = false;
+        }
       });
+    } catch (e) {
+      if (kDebugMode) print('Error focusing OTP field: $e');
+      _isFocusChanging = false;
     }
   }
 
   /// Unfocus OTP field
   void unfocusOtpField() {
-    if (!_isFocusChanging && _otpFocus.hasFocus) {
+    if (isDisposed || _isFocusChanging || !_otpFocus.hasFocus) return;
+    
+    try {
       _isFocusChanging = true;
       _otpFocus.unfocus();
       Future.delayed(AppDurations.shortDelay, () {
-        _isFocusChanging = false;
+        if (!isDisposed) {
+          _isFocusChanging = false;
+        }
       });
+    } catch (e) {
+      if (kDebugMode) print('Error unfocusing OTP field: $e');
+      _isFocusChanging = false;
     }
   }
 
@@ -49,7 +64,7 @@ class OtpViewModel extends BaseViewModel {
     super.init();
     // Auto-focus OTP field when screen loads (only once)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_otpFocus.hasFocus) {
+      if (!isDisposed && !_otpFocus.hasFocus) {
         focusOtpField();
       }
     });
@@ -76,33 +91,27 @@ class OtpViewModel extends BaseViewModel {
     }
 
     await handleAsync(() async {
-      _isLoading = true;
-      notifyListeners();
-
       // Simulate verification delay
-      await Future.delayed(AppDurations.autoSlideInterval);
+      await Future.delayed(AppDurations.otpVerificationDuration);
 
       // TODO: Replace with actual OTP verification API call
       // For now, accept any 4-digit OTP
       _errorText = null;
-      _isLoading = false;
-      notifyListeners();
 
       // ✅ Navigate to next screen
       _navigationService.navigateTo(AppRoutes.name);
-    }, errorMessage: AppStrings.otpVerificationError);
+    }, 
+    errorMessage: AppStrings.otpVerificationError,
+    minimumLoadingDuration: AppDurations.otpVerificationDuration);
   }
 
   /// 🔹 Resend OTP Code
   Future<void> resendCode() async {
     await handleAsync(() async {
-      _isLoading = true;
-      notifyListeners();
-
-      await Future.delayed(AppDurations.autoSlideInterval);
-      _isLoading = false;
-      notifyListeners();
-    }, errorMessage: AppStrings.resendCodeError);
+      await Future.delayed(AppDurations.buttonLoadingDuration);
+    }, 
+    errorMessage: AppStrings.resendCodeError,
+    minimumLoadingDuration: AppDurations.buttonLoadingDuration);
   }
 
   @override

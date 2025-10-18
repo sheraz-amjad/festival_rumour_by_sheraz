@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/navigation_service.dart';
@@ -28,11 +29,23 @@ class SignupViewModel extends BaseViewModel {
 
   /// Focus management methods
   void focusPhone() {
-    _phoneFocus.requestFocus();
+    if (isDisposed) return;
+    
+    try {
+      _phoneFocus.requestFocus();
+    } catch (e) {
+      if (kDebugMode) print('Error focusing phone field: $e');
+    }
   }
 
   void unfocusPhone() {
-    _phoneFocus.unfocus();
+    if (isDisposed) return;
+    
+    try {
+      _phoneFocus.unfocus();
+    } catch (e) {
+      if (kDebugMode) print('Error unfocusing phone field: $e');
+    }
   }
 
   @override
@@ -40,7 +53,9 @@ class SignupViewModel extends BaseViewModel {
     super.init();
     // Auto-focus phone field when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      focusPhone();
+      if (!isDisposed) {
+        focusPhone();
+      }
     });
   }
 
@@ -68,7 +83,7 @@ class SignupViewModel extends BaseViewModel {
     unfocusPhone();
 
     setLoading(true);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 100));
     setLoading(false);
 
     _navigationService.navigateTo(AppRoutes.otp);

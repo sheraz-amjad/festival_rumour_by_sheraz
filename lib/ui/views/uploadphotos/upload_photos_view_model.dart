@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_durations.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -25,7 +26,9 @@ class UploadPhotosViewModel extends BaseViewModel {
         selectedImage = kIsWeb ? pickedFile : File(pickedFile.path);
         notifyListeners();
       }
-    }, errorMessage: AppStrings.failtouploadimage);
+    }, 
+    errorMessage: AppStrings.failtouploadimage,
+    minimumLoadingDuration: AppDurations.buttonLoadingDuration);
 }
 
   /// Pick image from camera
@@ -37,7 +40,9 @@ class UploadPhotosViewModel extends BaseViewModel {
         selectedImage = kIsWeb ? pickedFile : File(pickedFile.path);
         notifyListeners();
       }
-    }, errorMessage: AppStrings.failedtotakephoto);
+    }, 
+    errorMessage: AppStrings.failedtotakephoto,
+    minimumLoadingDuration: AppDurations.buttonLoadingDuration);
   }
 
   /// Reset image
@@ -50,11 +55,13 @@ class UploadPhotosViewModel extends BaseViewModel {
   Future<void> continueToNext() async {
     await handleAsync(() async {
       // Simulate uploading image
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(AppDurations.apiCallDuration);
 
       // Navigate to next screen
       _navigationService.navigateTo(AppRoutes.interest);
-    }, errorMessage: AppStrings.faildtocontiue);
+    }, 
+    errorMessage: AppStrings.faildtocontiue,
+    minimumLoadingDuration: AppDurations.apiCallDuration);
   }
 
   /// Skip photo upload
@@ -62,6 +69,8 @@ class UploadPhotosViewModel extends BaseViewModel {
     await handleAsync(() async {
       // Navigate to next screen without uploading
       _navigationService.navigateTo(AppRoutes.interest);
-    }, errorMessage: AppStrings.faildtocontiue);
+    }, 
+    errorMessage: AppStrings.faildtocontiue,
+    minimumLoadingDuration: AppDurations.buttonLoadingDuration);
   }
 }

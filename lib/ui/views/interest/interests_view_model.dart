@@ -1,3 +1,4 @@
+import '../../../core/constants/app_durations.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
@@ -37,7 +38,7 @@ class InterestsViewModel extends BaseViewModel {
   Future<void> saveInterests() async {
     await handleAsync(() async {
       // Simulate API call to save interests
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(AppDurations.buttonLoadingDuration);
 
       // Navigate to next screen
       _navigationService.navigateTo(AppRoutes.festivals);
