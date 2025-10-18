@@ -46,7 +46,7 @@ class RumorsView extends BaseView<RumorsViewModel> {
               children: [
                 _buildAppBar(context, viewModel),
                 _buildSearchBar(context),
-                const SizedBox(height: AppDimensions.spaceS),
+                 SizedBox(height: context.getConditionalSpacing()),
                 Expanded(
                   child: _buildRumorsList(context, viewModel),
                 ),
@@ -76,15 +76,15 @@ class RumorsView extends BaseView<RumorsViewModel> {
         children: [
           // Back Button
           IconButton(
-            icon: const Icon(
+            icon:  Icon(
               Icons.arrow_back,
               color: AppColors.primary,
-              size: AppDimensions.iconL,
+              size: context.getConditionalIconSize(),
             ),
             onPressed: () => Navigator.pop(context),
           ),
           
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceXL : AppDimensions.spaceL),
+          SizedBox(width: context.getConditionalSpacing()),
           
           // Title - Flexible to prevent overflow
           Expanded(
@@ -92,36 +92,32 @@ class RumorsView extends BaseView<RumorsViewModel> {
               AppStrings.rumors,
               textType: TextType.heading,
               color: AppColors.primary,
-              fontSize: context.isLargeScreen ? AppDimensions.textXL :
-                           context.isMediumScreen ? AppDimensions.textL : AppDimensions.textS,
+              fontSize: context.getConditionalMainFont(),
               fontWeight: FontWeight.bold,
               maxLines: 1,
             ),
           ),
           
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceXXL),
+          SizedBox(width: context.getConditionalSpacing()),
 
           // Job Icon Button
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-              width: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
-              height: context.isLargeScreen ? 30 : context.isMediumScreen ? 28 : 25,
+              width: context.getConditionalIconSize(),
+              height: context.getConditionalIconSize(),
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
           
-          SizedBox(width: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceL),
+          SizedBox(width: context.getConditionalSpacing()),
           
           // Pro Label - Flexible container
           Flexible(
             child: GestureDetector(
               onTap: viewModel.goToSubscription,
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.isLargeScreen ? AppDimensions.paddingM : AppDimensions.paddingS,
-                  vertical: 2,
-                ),
+                padding: context.responsivePadding,
                 decoration: BoxDecoration(
                   color: AppColors.proLabelBackground,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -151,26 +147,26 @@ class RumorsView extends BaseView<RumorsViewModel> {
       child: StatefulBuilder(
         builder: (context, setState) {
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+            margin: context.responsiveMargin,
+            padding: context.responsivePadding,
             decoration: BoxDecoration(
               color: AppColors.onPrimary,
               borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
             ),
             child: Row(
               children: [
-                const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
-                const SizedBox(width: AppDimensions.spaceS),
+                 Icon(Icons.search, color: AppColors.onSurfaceVariant, size: context.getConditionalIconSize()),
+                 SizedBox(width: context.getConditionalSpacing()),
 
                 /// 🔹 Search Field
-                const Expanded(
+                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: AppStrings.searchHint,
                       hintStyle: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
-                        fontSize: AppDimensions.textM,
+                        fontSize: context.getConditionalFont(),
                       ),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,

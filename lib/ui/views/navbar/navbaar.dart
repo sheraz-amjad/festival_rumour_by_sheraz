@@ -1,6 +1,7 @@
 import 'package:festival_rumour/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/utils/custom_navbar.dart';
 import '../Profile/profile_view.dart';
@@ -87,19 +88,19 @@ class NavBaar extends BaseView<NavBaarViewModel> {
       case 'followers':
         return ProfileListView(
           initialTab: 0,
-          username: 'username',
+          Username: AppStrings.name,
           onBack: () => viewModel.setSubNavigation(null),
         );
       case 'following':
         return ProfileListView(
           initialTab: 1,
-          username: 'username',
+          Username: AppStrings.name,
           onBack: () => viewModel.setSubNavigation(null),
         );
       case 'festivals':
         return ProfileListView(
           initialTab: 2,
-          username: 'username',
+          Username: AppStrings.name,
           onBack: () => viewModel.setSubNavigation(null),
         );
       case 'toilets':

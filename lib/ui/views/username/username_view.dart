@@ -59,55 +59,70 @@ class _UsernameViewState extends State<UsernameView> {
                 /// 🔹 Overlay
                 Container(color: AppColors.overlayBlack45),
 
-                /// 🔹 Content (moves up on keyboard)
-                AnimatedPadding(
-                  duration: const Duration(milliseconds: 350),
-                  curve: Curves.easeOut,
-                  padding: EdgeInsets.only(bottom: keyboardHeight * 0.6),
-                  child: Center(
-                    child: ResponsiveContainer(
-                      mobileMaxWidth: double.infinity,
-                      tabletMaxWidth: AppDimensions.tabletWidth,
-                      desktopMaxWidth: AppDimensions.desktopWidth,
-                      child: ResponsivePadding(
-                        mobilePadding: EdgeInsets.symmetric(
-                          horizontal: screenWidth *0.04,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        tabletPadding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.2,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        desktopPadding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.25,
-                          vertical: screenHeight * 0.02,
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
+                /// 🔹 Content (keyboard-aware positioning)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final availableHeight = constraints.maxHeight;
+                      final isKeyboardVisible = keyboardHeight > 0;
+                      
+                      return SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: availableHeight,
+                          ),
+                          child: IntrinsicHeight(
+                            child: Column(
+                              mainAxisAlignment: isKeyboardVisible 
+                                ? MainAxisAlignment.start 
+                                : MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height: isKeyboardVisible ? screenHeight * 0.05 : screenHeight * 0.1),
+                            ResponsiveContainer(
+                              mobileMaxWidth: double.infinity,
+                              tabletMaxWidth: AppDimensions.tabletWidth,
+                              desktopMaxWidth: AppDimensions.desktopWidth,
+                              child: ResponsivePadding(
+                                mobilePadding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.02,
+                                  vertical: screenHeight * 0.02,
+                                ),
+                                tabletPadding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.2,
+                                  vertical: screenHeight * 0.02,
+                                ),
+                                desktopPadding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.25,
+                                  vertical: screenHeight * 0.02,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
                           /// Logo
                           SvgPicture.asset(
                             AppAssets.logo,
-                            height: context.isLargeScreen 
-                              ? screenHeight * 0.22
-                              : context.isMediumScreen 
-                                ? screenHeight * 0.20
-                                : screenHeight * 0.18,
+                            height: 150,
                             color: AppColors.primary,
                           ),
-                          SizedBox(height: screenHeight * 0.04),
+                          SizedBox(height: context.getConditionalSpacing()),
 
                           /// Login Card
                           Container(
-                            padding: const EdgeInsets.all(AppDimensions.paddingM),
+                            padding: context.responsivePadding,
+                            margin: context.responsiveMargin,
                             decoration: BoxDecoration(
                               color: AppColors.onPrimary.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            // crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                SizedBox(height: context.getConditionalSpacing()),
                                 /// Username Label
                                 Row(
                                   children: [
@@ -124,7 +139,7 @@ class _UsernameViewState extends State<UsernameView> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: AppDimensions.spaceS),
+                                SizedBox(height: context.getConditionalSpacing()),
 
                                 /// Username Field
                                 Focus(
@@ -132,15 +147,20 @@ class _UsernameViewState extends State<UsernameView> {
                                   child: TextField(
                                     controller: viewModel.emailController,
                                     focusNode: _emailFocusNode,
-                                    cursorColor: AppColors.white,
+                                    cursorColor: AppColors.primary,
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
+                                    textAlignVertical: TextAlignVertical.center,
                                     onChanged: viewModel.onUsernameChanged,
                                     onSubmitted: (_) {
                                       // Move focus to password field when user presses next
                                       _passwordFocusNode.requestFocus();
                                     },
-                                    style: const TextStyle(color: AppColors.white),
+                                    style: const TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 16,
+                                      height: 1.2,
+                                    ),
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: viewModel.isEmailValid 
@@ -149,47 +169,47 @@ class _UsernameViewState extends State<UsernameView> {
                                       hintText: AppStrings.enterYourEmail,
                                       hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.emailError,
-                                      errorStyle: const TextStyle(
+                                      errorStyle:  TextStyle(
                                         color: AppColors.error,
-                                        fontSize: AppDimensions.textS,
+                                        fontSize: context.responsiveTextS,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       prefixIcon: Icon(
                                         Icons.email,
-                                        color: viewModel.isEmailValid 
-                                          ? AppColors.success 
+                                        color: viewModel.isEmailValid
+                                          ? AppColors.success
                                           : AppColors.white70,
-                                        size: AppDimensions.iconS,
+                                        size: context.responsiveIconS,
                                       ),
                                       suffixIcon: viewModel.isEmailValid
-                                        ? const Icon(
+                                        ?  Icon(
                                             Icons.check_circle,
                                             color: AppColors.success,
-                                            size: AppDimensions.iconS,
+                                            size: context.responsiveIconS,
                                           )
                                         : null,
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: BorderSide(
-                                          color: viewModel.isEmailValid 
-                                            ? AppColors.success 
-                                            : AppColors.white, 
+                                          color: viewModel.isEmailValid
+                                            ? AppColors.success
+                                            : AppColors.white,
                                           width: AppDimensions.borderWidthS,
                                         ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: BorderSide(
-                                          color: viewModel.isEmailValid 
-                                            ? AppColors.success 
-                                            : AppColors.white60, 
+                                          color: viewModel.isEmailValid
+                                            ? AppColors.success
+                                            : AppColors.white60,
                                           width: AppDimensions.dividerThickness,
                                         ),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: const BorderSide(
-                                          color: AppColors.error, 
+                                          color: AppColors.primary,
                                           width: AppDimensions.borderWidthS,
                                         ),
                                       ),
@@ -197,9 +217,9 @@ class _UsernameViewState extends State<UsernameView> {
                                   ),
                                 ),
 
-                                const SizedBox(height: AppDimensions.spaceM),
+                                SizedBox(height: context.getConditionalSpacing()),
 
-                                /// Password Label
+
                                 Row(
                                   children: [
                                     ResponsiveTextWidget(
@@ -208,24 +228,25 @@ class _UsernameViewState extends State<UsernameView> {
                                       color: AppColors.accent,
                                         fontWeight: FontWeight.bold,
                                       ),
-                          ]
-                                    ),
                                     ResponsiveTextWidget(
                                       AppStrings.asterisk,
                                       textType: TextType.body,
                                       color: AppColors.error
                                     ),
-                                const SizedBox(height: AppDimensions.spaceS),
+                                ],
+                              ),
+                                SizedBox(height: context.getConditionalSpacing()),
 
-                                /// Password Field
+
                                 Focus(
                                   onFocusChange: viewModel.onPasswordFocusChange,
                                   child: TextField(
                                     controller: viewModel.passwordController,
                                     focusNode: _passwordFocusNode,
                                     obscureText: !viewModel.isPasswordVisible,
-                                    cursorColor: AppColors.white,
+                                    cursorColor: AppColors.primary,
                                     textInputAction: TextInputAction.done,
+                                    textAlignVertical: TextAlignVertical.center,
                                     onChanged: viewModel.onPasswordChanged,
                                     onSubmitted: (_) {
                                       // Attempt login when user presses done on password field
@@ -233,26 +254,30 @@ class _UsernameViewState extends State<UsernameView> {
                                         viewModel.validateAndLogin(context);
                                       }
                                     },
-                                    style: const TextStyle(color: AppColors.white),
+                                    style: const TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 16,
+                                      height: 1.2,
+                                    ),
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: viewModel.isPasswordValid 
+                                      fillColor: viewModel.isPasswordValid
                                         ? AppColors.success.withOpacity(0.1)
                                         : AppColors.primary.withOpacity(0.3),
                                       hintText: AppStrings.passwordPlaceholder,
                                       hintStyle: const TextStyle(color: AppColors.white70),
                                       errorText: viewModel.passwordError,
-                                      errorStyle: const TextStyle(
+                                      errorStyle:  TextStyle(
                                         color: AppColors.error,
-                                        fontSize: AppDimensions.textS,
+                                        fontSize: context.responsiveTextS,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       prefixIcon: Icon(
                                         Icons.lock,
-                                        color: viewModel.isPasswordValid 
-                                          ? AppColors.success 
+                                        color: viewModel.isPasswordValid
+                                          ? AppColors.success
                                           : AppColors.white70,
-                                        size: AppDimensions.iconS,
+                                        size: context.responsiveIconS,
                                       ),
                                       suffixIcon: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -272,7 +297,7 @@ class _UsernameViewState extends State<UsernameView> {
                                                 viewModel.passwordStrength,
                                                 style: TextStyle(
                                                   color: viewModel.passwordStrengthColor,
-                                                  fontSize: AppDimensions.textXS,
+                                                  fontSize: context.responsiveTextXS,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -283,7 +308,7 @@ class _UsernameViewState extends State<UsernameView> {
                                                   ? Icons.visibility
                                                   : Icons.visibility_off,
                                               color: AppColors.white70,
-                                              size: AppDimensions.iconS,
+                                              size: context.responsiveIconS,
                                             ),
                                             onPressed: viewModel.togglePasswordVisibility,
                                           ),
@@ -292,25 +317,25 @@ class _UsernameViewState extends State<UsernameView> {
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: BorderSide(
-                                          color: viewModel.isPasswordValid 
-                                            ? AppColors.success 
-                                            : AppColors.white, 
+                                          color: viewModel.isPasswordValid
+                                            ? AppColors.success
+                                            : AppColors.white,
                                           width: AppDimensions.borderWidthS,
                                         ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: BorderSide(
-                                          color: viewModel.isPasswordValid 
-                                            ? AppColors.success 
-                                            : AppColors.white60, 
+                                          color: viewModel.isPasswordValid
+                                            ? AppColors.success
+                                            : AppColors.white60,
                                           width: AppDimensions.dividerThickness,
                                         ),
                                       ),
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                         borderSide: const BorderSide(
-                                          color: AppColors.error, 
+                                          color: AppColors.primary,
                                           width: AppDimensions.borderWidthS,
                                         ),
                                       ),
@@ -318,47 +343,50 @@ class _UsernameViewState extends State<UsernameView> {
                                   ),
                                 ),
 
-                                const SizedBox(height: AppDimensions.spaceS),
+                                SizedBox(height: context.getConditionalSpacing()),
 
                                 /// Remember + Forgot
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                                   children: [
                                     Row(
                                       children: [
                                         Checkbox(
                                           value: viewModel.rememberMe,
                                           onChanged: viewModel.toggleRememberMe,
-                                          activeColor: AppColors.onPrimary,
+                                          activeColor: AppColors.primary,
+                                          checkColor: AppColors.onPrimary,
                                         ),
-                                        const ResponsiveTextWidget(
+
+                                         ResponsiveTextWidget(
                                           AppStrings.rememberMe,
-                                          textType: TextType.body,
+                                          fontSize: context.responsiveTextS,
                                       color: AppColors.primary),
                                       ],
                                     ),
+
+
                                     const ResponsiveTextWidget(
                                       AppStrings.forgotPassword,
-                                      textType: TextType.body,
+                                      fontSize: AppDimensions.textS,
                                       color: AppColors.accent,
                                         fontWeight: FontWeight.bold,
                                       ),
                                   ],
                                 ),
 
-                                const SizedBox(height: AppDimensions.spaceM),
+                                SizedBox(height: context.getConditionalSpacing()),
 
                                 /// Login Button
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: viewModel.isFormValid 
-                                      ? AppColors.accent 
-                                      : AppColors.grey600,
+                                    backgroundColor: AppColors.accent,
                                     padding: const EdgeInsets.all(AppDimensions.paddingM),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(AppDimensions.radiusS),
                                     ),
-                                    elevation: viewModel.isFormValid ? 4 : 0,
+                                    elevation: 4,
                                   ),
                                   onPressed: viewModel.isLoading
                                       ? null
@@ -375,7 +403,7 @@ class _UsernameViewState extends State<UsernameView> {
                                                 strokeWidth: 2,
                                               ),
                                             ),
-                                            const SizedBox(width: AppDimensions.spaceS),
+                                            SizedBox(width: context.responsiveSpaceS),
                                             const ResponsiveTextWidget(
                                               AppStrings.loggingIn,
                                               textType: TextType.body,
@@ -387,18 +415,14 @@ class _UsernameViewState extends State<UsernameView> {
                                       : Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              viewModel.isFormValid 
-                                                ? Icons.login 
-                                                : Icons.lock,
+                                             Icon(
+                                              Icons.login,
                                               color: AppColors.white,
-                                              size: AppDimensions.iconS,
+                                              size: context.responsiveIconS,
                                             ),
-                                            const SizedBox(width: AppDimensions.spaceS),
-                                            ResponsiveTextWidget(
-                                              viewModel.isFormValid 
-                                                ? AppStrings.login 
-                                                : AppStrings.completeFormToLogin,
+                                            SizedBox(width: context.responsiveSpaceS),
+                                            const ResponsiveTextWidget(
+                                              AppStrings.login,
                                               textType: TextType.body,
                                               color: AppColors.white,
                                               fontWeight: FontWeight.bold,
@@ -407,10 +431,9 @@ class _UsernameViewState extends State<UsernameView> {
                                         ),
                                 ),
 
-                                const SizedBox(height: AppDimensions.spaceM),
+                                SizedBox(height: context.getConditionalSpacing()),
 
-                                /// Sign Up Text
-                                /// Sign Up Text
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -418,26 +441,33 @@ class _UsernameViewState extends State<UsernameView> {
                                       AppStrings.dontHaveAccount,
                                       textType: TextType.body,
                                       color: AppColors.primary),
-                                    const SizedBox(width: AppDimensions.spaceXS),
+                                    SizedBox(width: AppDimensions.spaceXS),
                                     GestureDetector(
                                       onTap: () => viewModel.goToSignUp(context),
-                                      child: const ResponsiveTextWidget(
+                                      child:  ResponsiveTextWidget(
                                         AppStrings.signUp,
-                                        textType: TextType.body,
+                                        fontSize: context.getConditionalFont(),
                                           color: AppColors.accent,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                   ],
                                 ),
+                                SizedBox(height: context.getConditionalSpacing()),
                               ],
                             ),
                           ),
-                        ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                                SizedBox(height: isKeyboardVisible ? screenHeight * 0.02 : screenHeight * 0.1),
+                              ],
+                            ),
+                          ),
                         ),
-                        ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ),
               ],

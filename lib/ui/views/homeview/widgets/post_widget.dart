@@ -58,7 +58,9 @@ class _PostWidgetState extends State<PostWidget> {
               post.username,
               style: const TextStyle(fontWeight: FontWeight.bold,color: AppColors.accent),
             ),
-            subtitle: Text(post.timeAgo),
+            subtitle: Text(post.timeAgo
+                  , style: const TextStyle(fontWeight: FontWeight.bold,color: AppColors.primary),
+            ),
             trailing: const Icon(Icons.more_horiz),
           ),
 

@@ -15,7 +15,7 @@ class AppAssets {
   static const String logo = 'assets/icons/logo.svg';
   static const String handicon = 'assets/icons/handicon.png';
   static const String iconcharcter = 'assets/icons/iconcharacter.png';
-  static const String mapicon = 'assets/images/mapicon.png';
+  static const String mapicon = 'assets/images/location.png';
   static const String chaticon = 'assets/images/chaticon.png';
   static const String rumors = 'assets/images/rumour.png';
   static const String detailicon = 'assets/images/detailicon.png';

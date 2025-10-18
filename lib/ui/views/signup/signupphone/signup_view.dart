@@ -22,6 +22,26 @@ class SignupView extends BaseView<SignupViewModel> {
 
   @override
   Widget buildView(BuildContext context, SignupViewModel viewModel) {
+    // Listen for error messages and show snackbar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModel.errorMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(viewModel.errorMessage!),
+            backgroundColor: AppColors.accent,
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: AppColors.onPrimary,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
@@ -38,19 +58,9 @@ class SignupView extends BaseView<SignupViewModel> {
               desktopMaxWidth: AppDimensions.desktopWidth,
               child: Container(
                 width: double.infinity,
-                padding: context.isLargeScreen
-                    ? const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingXL,
-                  vertical: AppDimensions.paddingXXL,
-                )
-                    : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingL,
-                  vertical: AppDimensions.paddingXL,
-                )
-                    : const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingM,
-                  vertical: AppDimensions.paddingL,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.responsivePadding.top,
+                  vertical: context.responsivePadding.left,
                 ),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -66,11 +76,11 @@ class SignupView extends BaseView<SignupViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context),
-                      const SizedBox(height: AppDimensions.paddingL),
+                      SizedBox(height: context.responsiveSpaceL),
                       _buildPhoneInput(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingL),
+                      SizedBox(height: context.responsiveSpaceL),
                       _buildDescription(context),
-                      const SizedBox(height: AppDimensions.paddingXL),
+                      SizedBox(height: context.responsiveSpaceXL),
                       _buildContinueButton(context, viewModel),
                     ],
                   ),
@@ -95,11 +105,11 @@ class SignupView extends BaseView<SignupViewModel> {
     return Row(
       children: [
         CustomBackButton(onTap: () => context.pop()),
-        const SizedBox(width: AppDimensions.spaceS),
+        SizedBox(width: context.responsiveSpaceM),
         ResponsiveTextWidget(
           AppStrings.signUp,
-          style: const TextStyle(
-            fontSize: AppDimensions.textXXL,
+          style: TextStyle(
+            fontSize: context.responsiveTextXXL,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
@@ -124,8 +134,8 @@ class SignupView extends BaseView<SignupViewModel> {
               context: context,
               locale: const Locale(AppStrings.localeEnglish),
               child: CountryCodePicker(
-                onChanged: (country) {},
-                initialSelection: AppStrings.defaultCountryCode,
+                onChanged: viewModel.onCountryChanged,
+                initialSelection: viewModel.selectedCountryCode.code,
                 favorite: AppStrings.favoriteCountries,
                 showCountryOnly: false,
                 showOnlyCountryWhenClosed: false,
@@ -142,7 +152,7 @@ class SignupView extends BaseView<SignupViewModel> {
             ),
           ),
         ),
-        const SizedBox(width: AppDimensions.spaceM),
+        SizedBox(width: context.responsiveSpaceM),
         Expanded(
           child: TextField(
             controller: viewModel.phoneNumberController,
@@ -159,14 +169,14 @@ class SignupView extends BaseView<SignupViewModel> {
                 borderSide: BorderSide(color: AppColors.primary, width: AppDimensions.borderWidthM),
               ),
               errorText: viewModel.phoneNumberError,
-              errorStyle: const TextStyle(
+              errorStyle: TextStyle(
                 color: AppColors.accent,
-                fontSize: AppDimensions.textS,
+                fontSize: context.responsiveTextS,
                 fontWeight: FontWeight.w500,
               ),
             ),
             keyboardType: TextInputType.phone,
-            cursorColor: AppColors.white,
+            cursorColor: AppColors.primary,
             textInputAction: TextInputAction.done,
             onChanged: (value) {
               viewModel.validatePhone();
@@ -187,9 +197,9 @@ class SignupView extends BaseView<SignupViewModel> {
   Widget _buildDescription(BuildContext context) {
     return ResponsiveTextWidget(
       AppStrings.description,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.white,
-        fontSize: AppDimensions.textM,
+        fontSize: context.responsiveTextM,
       ),
     );
   }
@@ -197,33 +207,34 @@ class SignupView extends BaseView<SignupViewModel> {
   Widget _buildContinueButton(BuildContext context, SignupViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: AppDimensions.buttonHeightXL,
+      height: context.responsiveButtonHeightXL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(
-              vertical: AppDimensions.paddingM),
+          padding: EdgeInsets.symmetric(
+            vertical: context.responsivePadding.top,
+          ),
         ),
         onPressed: viewModel.isLoading ? null : viewModel.goToOtp,
         child: viewModel.isLoading
-            ? const SizedBox(
-          width: AppDimensions.iconS,
-          height: AppDimensions.iconS,
+            ?  SizedBox(
+          width: context.responsiveIconS,
+          height: context.responsiveIconS,
           child: CircularProgressIndicator(
             color: AppColors.accent,
             strokeWidth: 2,
           ),
         )
-            :  ResponsiveTextWidget(
+            : ResponsiveTextWidget(
           AppStrings.continueText,
-          textType: TextType.body, 
-            fontSize: AppDimensions.textL,
-            fontWeight: FontWeight.bold,
-            color: AppColors.onPrimary,
-          ),
+          textType: TextType.body,
+          fontSize: context.responsiveTextL,
+          fontWeight: FontWeight.bold,
+          color: AppColors.onPrimary,
+        ),
         ),
     );
   }

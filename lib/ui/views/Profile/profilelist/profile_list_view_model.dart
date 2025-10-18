@@ -1,4 +1,5 @@
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/viewmodels/base_view_model.dart';
 
 /// ViewModel for ProfileListView that manages followers, following, and festivals.
@@ -14,21 +15,21 @@ class ProfileListViewModel extends BaseViewModel {
 
   // --- Mock Data (Replace with Repository Data) ---
   final List<Map<String, String>> _allFollowers = [
-    {'name': 'John Doe', 'username': 'johndoe', 'image': AppAssets.profile},
-    {'name': 'Jane Smith', 'username': 'janesmith', 'image': AppAssets.profile},
-    {'name': 'Ali Khan', 'username': 'alikhan', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName1, 'username': 'johndoe', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName2, 'username': 'janesmith', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName3, 'username': 'alikhan', 'image': AppAssets.profile},
   ];
 
   final List<Map<String, String>> _allFollowing = [
-    {'name': 'Mike Johnson', 'username': 'mikej', 'image': AppAssets.profile},
-    {'name': 'Sarah Wilson', 'username': 'sarahw', 'image': AppAssets.profile},
-    {'name': 'Ayesha Noor', 'username': 'ayeshan', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName1, 'username': 'mikej', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName2, 'username': 'sarahw', 'image': AppAssets.profile},
+    {'name': AppStrings.mockUserName3, 'username': 'ayeshan', 'image': AppAssets.profile},
   ];
 
   final List<Map<String, String>> _allFestivals = [
-    {'title': 'Coachella 2024', 'location': 'California'},
-    {'title': 'Glastonbury', 'location': 'UK'},
-    {'title': 'Burning Man', 'location': 'Nevada'},
+    {'title': AppStrings.mockFestival2, 'location': AppStrings.mockLocation2},
+    {'title': AppStrings.mockFestival6, 'location': AppStrings.mockLocation5},
+    {'title': AppStrings.mockFestival4, 'location': AppStrings.mockLocation4},
   ];
 
   // --- Filtered Lists ---

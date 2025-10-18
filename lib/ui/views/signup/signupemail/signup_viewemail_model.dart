@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/services/firebase_auth_service.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/viewmodels/base_view_model.dart';
 
 class SignupViewEmailModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -167,15 +169,39 @@ class SignupViewEmailModel extends BaseViewModel {
     }
   }
 
-  /// ✅ Navigate if valid
+  /// ✅ Navigate if valid with Firebase Auth
   Future<void> goToOtp() async {
     if (!validateFields()) return;
 
     setLoading(true);
-    await Future.delayed(const Duration(milliseconds: 100));
-    setLoading(false);
 
-    _navigationService.navigateTo(AppRoutes.signup);
+    try {
+      // Create user account with Firebase
+      final result = await _authService.signUpWithEmail(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+
+      if (result.isSuccess) {
+        // User created successfully, navigate to next screen
+        _navigationService.navigateTo(AppRoutes.name);
+      } else {
+        // Show error message
+        _showErrorSnackBar(result.errorMessage ?? 'Failed to create account');
+      }
+    } catch (e) {
+      _showErrorSnackBar('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /// Show error message
+  void _showErrorSnackBar(String message) {
+    // This will be handled by the view
+    // For now, we'll store the error message
+    emailError = message;
+    notifyListeners();
   }
 
   @override

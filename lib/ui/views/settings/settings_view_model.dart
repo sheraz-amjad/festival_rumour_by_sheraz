@@ -24,7 +24,7 @@ class SettingsViewModel extends BaseViewModel {
 
   /// 🔹 Navigation / Actions (stub methods for now)
   void editAccount() {
-    // TODO: Navigate to Edit Account Details screen
+    _navigationService.navigateTo(AppRoutes.editAccount);
   }
 
   void openBadges() {

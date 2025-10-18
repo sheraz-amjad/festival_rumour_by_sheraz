@@ -1,7 +1,9 @@
+import 'package:festival_rumour/shared/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
 import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/router/app_router.dart';
 import '../profile_list_view_model.dart';
 
 class FollowersTab extends StatelessWidget {
@@ -53,25 +55,25 @@ class FollowersTab extends StatelessWidget {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: AppDimensions.avatarM,
+                      radius: AppDimensions.avatarS,
                       backgroundImage: AssetImage(follower['image'] ?? ''),
                       backgroundColor: AppColors.primary.withOpacity(0.1),
                     ),
-                    const SizedBox(width: AppDimensions.paddingS),
+                    const SizedBox(width: AppDimensions.paddingXS),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          ResponsiveText(
                             follower['name'] ?? 'Unknown User',
                             style: const TextStyle(
                               color: AppColors.white,
                               fontSize: AppDimensions.textL,
-                              fontWeight: FontWeight.w600,
+                            //  fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(height: AppDimensions.spaceXS),
-                          Text(
+                          ResponsiveText(
                             follower['username'] ?? '',
                             style: const TextStyle(
                               color: AppColors.grey600,
@@ -82,7 +84,7 @@ class FollowersTab extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: AppDimensions.buttonHeightS,
+                      height: AppDimensions.buttonHeightM,
                       margin: const EdgeInsets.only(right: AppDimensions.spaceS),
                       child: ElevatedButton(
                         onPressed: () {
@@ -91,32 +93,58 @@ class FollowersTab extends StatelessWidget {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.accent,
-                          foregroundColor: AppColors.white,
+                          foregroundColor: AppColors.onPrimary,
                           padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                           ),
                         ),
-                        child: const Text(
+                        child: const ResponsiveText(
                           'Unfollow',
                           style: TextStyle(
-                            fontSize: AppDimensions.textS,
+                            fontSize: AppDimensions.textM,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.more_vert,
-                        color: AppColors.white,
+                PopupMenuButton<String>(
+                  color: AppColors.primary,
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: AppColors.white,
+                  ),
+                  itemBuilder: (BuildContext context) => [
+                     PopupMenuItem<String>(
+                      value: 'Message',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navigate to chat view
+                          Navigator.pushNamed(context, AppRoutes.chat);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.accent,
+                          foregroundColor: AppColors.onPrimary,
+                          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+                          ),
+                        ),
+
+                        child: const ResponsiveText(
+                          'Message',
+                          style: TextStyle(
+                            fontSize: AppDimensions.textM,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        // Handle more options
-                      },
+
                     ),
                   ],
                 ),
+                ]
+              ),
               );
             },
           ),

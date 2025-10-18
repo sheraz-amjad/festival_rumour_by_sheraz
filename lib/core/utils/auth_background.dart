@@ -23,7 +23,7 @@ class AuthBackground extends StatelessWidget {
         /// Background Image
         SizedBox(
           width: double.infinity,
-          height: screenHeight * 0.7,
+          height: screenHeight * 0.8,
           child: Image.asset(
             AppAssets.background,
             fit: BoxFit.cover,
@@ -34,7 +34,7 @@ class AuthBackground extends StatelessWidget {
         Container(
           width: double.infinity,
           height: screenHeight,
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withOpacity(0.7),
         ),
 
         /// Logo + Welcome text
@@ -46,16 +46,16 @@ class AuthBackground extends StatelessWidget {
               Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: EdgeInsets.only(top: screenHeight * 0.1),
+                  padding: EdgeInsets.only(top: screenHeight * 0.15),
                   child: SvgPicture.asset(
                     AppAssets.logo,
                     color: Colors.white,
-                    height: screenHeight * 0.22,
+                    height: screenHeight * 0.20,
                   ),
                 ),
               ),
               Positioned(
-                top: screenHeight * 0.37,
+                top: screenHeight * 0.35,
                 left: screenWidth * 0.1,
                 right: screenWidth * 0.1,
                 child: Column(
@@ -65,7 +65,7 @@ class AuthBackground extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.headingColor,
-                        fontSize: screenHeight * 0.04,
+                        fontSize: screenHeight * 0.05,
                         fontWeight: AppFonts.headingFontWeight,
                       ),
                     ),
@@ -75,7 +75,7 @@ class AuthBackground extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: AppColors.headingColor,
-                        fontSize: screenHeight * 0.04,
+                        fontSize: screenHeight * 0.05,
                         fontWeight: AppFonts.headingFontWeight,
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
@@ -14,7 +15,7 @@ class FollowingTab extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical:AppDimensions.paddingS),
           child: TextField(
             style: const TextStyle(color: AppColors.primary),
             cursorColor: AppColors.primary,
@@ -25,7 +26,7 @@ class FollowingTab extends StatelessWidget {
               filled: true,
               fillColor: AppColors.onPrimary.withOpacity(0.3),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
               ),
             ),
             onChanged: viewModel.searchFollowing,
@@ -33,16 +34,16 @@ class FollowingTab extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             itemCount: viewModel.following.length,
             itemBuilder: (context, index) {
               final following = viewModel.following[index];
               return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: AppDimensions.paddingS),
+                padding: const EdgeInsets.all(AppDimensions.paddingM),
                 decoration: BoxDecoration(
                   color: AppColors.black,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                   border: Border.all(
                     color: AppColors.white,
                     width: AppDimensions.dividerThickness,
@@ -51,16 +52,16 @@ class FollowingTab extends StatelessWidget {
                 child: Row(
                   children: [
                     CircleAvatar(
-                      radius: AppDimensions.avatarM,
+                      radius: AppDimensions.avatarS,
                       backgroundImage: AssetImage(following['image'] ?? ''),
                       backgroundColor: AppColors.primary.withOpacity(0.1),
                     ),
-                    const SizedBox(width: AppDimensions.paddingS),
+                    const SizedBox(width: AppDimensions.paddingXS),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          ResponsiveText(
                             following['name'] ?? 'Unknown User',
                             style: const TextStyle(
                               color: AppColors.white,
@@ -69,7 +70,7 @@ class FollowingTab extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: AppDimensions.spaceXS),
-                          Text(
+                          ResponsiveText(
                             following['username'] ?? '',
                             style: const TextStyle(
                               color: AppColors.grey600,
@@ -80,25 +81,25 @@ class FollowingTab extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: AppDimensions.buttonHeightS,
-                      margin: const EdgeInsets.only(right: 8),
+                      height: AppDimensions.buttonHeightM,
+                      margin: const EdgeInsets.only(right: AppDimensions.spaceS),
                       child: ElevatedButton(
                         onPressed: () {
                           // Navigate to chat view
                           Navigator.pushNamed(context, AppRoutes.chat);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.grey600,
-                          foregroundColor: AppColors.primary,
+                          backgroundColor: AppColors.accent,
+                          foregroundColor: AppColors.onPrimary,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text(
+                        child: const ResponsiveText(
                           'Message',
                           style: TextStyle(
-                            fontSize: AppDimensions.textS,
+                            fontSize: AppDimensions.textM,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -125,7 +126,7 @@ class FollowingTab extends StatelessWidget {
                                 size: AppDimensions.iconS,
                               ),
                               SizedBox(width: AppDimensions.spaceS),
-                              Text(
+                              ResponsiveText(
                                 AppStrings.unfollow,
                                 style: TextStyle(
                                   color: AppColors.red,

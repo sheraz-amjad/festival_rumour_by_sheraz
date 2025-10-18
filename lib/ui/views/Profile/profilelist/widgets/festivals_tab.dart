@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/widgets/responsive_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_sizes.dart';
@@ -30,7 +31,7 @@ class _FestivalsTabState extends State<FestivalsTab> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
           child: TextField(
             style: const TextStyle(color: AppColors.primary),
             cursorColor: AppColors.primary,
@@ -41,7 +42,8 @@ class _FestivalsTabState extends State<FestivalsTab> {
               filled: true,
               fillColor: AppColors.onPrimary.withOpacity(0.3),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
+
               ),
             ),
             onChanged: widget.viewModel.searchFestivals,
@@ -49,20 +51,20 @@ class _FestivalsTabState extends State<FestivalsTab> {
         ),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             itemCount: widget.viewModel.festivals.length,
             itemBuilder: (context, index) {
               final festival = widget.viewModel.festivals[index];
               final isFavorite = _favoriteFestivals.contains(index);
               return Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: AppDimensions.paddingS),
+                padding: const EdgeInsets.all(AppDimensions.paddingM),
                 decoration: BoxDecoration(
                   color: AppColors.black,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
                   border: Border.all(
                     color: AppColors.white,
-                    width: AppDimensions.borderWidthS,
+                    width: AppDimensions.dividerThickness,
                   ),
                 ),
                 child: Row(
@@ -71,13 +73,13 @@ class _FestivalsTabState extends State<FestivalsTab> {
                       width: AppDimensions.imageM,
                       height: AppDimensions.imageM,
                       decoration: BoxDecoration(
-                        color: AppColors.accent.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(24),
+                        color: AppColors.accent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(AppDimensions.avatarS),
                       ),
                       child: const Icon(
                         Icons.military_tech,
                         color: AppColors.accent,
-                        size: 24,
+                        size: AppDimensions.imageM,
                       ),
                     ),
                     SizedBox(width: AppDimensions.spaceM),
@@ -85,16 +87,16 @@ class _FestivalsTabState extends State<FestivalsTab> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          ResponsiveText(
                             festival['title'] ?? 'Unknown Festival',
                             style: const TextStyle(
                               color: AppColors.white,
-                              fontSize: AppDimensions.textL,
+                              fontSize: AppDimensions.textM,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           SizedBox(height: AppDimensions.spaceXS),
-                          Text(
+                          ResponsiveText(
                             festival['location'] ?? 'Unknown Location',
                             style: const TextStyle(
                               color: AppColors.grey600,
@@ -105,25 +107,16 @@ class _FestivalsTabState extends State<FestivalsTab> {
                       ),
                     ),
                     Container(
-                      height: AppDimensions.iconM,
-                      width: AppDimensions.iconM,
-                      margin: const EdgeInsets.only(right: 8),
+                      margin: const EdgeInsets.only(right: AppDimensions.spaceXS),
                       child: IconButton(
                         onPressed: () => _toggleFavorite(index),
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: isFavorite ? AppColors.error : AppColors.grey600,
-                              width: AppDimensions.borderWidthS,
-                            ),
-                          ),
                         ),
                         icon: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? AppColors.error : AppColors.grey600,
-                          size: 18,
+                          color: isFavorite ? AppColors.red : AppColors.white,
+                          size: AppDimensions.iconL,
                         ),
                       ),
                     ),

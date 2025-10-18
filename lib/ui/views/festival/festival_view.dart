@@ -62,14 +62,15 @@ class FestivalView extends BaseView<FestivalViewModel> {
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(height: context.getConditionalSpacing()),
                 _buildTopBarWithSearch(context, viewModel),
-                const SizedBox(height: AppDimensions.paddingS),
+                 SizedBox(height: context.getConditionalSpacing()),
                 _titleHeadline(context),
-                const SizedBox(height: AppDimensions.paddingS),
+                 SizedBox(height: context.getConditionalSpacing()),
                 Expanded(
                     child: _buildFestivalsSlider(context, viewModel, pageController),
                 ),
-                const SizedBox(height: AppDimensions.paddingS),
+                 SizedBox(height: context.getConditionalSpacing()),
                 _buildBottomIcon(context),
               ],
               ),
@@ -81,16 +82,100 @@ class FestivalView extends BaseView<FestivalViewModel> {
     );
   }
 
+  void _showFilterMenu(BuildContext context, FestivalViewModel viewModel) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.onPrimary.withOpacity(0.9),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Filter Festivals',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildFilterOption(context, viewModel, AppStrings.live, Icons.live_tv),
+            _buildFilterOption(context, viewModel, AppStrings.upcoming, Icons.schedule),
+            _buildFilterOption(context, viewModel, AppStrings.past, Icons.history),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilterOption(BuildContext context, FestivalViewModel viewModel, String filter, IconData icon) {
+    final isSelected = viewModel.currentFilter == filter;
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isSelected ? AppColors.accent : AppColors.primary,
+      ),
+      title: Text(
+        filter,
+        style: TextStyle(
+          color: isSelected ? AppColors.accent : AppColors.primary,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        viewModel.setFilter(filter);
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  // Helper methods for responsive sizing - same as home view
+  // double _getResponsiveIconSize(BuildContext context) {
+  //   if (context.isHighResolutionPhone) {
+  //     return AppDimensions.iconL; // 48px for high-res phones like Pixel 6 Pro
+  //   } else if (context.isLargeScreen) {
+  //     return AppDimensions.iconXL; // 64px for desktop
+  //   } else if (context.isMediumScreen) {
+  //     return AppDimensions.iconL; // 32px for tablets
+  //   }
+  //   return AppDimensions.iconL; // 32px minimum for all phones
+  // }
+
+  double _getResponsiveSpacing(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.spaceM; // 16px for high-res phones (reduced from 24px)
+    } else if (context.isLargeScreen) {
+      return AppDimensions.spaceL; // 24px for desktop (reduced from 32px)
+    } else if (context.isMediumScreen) {
+      return AppDimensions.spaceS; // 8px for tablets (reduced from 16px)
+    }
+    return AppDimensions.spaceS; // 8px minimum for all phones (reduced from 16px)
+  }
+
+  double _getResponsivePadding(BuildContext context) {
+    if (context.isHighResolutionPhone) {
+      return AppDimensions.paddingXS; // 16px for high-res phones
+    } else if (context.isLargeScreen) {
+      return AppDimensions.paddingL; // 24px for desktop
+    } else if (context.isMediumScreen) {
+      return AppDimensions.paddingS; // 8px for tablets
+    }
+    return AppDimensions.paddingS; // 8px minimum for all phones
+  }
 
   Widget _buildTopBarWithSearch(BuildContext context, FestivalViewModel viewModel) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
       child: Row(
       children: [
           // Logo
         Container(
-          height: AppDimensions.iconXXL,
-          width: AppDimensions.iconXXL,
+          height: context.getConditionalLogoSize(),
+          width: context.getConditionalLogoSize(),
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.transparent,
@@ -100,199 +185,305 @@ class FestivalView extends BaseView<FestivalViewModel> {
             color: AppColors.primary,
           ),
         ),
-        const SizedBox(width: AppDimensions.paddingM),
+         SizedBox(width: context.getConditionalSpacing() ),
           
           // Search Bar (same design as home view)
         Expanded(
           child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+            height: context.isSmallScreen 
+                ? AppDimensions.searchBarHeight * 0.8
+                : context.isMediumScreen 
+                    ? AppDimensions.searchBarHeight * 1.0
+                    : AppDimensions.searchBarHeight * 1.0,
+            margin: context.responsiveMargin,
+            padding: context.responsivePadding,
             decoration: BoxDecoration(
               color: AppColors.onPrimary,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
             ),
             child: Row(
               children: [
-                  const Icon(Icons.search, color: AppColors.onSurfaceVariant, size: AppDimensions.iconM),
-                  const SizedBox(width: AppDimensions.spaceS),
+                SizedBox(width: context.getConditionalSpacing()),
+                Icon(
+                  Icons.search, 
+                  color: AppColors.onSurfaceVariant, 
+                  size: context.getConditionalIconSize(),
+                ),
+                SizedBox(width: context.getConditionalSpacing()),
 
-                  /// 🔹 Search Field
+                /// 🔹 Search Field
                 Expanded(
-                    child: StatefulBuilder(
-                      builder: (context, setState) {
-                        return TextField(
-                          focusNode: viewModel.searchFocusNode,
-                          decoration: InputDecoration(
-                            hintText: AppStrings.searchFestivals,
-                            hintStyle: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: AppDimensions.textM,
-                      ),
-                      border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                      isDense: true,
-                            filled: false,
-                            fillColor: Colors.transparent,
-                      contentPadding: EdgeInsets.zero,
-                            suffixIcon: viewModel.currentSearchQuery.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(Icons.clear, color: AppColors.primary, size: 20),
-                                    onPressed: () {
-                                      viewModel.clearSearch();
-                                      setState(() {}); // Update the UI
-                                    },
-                                  )
-                                : null,
-                    ),
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: AppDimensions.textM,
+                  child: TextField(
+                    controller: viewModel.searchController,
+                        focusNode: viewModel.searchFocusNode,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          hintText: AppStrings.searchFestivals,
+                          hintStyle: const TextStyle(
+                        color: AppColors.grey600,
+                            fontWeight: FontWeight.w600,
+                            fontSize: AppDimensions.textM,
                           ),
-                          onChanged: (value) {
-                            viewModel.setSearchQuery(value);
-                          },
-                          onSubmitted: (value) {
-                            viewModel.unfocusSearch();
-                          },
-                          textInputAction: TextInputAction.search,
-                        );
-                      },
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          isDense: true,
+                          filled: false,
+                          fillColor: Colors.transparent,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: AppDimensions.textM,
+                          height: AppDimensions.searchBarTextHeight,
+                        ),
+                    cursorColor: AppColors.primary,
+                    onChanged: (value) {
+                      viewModel.setSearchQuery(value);
+                    },
+                    onSubmitted: (value) {
+                      viewModel.unfocusSearch();
+                    },
+                   textInputAction: TextInputAction.search,
+                  ),
+                ),
+
+                /// 🔹 Search Clear Button - Always reserve space
+                SizedBox(
+                  width: AppDimensions.searchBarClearButtonWidth,
+                  child: viewModel.currentSearchQuery.isNotEmpty
+                      ? IconButton(
+                    icon: const Icon(Icons.clear, color: AppColors.primary, size: AppDimensions.searchBarIconSize),
+                    onPressed: () {
+                      // ✅ Clear search and hide keyboard
+                      viewModel.clearSearch();
+                      FocusScope.of(context).unfocus();
+                    },
+                  )
+                      : const SizedBox.shrink(),
+                ),
+
+                /// 🔹 Filter Dropdown Menu (No Text Display)
+                SizedBox(
+                  width: context.getConditionalIconSize(), // Fixed width to prevent layout issues
+                  height: context.getConditionalIconSize(), // Fixed height to match search bar
+                  child: DropdownMenu<String>(
+                    initialSelection: viewModel.currentFilter,
+                    onSelected: (value) {
+                      if (value != null) {
+                        viewModel.setFilter(value);
+                        debugPrint("${AppDimensions.debugSelectedFilter}$value");
+                      }
+                    },
+                    // Hide the text input completely
+                    textStyle: const TextStyle(color: Colors.transparent, fontSize: 0),
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    // Make the dropdown invisible but functional
+                    expandedInsets: EdgeInsets.zero,
+                    width: double.infinity,
+                  menuStyle: MenuStyle(
+                    backgroundColor: WidgetStateProperty.all(AppColors.onPrimary),
+                    elevation: WidgetStateProperty.all(8),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      ),
+                    ),
+                    minimumSize: WidgetStateProperty.all(Size(double.infinity, 0)),
+                    maximumSize: WidgetStateProperty.all(Size(double.infinity, double.infinity)),
+                  ),
+                  trailingIcon: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                    ),
+                    child: const Icon(
+                      Icons.arrow_drop_down_outlined,
+                      color: AppColors.onPrimary,
+                      size: AppDimensions.searchBarDropdownIconSize,
                     ),
                   ),
-
-                  /// 🔹 Dropdown Filter (same as home view)
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: 'all',
-                      dropdownColor: AppColors.onPrimary.withOpacity(0.5),
-                      isExpanded: false,
-                      menuWidth: double.infinity,
-                      menuMaxHeight: context.screenHeight * 0.30,
-                  icon: Container(
-                    padding: const EdgeInsets.all(AppDimensions.paddingXS),
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      shape: BoxShape.circle,
-                    ),
-                        child: const Icon(Icons.keyboard_arrow_up, color: AppColors.onPrimary, size: 16),
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry<String>(
+                      value: AppStrings.live,
+                      label: AppStrings.live,
+                      labelWidget: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.paddingM,
+                            vertical: AppDimensions.paddingS,
+                          ),
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == AppStrings.live
+                                ? AppColors.primary.withOpacity(0.1)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Container(
+                                width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                                height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
+                                decoration: BoxDecoration(
+                                  color: viewModel.currentFilter == AppStrings.live
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                                  boxShadow: viewModel.currentFilter == AppStrings.live
+                                      ? [
+                                          BoxShadow(
+                                            color: AppColors.primary.withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ]
+                                      : null,
                       ),
-                      items: [
-                        DropdownMenuItem(
-                          value: 'all',
-                          child: Row(
-                            children: [
-                              Container(
-                                width: AppDimensions.iconS,
-                                height: AppDimensions.iconS,
-                                decoration: BoxDecoration(
-                                  color: AppColors.grey600,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: const Icon(
-                                  Icons.grid_view,
-                                  color: AppColors.white,
-                                  size: 16,
-                                ),
-                              ),
-                              SizedBox(width: AppDimensions.spaceS),
-                              const ResponsiveTextWidget(
-                                AppStrings.allFestivals,
-                                textType: TextType.caption,
-                                color: AppColors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 'live',
-                          child: Row(
-                            children: [
-                              Container(
-                                width: AppDimensions.iconS,
-                                height: AppDimensions.iconS,
-                                decoration: BoxDecoration(
-                                  color: AppColors.grey600,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: const Icon(
+                      child: Icon(
                                   Icons.live_tv,
-                                  color: AppColors.white,
-                                  size: 16,
+                        color: AppColors.onPrimary, 
+                                  size: AppDimensions.searchBarDropdownEntryIconSize,
                                 ),
                               ),
-                              SizedBox(width: AppDimensions.spaceS),
-                              const ResponsiveTextWidget(
-                                AppStrings.live,
-                                textType: TextType.caption,
-                                color: AppColors.white,
+                              const SizedBox(width: AppDimensions.spaceM),
+                              Text(
+                          AppStrings.live,
+                                style: TextStyle(
+                                  color: viewModel.currentFilter == AppStrings.live
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  fontSize: AppDimensions.textM,
+                                  fontWeight: viewModel.currentFilter == AppStrings.live
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        DropdownMenuItem(
-                          value: 'upcoming',
+                      ),
+                    DropdownMenuEntry<String>(
+                      value: AppStrings.upcoming,
+                      label: AppStrings.upcoming,
+                      labelWidget: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.paddingM,
+                            vertical: AppDimensions.paddingS,
+                          ),
                           child: Row(
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Container(
-                                width: AppDimensions.iconS,
-                                height: AppDimensions.iconS,
+                                width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                                height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
                                 decoration: BoxDecoration(
-                                  color: AppColors.grey600,
-                                  borderRadius: BorderRadius.circular(4),
+                                  color: viewModel.currentFilter == AppStrings.upcoming
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                                  boxShadow: viewModel.currentFilter == AppStrings.upcoming
+                                      ? [
+                                          BoxShadow(
+                                            color: AppColors.primary.withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ]
+                                      : null,
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.schedule,
-                                  color: AppColors.white,
-                                  size: 16,
+                                  color: AppColors.onPrimary,
+                                  size: AppDimensions.searchBarDropdownEntryIconSize,
                                 ),
                               ),
-                              SizedBox(width: AppDimensions.spaceS),
-                              const ResponsiveTextWidget(
-                                AppStrings.upcoming,
-                                textType: TextType.caption,
-                                color: AppColors.white,
+                              const SizedBox(width: AppDimensions.spaceM),
+                              Text(
+                          AppStrings.upcoming,
+                                style: TextStyle(
+                                  color: viewModel.currentFilter == AppStrings.upcoming
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  fontSize: AppDimensions.textM,
+                                  fontWeight: viewModel.currentFilter == AppStrings.upcoming
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        DropdownMenuItem(
-                          value: 'past',
+                      ),
+                    DropdownMenuEntry<String>(
+                      value: AppStrings.past,
+                      label: AppStrings.past,
+                      labelWidget: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.paddingM,
+                            vertical: AppDimensions.paddingS,
+                          ),
+                          decoration: BoxDecoration(
+                            color: viewModel.currentFilter == AppStrings.past
+                                ? AppColors.primary.withOpacity(0.1)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                          ),
                           child: Row(
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               Container(
-                                width: AppDimensions.iconS,
-                                height: AppDimensions.iconS,
+                                width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                                height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
                                 decoration: BoxDecoration(
-                                  color: AppColors.grey600,
-                                  borderRadius: BorderRadius.circular(4),
+                                  color: viewModel.currentFilter == AppStrings.past
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                                  boxShadow: viewModel.currentFilter == AppStrings.past
+                                      ? [
+                                          BoxShadow(
+                                            color: AppColors.primary.withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ]
+                                      : null,
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.history,
-                                  color: AppColors.white,
-                                  size: 16,
+                                  color: AppColors.onPrimary,
+                                  size: AppDimensions.searchBarDropdownEntryIconSize,
                                 ),
                               ),
-                              SizedBox(width: AppDimensions.spaceS),
-                              const ResponsiveTextWidget(
-                                AppStrings.past,
-                                textType: TextType.caption,
-                                color: AppColors.white,
+                              const SizedBox(width: AppDimensions.spaceM),
+                              Text(
+                          AppStrings.past,
+                                style: TextStyle(
+                                  color: viewModel.currentFilter == AppStrings.past
+                                      ? AppColors.accent
+                                      : AppColors.primary,
+                                  fontSize: AppDimensions.textM,
+                                  fontWeight: viewModel.currentFilter == AppStrings.past
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                  ],
-                  onChanged: (value) {
-                        if (value != null) {
-                          // Handle filter change
-                          debugPrint("Selected Filter: $value");
-                        }
-                  },
-                    ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -387,14 +578,25 @@ class FestivalView extends BaseView<FestivalViewModel> {
 
   Widget _titleHeadline(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.isSmallScreen 
+            ? AppDimensions.paddingXS
+            : context.isMediumScreen 
+                ? AppDimensions.paddingS
+                : AppDimensions.paddingXS,
+        vertical: context.isSmallScreen
+            ? AppDimensions.paddingXS
+            : context.isMediumScreen 
+                ? AppDimensions.paddingS
+                : AppDimensions.paddingXS
+      ),
       decoration: BoxDecoration(
         color: AppColors.headlineBackground,
       ),
       child: ResponsiveTextWidget(
         AppStrings.headlineText,
         textAlign: TextAlign.center,
-        textType: TextType.title,
+        fontSize: context.getConditionalMainFont(),
         fontWeight: FontWeight.bold,
         color: AppColors.primary,
       ),

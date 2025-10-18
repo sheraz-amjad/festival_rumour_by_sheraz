@@ -22,6 +22,26 @@ class OtpView extends BaseView<OtpViewModel> {
 
   @override
   Widget buildView(BuildContext context, OtpViewModel viewModel) {
+    // Listen for error messages and show snackbar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModel.errorText != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(viewModel.errorText!),
+            backgroundColor: AppColors.accent,
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: AppColors.onPrimary,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    });
+
     // Set status bar style for dark background
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -42,11 +62,18 @@ class OtpView extends BaseView<OtpViewModel> {
                 tabletMaxWidth: double.infinity,
                 desktopMaxWidth: double.infinity,
                 child: Container(
-                  padding: context.isLargeScreen
-                      ? EdgeInsets.symmetric(horizontal: AppDimensions.paddingXXL, vertical: AppDimensions.paddingXXL)
-                      : context.isMediumScreen
-                      ? EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL, vertical: AppDimensions.paddingXL)
-                      : EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingM),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.isSmallScreen 
+                        ? AppDimensions.paddingM
+                        : context.isMediumScreen 
+                            ? AppDimensions.paddingL
+                            : AppDimensions.paddingXL,
+                    vertical: context.isSmallScreen 
+                        ? AppDimensions.paddingM
+                        : context.isMediumScreen 
+                            ? AppDimensions.paddingL
+                            : AppDimensions.paddingXL
+                  ),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(AppAssets.bottomsheet),
@@ -66,8 +93,10 @@ class OtpView extends BaseView<OtpViewModel> {
                             color: AppColors.primary,
                           ),
                         const SizedBox(height: AppDimensions.spaceS),
-                        const ResponsiveTextWidget(
-                          "${AppStrings.enterOtpDescription}\n+62 873 7764 2922",
+                        ResponsiveTextWidget(
+                          viewModel.phoneNumber != null 
+                            ? "${AppStrings.enterOtpDescription}\n${viewModel.displayPhoneNumber}"
+                            : "${AppStrings.enterOtpDescription}\nPlease check your phone for the verification code.",
                           textType: TextType.body, color: AppColors.primary, fontSize: AppDimensions.textM),
 
                         const SizedBox(height: AppDimensions.paddingL),
@@ -117,8 +146,16 @@ class OtpView extends BaseView<OtpViewModel> {
       pinTheme: PinTheme(
         shape: PinCodeFieldShape.circle,
         borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-        fieldHeight: AppDimensions.buttonHeightXL,
-        fieldWidth: AppDimensions.buttonHeightXL,
+        fieldHeight: context.isSmallScreen 
+            ? AppDimensions.buttonHeightL
+            : context.isMediumScreen 
+                ? AppDimensions.buttonHeightXL
+                : AppDimensions.buttonHeightXL * 1.2,
+        fieldWidth: context.isSmallScreen 
+            ? AppDimensions.buttonHeightL
+            : context.isMediumScreen 
+                ? AppDimensions.buttonHeightXL
+                : AppDimensions.buttonHeightXL * 1.2,
         inactiveFillColor: AppColors.onPrimary,
         activeFillColor: AppColors.onPrimary,
         selectedFillColor: AppColors.onPrimary,
@@ -146,7 +183,11 @@ class OtpView extends BaseView<OtpViewModel> {
   Widget _buildSignupButton(BuildContext context, OtpViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: AppDimensions.buttonHeightXL,
+      height: context.isSmallScreen 
+          ? AppDimensions.buttonHeightL
+          : context.isMediumScreen 
+              ? AppDimensions.buttonHeightXL
+              : AppDimensions.buttonHeightXL * 1.1,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,

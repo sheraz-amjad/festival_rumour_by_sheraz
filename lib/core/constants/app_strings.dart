@@ -151,6 +151,7 @@ class AppStrings {
   static const String continueError = "Failed to continue. Please try again.";
   static const String nowBadgeText = "NOW";
   static const String overview = "Overview";
+  static const String name = "Syed Sheraz ";
 
   static const String searchHint = "Search...";
   static const String searchFestivals = "Search festivals...";
@@ -167,7 +168,7 @@ class AppStrings {
   static const String festivalName = "Festival Name";
   static const String toiletCategory = "Toilet Category";
   static const String image = "Image";
-  static const String location = "Location";
+  static const String location = "LOCATION";
   static const String openMap = "Open Map";
   static const String latitude = "Latitude";
   static const String longitude = "Longitude";
@@ -224,7 +225,7 @@ class AppStrings {
 
   // Festival Related
   static const String festivals = 'Festivals';
-  static const String rumors = 'Rumors';
+  static const String rumors = 'RUMORS';
   static const String featured = 'Featured';
   static const String popular = 'Popular';
 
@@ -671,6 +672,8 @@ class AppStrings {
   static const String editAccountDetails = 'Edit Account Details';
   static const String notification = 'Notification';
   static const String enableOrDisableNotifications = 'Enable or disable notifications';
+  static const String tapToUploadImage = 'Tap to upload image';
+  //static const String changePassword = 'Change Password';
   static const String privacySettingsPro = 'Privacy Settings PRO';
   static const String includingAnonymousToggle = 'Including Anonymous toggle';
   static const String badges = 'Badges';
@@ -693,4 +696,82 @@ class AppStrings {
   static const String joinConversation = 'Join the conversation!';
   static const String followTopicDescription = 'Follow this topic to receive notifications when people respond.';
   static const String allPosts = 'All Posts';
+  
+  // Badge titles and descriptions
+  static const String topRumourSpotter = '1  Top Rumour Spotter';
+  static const String topRumourSpotterDescription = '          For viral or trending posts';
+  static const String mediaMaster = '2  Media Master';
+  static const String mediaMasterDescription = '          For contributing quality photos/videos';
+  static const String crowdFavourite = '3  Crowd Favourite';
+  static const String crowdFavouriteDescription = '          For most liked/reacted content';
+  
+  // Danger Zone strings
+  static const String dangerZone = 'Danger Zone';
+  static const String deleteAccountWarning = 'Once you delete your account, there is no going back. Please be certain.';
+  static const String deleteAccount = 'Delete Account';
+  
+  // Mock Data Constants
+  static const String mockUserName1 = 'John Doe';
+  static const String mockUserName2 = 'Jane Smith';
+  static const String mockUserName3 = 'Ali Khan';
+  static const String mockUserName4 = 'Mike Johnson';
+  static const String mockUserName5 = 'Sarah Wilson';
+  static const String mockUserName6 = 'Ayesha Nadeem';
+  static const String mockUserName7 = 'LiveStreamer';
+  static const String mockUserName8 = 'FestivalGoer';
+  static const String mockUserName9 = 'MusicLover';
+  static const String mockUserName10 = 'FestivalFan';
+  static const String mockUserName11 = 'ConcertGoer';
+  static const String mockUserName12 = 'EventPlanner';
+  static const String mockUserName13 = 'FestivalVeteran';
+  static const String mockUserName14 = 'MusicEnthusiast';
+  static const String mockUserName15 = 'ConcertMemories';
+  
+  // Mock Bio and Contact Info
+  static const String mockBio = 'Music enthusiast and festival lover';
+  static const String mockEmail = 'john.doe@example.com';
+  static const String mockPhone = '+1 234 567 8900';
+  static const String mockWebsite = 'https://johndoe.com';
+  
+  // Mock Festival Data
+  static const String mockFestival1 = 'Electric Music Festival';
+  static const String mockFestival2 = 'Coachella Valley Music Festival';
+  static const String mockFestival3 = 'Tomorrowland Electronic Festival';
+  static const String mockFestival4 = 'Burning Man Festival';
+  static const String mockFestival5 = 'Ultra Music Festival';
+  static const String mockFestival6 = 'Glastonbury Festival';
+  
+  // Mock Locations
+  static const String mockLocation1 = 'Miami, Florida';
+  static const String mockLocation2 = 'Indio, California';
+  static const String mockLocation3 = 'Boom, Belgium';
+  static const String mockLocation4 = 'Black Rock City, Nevada';
+  static const String mockLocation5 = 'Pilton, England';
+  
+  // Mock Dates
+  static const String mockDate1 = 'March 15-17, 2024';
+  static const String mockDate2 = 'April 12-14, 2024';
+  static const String mockDate3 = 'July 19-21, 2024';
+  static const String mockDate4 = 'August 25-September 2, 2024';
+  static const String mockDate5 = 'March 22-24, 2024';
+  static const String mockDate6 = 'June 26-30, 2024';
+  
+  // Validation Error Messages
+  static const String bioTooLong = 'Bio must be less than 500 characters';
+  static const String websiteInvalidFormat = 'Website must start with http:// or https://';
+  
+  // Firebase Test Messages
+  static const String firebaseTest = 'Firebase Test';
+  static const String firebaseConnectionTest = 'Firebase Connection Test';
+  static const String firebaseAuthTest = 'Firebase Auth Test';
+  static const String firebaseWorking = 'Firebase is Working!';
+  static const String firebaseIssuesDetected = 'Firebase Issues Detected';
+  static const String firebaseWorkingDescription = 'Your Firebase integration is working correctly. You can use authentication features.';
+  static const String firebaseIssuesDescription = 'There are issues with your Firebase setup. Check the details above.';
+  static const String retest = 'Retest';
+  static const String goBack = 'Go Back';
+  static const String testing = 'Testing...';
+  
+  // Apple Login Messages
+  static const String appleLoginDevelopment = '🍎 Apple login is under development';
 }

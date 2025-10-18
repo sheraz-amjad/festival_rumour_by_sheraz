@@ -5,8 +5,15 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_durations.dart';
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../core/services/firebase_auth_service.dart';
+import '../../../core/di/locator.dart';
+import '../../../core/services/navigation_service.dart';
 
 class UsernameViewModel extends BaseViewModel {
+  /// Services
+  final FirebaseAuthService _authService = FirebaseAuthService();
+  final NavigationService _navigationService = locator<NavigationService>();
+
   /// Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -30,15 +37,25 @@ class UsernameViewModel extends BaseViewModel {
   /// 🔹 Input Handlers
   /// ---------------------------
   void onUsernameChanged(String value) {
-    _validateEmail(value);
-    _updateFormValidity();
-    notifyListeners();
+    // Don't validate while typing - only clear previous errors
+    if (value.isEmpty) {
+      emailError = null;
+      isEmailValid = false;
+      _updateFormValidity();
+      notifyListeners();
+    }
   }
 
   void onPasswordChanged(String value) {
-    _validatePassword(value);
-    _updateFormValidity();
-    notifyListeners();
+    // Don't validate while typing - only clear previous errors
+    if (value.isEmpty) {
+      passwordError = null;
+      passwordStrength = '';
+      passwordStrengthColor = AppColors.grey600;
+      isPasswordValid = false;
+      _updateFormValidity();
+      notifyListeners();
+    }
   }
 
   /// Toggle remember me
@@ -55,7 +72,7 @@ class UsernameViewModel extends BaseViewModel {
 
   /// Focus handlers
   void onUsernameFocusChange(bool hasFocus) {
-    if (!hasFocus && emailController.text.isNotEmpty) {
+    if (!hasFocus) {
       _validateEmail(emailController.text);
       _updateFormValidity();
       notifyListeners();
@@ -63,7 +80,7 @@ class UsernameViewModel extends BaseViewModel {
   }
 
   void onPasswordFocusChange(bool hasFocus) {
-    if (!hasFocus && passwordController.text.isNotEmpty) {
+    if (!hasFocus) {
       _validatePassword(passwordController.text);
       _updateFormValidity();
       notifyListeners();
@@ -158,15 +175,31 @@ class UsernameViewModel extends BaseViewModel {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    // Validate all fields
+    // Always validate all fields when login button is clicked
     _validateEmail(email);
     _validatePassword(password);
     _updateFormValidity();
+    
+    // Notify listeners to update UI with error messages
+    notifyListeners();
 
-    // If any error found
+    // If any error found, show specific error messages
     if (!isFormValid) {
-      notifyListeners();
-      _showErrorSnackBar(context, AppStrings.fixErrors);
+      // Show specific error message based on what's missing
+      String errorMessage = '';
+      if (email.isEmpty) {
+        errorMessage = AppStrings.emailRequired;
+      } else if (!_isValidEmail(email)) {
+        errorMessage = AppStrings.emailInvalid;
+      } else if (password.isEmpty) {
+        errorMessage = AppStrings.passwordRequired;
+      } else if (password.length < 6) {
+        errorMessage = AppStrings.passwordMinLength;
+      } else {
+        errorMessage = AppStrings.fixErrors;
+      }
+      
+      _showErrorSnackBar(context, errorMessage);
       return;
     }
 
@@ -174,11 +207,11 @@ class UsernameViewModel extends BaseViewModel {
       // Simulate API delay
       await Future.delayed(AppDurations.loginLoadingDuration);
 
-      // Simulate login validation
+      // Firebase login validation
       if (await _performLogin(email, password)) {
         _showSuccessSnackBar(context, AppStrings.loginSuccess);
-        // Navigate to Home Screen
-        Navigator.pushReplacementNamed(context, AppRoutes.festivals);
+        // Navigate to Home Screen using navigation service
+        _navigationService.navigateTo(AppRoutes.festivals);
       } else {
         _showErrorSnackBar(context, AppStrings.loginFailed);
       }
@@ -188,11 +221,24 @@ class UsernameViewModel extends BaseViewModel {
   }
 
   Future<bool> _performLogin(String email, String password) async {
-    // Simulate API call
-    await Future.delayed(AppDurations.apiCallDuration);
-    
-    // Dummy validation - in real app, this would be an API call
-    return email.isNotEmpty && password.isNotEmpty;
+    try {
+      // Use Firebase Auth to sign in
+      final result = await _authService.signInWithEmail(
+        email: email,
+        password: password,
+      );
+
+      if (result.isSuccess) {
+        // User successfully signed in
+        return true;
+      } else {
+        // Return false and let the calling method handle the error display
+        return false;
+      }
+    } catch (e) {
+      // Handle unexpected errors
+      return false;
+    }
   }
 
   void _showSuccessSnackBar(BuildContext context, String message) {
@@ -231,7 +277,30 @@ class UsernameViewModel extends BaseViewModel {
   /// 🔹 Navigate to Sign Up
   /// ---------------------------
   void goToSignUp(BuildContext context) {
-    Navigator.pushNamed(context, AppRoutes.signupEmail);
+    _navigationService.navigateTo(AppRoutes.signupEmail);
+  }
+
+  /// ---------------------------
+  /// 🔹 Firebase Auth State Management
+  /// ---------------------------
+  void checkAuthState() {
+    // Check if user is already signed in
+    if (_authService.isSignedIn) {
+      // User is already signed in, navigate to home
+      _navigationService.navigateTo(AppRoutes.festivals);
+    }
+  }
+
+  /// Sign out method
+  Future<void> signOut() async {
+    try {
+      await _authService.signOut();
+      // Navigate back to welcome/login screen
+      _navigationService.navigateTo(AppRoutes.welcome);
+    } catch (e) {
+      // Handle sign out error
+      print('Sign out error: $e');
+    }
   }
 
   /// ---------------------------

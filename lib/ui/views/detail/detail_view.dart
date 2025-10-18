@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
@@ -50,7 +51,11 @@ class DetailView extends BaseView<DetailViewModel> {
             child: Column(
               children: [
                 _buildAppBar(context, viewModel),
-                const SizedBox(height: AppDimensions.spaceXL),
+                SizedBox(height: context.isSmallScreen 
+                    ? AppDimensions.spaceL
+                    : context.isMediumScreen 
+                        ? AppDimensions.spaceXL
+                        : AppDimensions.spaceXXL),
                 Expanded(
                   child: _buildContentCards(context),
                 ),
@@ -199,7 +204,7 @@ class DetailView extends BaseView<DetailViewModel> {
                 child: Center(
                   child: ResponsiveTextWidget(
                     title,
-                    textType: TextType.heading,
+                    textType: TextType.title,
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.center,

@@ -41,8 +41,6 @@ class WelcomeViewModel extends BaseViewModel {
 
   Future<void> loginWithEmail() async {
     _navigationService.navigateTo(AppRoutes.username);
-    await Future.delayed(const Duration(seconds: 2));
-    setLoading(false);
   }
 
   Future<void> loginWithApple() async {

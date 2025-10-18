@@ -1,9 +1,11 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/router/app_router.dart';
-import '../../../../core/services/navigation_service.dart'; // Make sure locator is registered for NavigationService
+import '../../../../core/services/navigation_service.dart';
+import '../../../../shared/widgets/responsive_widget.dart'; // Make sure locator is registered for NavigationService
 
 class GridOption extends StatelessWidget {
   final String title;
@@ -21,8 +23,6 @@ class GridOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return GestureDetector(
       onTap: () {
         // Call the passed callback first (if provided)
@@ -33,8 +33,13 @@ class GridOption extends StatelessWidget {
           _handleNavigation(title);
         }
       },
+
       child: Container(
-        height: screenHeight * 0.2,
+        height: context.isSmallScreen 
+            ? context.screenHeight * 0.18
+            : context.isMediumScreen 
+                ? context.screenHeight * 0.20
+                : context.screenHeight * 0.22,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           color: AppColors.onSurface,
@@ -50,6 +55,10 @@ class GridOption extends StatelessWidget {
                 height: double.infinity,
                 fit: BoxFit.cover,
               ),
+              Positioned.fill(
+                top: 115,
+                child: Container(color: Colors.black.withOpacity(0.35)),
+              ),
 
               // Text overlay
               Align(
@@ -57,18 +66,19 @@ class GridOption extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(AppDimensions.spaceS),
-                  child: Text(
+                  child: ResponsiveText(
                     title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: AppColors.white,
                       fontSize: AppDimensions.textL,
                       fontWeight: FontWeight.bold,
-                    ),
+                   //   letterSpacing: 0.5,
                   ),
                 ),
               ),
-            ],
+              ),
+          ],
           ),
         ),
       ),

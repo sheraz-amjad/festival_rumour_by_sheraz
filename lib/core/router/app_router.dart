@@ -28,10 +28,12 @@ import '../../ui/views/signup/signupemail/signup_viewemail.dart';
 import '../../ui/views/map/map_view.dart';
 import '../../ui/views/subscription/subscription_view.dart';
 import '../../ui/views/settings/settings_view.dart';
+import '../../ui/views/settings/edit_account_view.dart';
 import '../../ui/views/leaderboard/leaderboard_view.dart';
 import '../../ui/views/posts/posts_view.dart';
 import '../../ui/views/chat/create_chat_room_view.dart';
 import '../../ui/views/rumors/rumors_view.dart';
+import '../../ui/views/test/firebase_test_view.dart';
 import '../utils/transition.dart';
 
 class AppRoutes {
@@ -51,6 +53,7 @@ class AppRoutes {
   static const String map = '/map';
   static const String notification = '/notification';
   static const String settings = '/settings';
+  static const String editAccount = '/edit_account';
   static const String leaderboard = '/leaderboard';
   static const String comments = '/comments';
   static const String profileList = '/profileList';
@@ -68,6 +71,7 @@ class AppRoutes {
   static const String news = '/news';
   static const String rumors = '/rumors';
   static const String jobpost = '/jobpost';
+  static const String firebaseTest = '/firebase_test';
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -122,6 +126,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.settings:
       return SmoothPageRoute(page: const SettingsView());
 
+    case AppRoutes.editAccount:
+      return SmoothPageRoute(page: const EditAccountView());
+
     case AppRoutes.leaderboard:
       return SmoothPageRoute(page: const LeaderboardView());
 
@@ -146,7 +153,7 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.profileList:
       final args = settings.arguments as int? ?? 0;
       return SmoothPageRoute(
-        page: ProfileListView(initialTab: args, username: 'username'),
+        page: ProfileListView(initialTab: args, Username: 'username'),
       );
 
     case AppRoutes.posts:
@@ -175,6 +182,9 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 
     case AppRoutes.rumors:
       return SmoothPageRoute(page: const RumorsView());
+
+    case AppRoutes.firebaseTest:
+      return SmoothPageRoute(page: const FirebaseTestView());
 
     default:
       return MaterialPageRoute(

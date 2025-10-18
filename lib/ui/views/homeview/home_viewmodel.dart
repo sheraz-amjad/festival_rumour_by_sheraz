@@ -14,17 +14,25 @@ class HomeViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   List<PostModel> posts = [];
   List<PostModel> allPosts = []; // Store all posts
-  String selectedFilter = 'all'; // Default filter - show all posts
+  String selectedFilter = AppStrings.live; // Default filter - show live posts
+  String get currentFilter => selectedFilter;
   String searchQuery = ''; // Search query
   late FocusNode searchFocusNode; // Search field focus node
-
+  final TextEditingController searchController = TextEditingController();
   HomeViewModel() {
     searchFocusNode = FocusNode();
+    // Listen to search controller changes
+    searchController.addListener(() {
+      if (searchController.text != searchQuery) {
+        setSearchQuery(searchController.text);
+      }
+    });
   }
 
   @override
   void dispose() {
     searchFocusNode.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -35,7 +43,7 @@ class HomeViewModel extends BaseViewModel {
       allPosts = [
         // 🔴 LIVE POSTS
         PostModel(
-          username: "LiveStreamer",
+          username: AppStrings.mockUserName7,
           timeAgo: "30 minutes ago",
           content: "🔴 LIVE: Main stage performance happening RIGHT NOW! The crowd is going wild! 🎵🔥",
           imagePath: AppAssets.post,
@@ -44,7 +52,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.live,
         ),
         PostModel(
-          username: "FestivalGoer",
+          username: AppStrings.mockUserName8,
           timeAgo: "1 hour ago",
           content: "🔴 LIVE: Amazing DJ set at the electronic stage! The bass is shaking the ground! 🎧⚡",
           imagePath: AppAssets.post1,
@@ -53,7 +61,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.live,
         ),
         PostModel(
-          username: "MusicLover",
+          username: AppStrings.mockUserName9,
           timeAgo: "2 hours ago",
           content: "🔴 LIVE: Acoustic session at the intimate stage - pure magic happening! 🎸✨",
           imagePath: AppAssets.post2,
@@ -64,7 +72,7 @@ class HomeViewModel extends BaseViewModel {
         
         // ⏰ UPCOMING POSTS
         PostModel(
-          username: "FestivalFan",
+          username: AppStrings.mockUserName10,
           timeAgo: "3 hours ago",
           content: "⏰ UPCOMING: Tomorrow's headliner is going to be EPIC! Can't wait! 🎤🎪",
           imagePath: AppAssets.post3,
@@ -73,7 +81,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.upcoming,
         ),
         PostModel(
-          username: "ConcertGoer",
+          username: AppStrings.mockUserName11,
           timeAgo: "5 hours ago",
           content: "⏰ UPCOMING: Next week's lineup is INSANE! Who else is counting down? 🎪⏳",
           imagePath: AppAssets.post5,
@@ -82,7 +90,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.upcoming,
         ),
         PostModel(
-          username: "EventPlanner",
+          username: AppStrings.mockUserName12,
           timeAgo: "6 hours ago",
           content: "⏰ UPCOMING: Special surprise performance announced for tonight! 🤫🎭",
           imagePath: AppAssets.post,
@@ -93,7 +101,7 @@ class HomeViewModel extends BaseViewModel {
         
         // 📸 PAST POSTS
         PostModel(
-          username: "FestivalVeteran",
+          username: AppStrings.mockUserName13,
           timeAgo: "1 day ago",
           content: "📸 PAST: Yesterday's performance was LEGENDARY! What a night! 🌟🎉",
           imagePath: AppAssets.post1,
@@ -102,7 +110,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.past,
         ),
         PostModel(
-          username: "MusicEnthusiast",
+          username: AppStrings.mockUserName14,
           timeAgo: "2 days ago",
           content: "📸 PAST: Last weekend's festival was one for the books! Already planning next year! 📸🎪",
           imagePath: AppAssets.post2,
@@ -111,7 +119,7 @@ class HomeViewModel extends BaseViewModel {
           status: AppStrings.past,
         ),
         PostModel(
-          username: "ConcertMemories",
+          username: AppStrings.mockUserName15,
           timeAgo: "3 days ago",
           content: "📸 PAST: That sunset performance was absolutely magical! Golden hour vibes! 🌅🎵",
           imagePath: AppAssets.post3,
@@ -172,7 +180,6 @@ class HomeViewModel extends BaseViewModel {
     } else if (selectedFilter == AppStrings.past) {
       filteredPosts = filteredPosts.where((post) => post.status == AppStrings.past).toList();
     }
-    // If selectedFilter == 'all', show all posts (no filtering by status)
 
     // Apply search filter
     if (searchQuery.isNotEmpty) {
@@ -185,18 +192,16 @@ class HomeViewModel extends BaseViewModel {
     posts = filteredPosts;
   }
 
-  String get currentFilter => selectedFilter;
-
   // Search methods
   void setSearchQuery(String query) {
     searchQuery = query;
-    // Don't update controller.text here to avoid conflicts
     _applyFilter();
     notifyListeners();
   }
 
   void clearSearch() {
     searchQuery = '';
+    searchController.clear();
     _applyFilter();
     notifyListeners();
   }
@@ -210,6 +215,8 @@ class HomeViewModel extends BaseViewModel {
       if (kDebugMode) print('Error unfocusing search: $e');
     }
   }
+
+
 
   String get currentSearchQuery => searchQuery;
 }

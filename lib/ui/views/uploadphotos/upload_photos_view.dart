@@ -9,12 +9,9 @@ import '../../../core/utils/base_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
-
 import '../../../core/utils/backbutton.dart';
-
 import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/widgets/responsive_widget.dart';
-
 import '../../../shared/extensions/context_extensions.dart';
 import 'upload_photos_view_model.dart';
 
@@ -35,7 +32,7 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
         statusBarBrightness: Brightness.dark,
       ),
     );
-    
+
     return SafeArea(
         child: Scaffold(
           body: Stack(
@@ -154,7 +151,7 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                // color: AppColors.onPrimary.withOpacity(0.3),
                 width: double.infinity,
                 height:
-                    AppDimensions.imageXXL * 2, // ✅ fixed height (same whether empty or with image)
+                    AppDimensions.imageXXL * 2.4, // ✅ fixed height (same whether empty or with image)
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppDimensions.radiusL),
                    color: AppColors.onPrimary.withOpacity(0.4),
@@ -187,8 +184,8 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
           ),
           // Plus circle outside (bottom right)
           Positioned(
-            bottom: -AppDimensions.paddingL,
-            right: -AppDimensions.paddingL,
+            bottom: -AppDimensions.paddingS,
+            right: -AppDimensions.paddingM,
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.borderWidthS), // border thickness
               decoration: BoxDecoration(
@@ -216,7 +213,7 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
         // Next button
         SizedBox(
           width: double.infinity,
-          height: AppDimensions.buttonHeightXL,
+          height: context.responsiveButtonHeightL,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor:
@@ -239,10 +236,9 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                         strokeWidth: AppDimensions.borderWidthS,
                       ),
                     )
-                    : const ResponsiveTextWidget(
+                    :  ResponsiveTextWidget(
                       AppStrings.next,
-                      textType: TextType.body,
-                        fontSize: AppDimensions.textXL,
+                        fontSize: context.responsiveTextM,
                         color: AppColors.onPrimary,
                       ),
                     ),

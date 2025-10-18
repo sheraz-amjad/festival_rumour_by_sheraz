@@ -1,15 +1,17 @@
-import 'package:festival_rumour/ui/views/signup/signupemail/signup_viewemail_model.dart';
+import 'package:festival_rumour/shared/widgets/responsive_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:festival_rumour/ui/views/signup/signupemail/signup_viewemail_model.dart';
+
 import '../../../../core/constants/app_assets.dart';
-import '../../../../core/utils/base_view.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/auth_background.dart';
 import '../../../../core/utils/backbutton.dart';
-import '../../../../shared/widgets/responsive_widget.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/utils/base_view.dart';
 import '../../../../shared/extensions/context_extensions.dart';
+import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../shared/widgets/responsive_widget.dart';
 
 class SignupViewEmail extends BaseView<SignupViewEmailModel> {
   const SignupViewEmail({super.key});
@@ -19,6 +21,26 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
 
   @override
   Widget buildView(BuildContext context, SignupViewEmailModel viewModel) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final error = viewModel.emailError;
+      if (error != null &&
+          (error.contains('Failed to create account') ||
+              error.contains('An unexpected error'))) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: AppColors.accent,
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Dismiss',
+              textColor: AppColors.onPrimary,
+              onPressed: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            ),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
@@ -33,36 +55,32 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
               desktopMaxWidth: double.infinity,
               child: Container(
                 width: double.infinity,
-                margin: const EdgeInsets.all(0),
-                padding: context.isLargeScreen
-                    ? const EdgeInsets.symmetric(horizontal: 24, vertical: 44)
-                    : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(
-                    horizontal: 18, vertical: 36)
-                    : const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 28),
+                margin: EdgeInsets.zero,
+                padding:context.responsivePadding,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(AppAssets.bottomsheet),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.vertical(
-                 top: Radius.circular(AppDimensions.radiusXXL),
-                ),
+                    top: Radius.circular(AppDimensions.radiusXXL),
+                  ),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: context.getConditionalSpacing()),
                       _buildHeader(context),
-                      const SizedBox(height: AppDimensions.paddingS),
+                      SizedBox(height: context.getConditionalSpacing()),
                       _buildEmailField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingS),
+                      SizedBox(height: context.getConditionalSpacing()),
                       _buildPasswordField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingS),
+                      SizedBox(height: context.getConditionalSpacing()),
                       _buildConfirmPasswordField(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingS),
+                      SizedBox(height: context.getConditionalSpacing()),
                       _buildContinueButton(context, viewModel),
+                      SizedBox(height: context.getConditionalSpacing()),
                     ],
                   ),
                 ),
@@ -81,15 +99,16 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     );
   }
 
+  /// 🔹 Header
   Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
         CustomBackButton(onTap: () => context.pop()),
-        const SizedBox(width: AppDimensions.spaceL),
-        const Text(
+        SizedBox(width: context.getConditionalSpacing()),
+        Text(
           AppStrings.signUp,
           style: TextStyle(
-            fontSize: AppDimensions.textXL,
+            fontSize: context.responsiveTextXL,
             fontWeight: FontWeight.bold,
             color: AppColors.primary,
           ),
@@ -98,12 +117,12 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     );
   }
 
-  Widget _buildEmailField(
-      BuildContext context, SignupViewEmailModel viewModel) {
+  /// 🔹 Email Field
+  Widget _buildEmailField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.emailController,
       focusNode: viewModel.emailFocus,
-      autofocus: true, // Auto-focus on first field
+      autofocus: true,
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
         labelText: AppStrings.emailLabel,
@@ -114,12 +133,12 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           borderSide: BorderSide(color: AppColors.onSurface),
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         errorText: viewModel.emailError,
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: AppColors.accent,
-          fontSize: AppDimensions.textS,
+          fontSize: context.getConditionalFont(),
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -128,7 +147,6 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       textInputAction: TextInputAction.next,
       onSubmitted: (_) => viewModel.handleEmailSubmitted(),
       onChanged: (value) {
-        // Clear error when user starts typing
         if (viewModel.emailError != null) {
           viewModel.emailError = null;
           viewModel.notifyListeners();
@@ -137,13 +155,12 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     );
   }
 
-  /// Password field with visibility toggle
-  Widget _buildPasswordField(
-      BuildContext context, SignupViewEmailModel viewModel) {
+  /// 🔹 Password Field
+  Widget _buildPasswordField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.passwordController,
       focusNode: viewModel.passwordFocus,
-      obscureText: !viewModel.isPasswordVisible, // 👁️ toggle state
+      obscureText: !viewModel.isPasswordVisible,
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
         labelText: AppStrings.passwordLabel,
@@ -154,20 +171,19 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           borderSide: BorderSide(color: AppColors.onSurface),
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         errorText: viewModel.passwordError,
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: AppColors.accent,
-          fontSize: AppDimensions.textS,
+          fontSize: context.getConditionalFont(),
           fontWeight: FontWeight.w500,
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            viewModel.isPasswordVisible
-                ? Icons.visibility
-                : Icons.visibility_off,
+            viewModel.isPasswordVisible ? Icons.visibility : Icons.visibility_off,
             color: AppColors.primary,
+            size: context.getConditionalIconSize(),
           ),
           onPressed: viewModel.togglePasswordVisibility,
         ),
@@ -177,7 +193,6 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       textInputAction: TextInputAction.next,
       onSubmitted: (_) => viewModel.handlePasswordSubmitted(),
       onChanged: (value) {
-        // Clear error when user starts typing
         if (viewModel.passwordError != null) {
           viewModel.passwordError = null;
           viewModel.notifyListeners();
@@ -186,13 +201,12 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     );
   }
 
-  /// Confirm password field with visibility toggle
-  Widget _buildConfirmPasswordField(
-      BuildContext context, SignupViewEmailModel viewModel) {
+  /// 🔹 Confirm Password Field
+  Widget _buildConfirmPasswordField(BuildContext context, SignupViewEmailModel viewModel) {
     return TextField(
       controller: viewModel.confirmPasswordController,
       focusNode: viewModel.confirmPasswordFocus,
-      obscureText: !viewModel.isConfirmPasswordVisible, // 👁️ toggle state
+      obscureText: !viewModel.isConfirmPasswordVisible,
       style: const TextStyle(color: AppColors.primary),
       decoration: InputDecoration(
         labelText: AppStrings.confirmPasswordLabel,
@@ -203,12 +217,12 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
           borderSide: BorderSide(color: AppColors.onSurface),
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.onSurface, width: 2),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         errorText: viewModel.confirmPasswordError,
-        errorStyle: const TextStyle(
+        errorStyle: TextStyle(
           color: AppColors.accent,
-          fontSize: AppDimensions.textS,
+          fontSize: context.getConditionalFont(),
           fontWeight: FontWeight.w500,
         ),
         suffixIcon: IconButton(
@@ -217,6 +231,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
                 ? Icons.visibility
                 : Icons.visibility_off,
             color: AppColors.primary,
+            size: context.getConditionalIconSize(),
           ),
           onPressed: viewModel.toggleConfirmPasswordVisibility,
         ),
@@ -226,7 +241,6 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
       textInputAction: TextInputAction.done,
       onSubmitted: (_) => viewModel.handleConfirmPasswordSubmitted(),
       onChanged: (value) {
-        // Clear error when user starts typing
         if (viewModel.confirmPasswordError != null) {
           viewModel.confirmPasswordError = null;
           viewModel.notifyListeners();
@@ -235,39 +249,40 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
     );
   }
 
-  Widget _buildContinueButton(
-      BuildContext context, SignupViewEmailModel viewModel) {
+  /// 🔹 Continue Button
+  Widget _buildContinueButton(BuildContext context, SignupViewEmailModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: AppDimensions.buttonHeightXL,
+      height: context.responsiveButtonHeightL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+          padding: context.responsivePadding,
         ),
         onPressed: viewModel.isLoading
             ? null
             : () {
-          viewModel.unfocusAll(); // Use viewModel method instead of FocusScope
+          viewModel.unfocusAll();
           viewModel.goToOtp();
         },
         child: viewModel.isLoading
-            ? const SizedBox(
-          width: AppDimensions.iconS,
-          height: AppDimensions.iconS,
-          child: CircularProgressIndicator(
-            color: AppColors.accent,
+            ? SizedBox(
+          width: context.getConditionalLogoSize(),
+          height: context.getConditionalIconSize(),
+          child: const CircularProgressIndicator(
+            color: AppColors.onPrimary,
             strokeWidth: 2,
           ),
         )
-            : const Text(
+            : ResponsiveTextWidget(
           AppStrings.continueText,
           style: TextStyle(
             color: AppColors.onPrimary,
-            fontSize: AppDimensions.textL,
+            fontSize: context.getConditionalMainFont(),
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

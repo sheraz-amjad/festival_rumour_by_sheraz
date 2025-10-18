@@ -124,6 +124,8 @@ dependencies:
 
   # Contacts
   flutter_contacts: ^1.1.7
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.8
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:festival_rumour/core/constants/app_durations.dart';
 import 'package:festival_rumour/ui/views/homeview/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,7 +52,8 @@ class HomeView extends BaseView<HomeViewModel> {
               children: [
                 _buildAppBar(context, viewModel),
                 _buildSearchBar(context, viewModel),
-                const SizedBox(height: AppDimensions.spaceS),
+                // Conditional spacing based on screen size
+
                 Expanded(
                   child: _buildFeedList(context, viewModel),
                 ),
@@ -66,15 +68,15 @@ class HomeView extends BaseView<HomeViewModel> {
 
   Widget _buildAppBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsivePadding(
-      mobilePadding: const EdgeInsets.symmetric(
+      mobilePadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalMobile,
         vertical: AppDimensions.appBarVerticalMobile,
       ),
-      tabletPadding: const EdgeInsets.symmetric(
+      tabletPadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalTablet,
         vertical: AppDimensions.appBarVerticalTablet,
       ),
-      desktopPadding: const EdgeInsets.symmetric(
+      desktopPadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalDesktop,
         vertical: AppDimensions.appBarVerticalDesktop,
       ),
@@ -84,122 +86,58 @@ class HomeView extends BaseView<HomeViewModel> {
           SvgPicture.asset(
             AppAssets.logo,
             color: AppColors.primary,
-           width: AppDimensions.imageM,
-           height: AppDimensions.imageM,
-           // width: _getResponsiveIconSize(context),
-           //  height: _getResponsiveIconSize(context),
+            width: context.getConditionalLogoSize(),
+           // The getter 'responsivePaddingL' isn't defined for the type 'BuildContext'.
+            
+            height: context.getConditionalLogoSize(),
           ),
-
-          SizedBox(width: _getResponsiveSpacing(context)),
           
           // Title - Flexible to prevent overflow
           Expanded(
             child: ResponsiveTextWidget(
               AppStrings.lunaFest2025,
-              textType: TextType.heading,
+              fontSize: context.getConditionalMainFont(),
               color: AppColors.primary,
               fontWeight: FontWeight.bold,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          
-          const Spacer(),
-
 
           // Job Icon Button with responsive sizing
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-             // width: _getResponsiveIconSize(context),
-              //height: _getResponsiveIconSize(context),
+             width: context.getConditionalMainIcon(),
+              height: context.getConditionalMainIcon(),
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
           
-          SizedBox(width: AppDimensions.spaceM),
+          // Conditional spacing before Pro label
           
-          // Pro Label - Flexible container
-          Flexible(
-            child: GestureDetector(
-              onTap: viewModel.goToSubscription,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _getResponsivePadding(context),
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                ),
-                child: ResponsiveTextWidget(
-                  AppStrings.proLabel,
-                  textType: TextType.label,
-                  color: AppColors.proLabelText,
-                  fontWeight: FontWeight.bold,
-                ),
+          // Pro Label - Aligned with search bar dropdown position
+          GestureDetector(
+            onTap: viewModel.goToSubscription,
+            child: Container(
+              padding: context.responsivePadding,
+              margin: context.responsiveMargin,
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+              ),
+              child: ResponsiveTextWidget(
+                AppStrings.proLabel,
+                textType: TextType.label,
+                fontSize: context.getConditionalFont(),
+                color: AppColors.proLabelText,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  // Helper methods for responsive sizing - optimized for high-res phones
-  double _getResponsiveIconSize(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.iconM; // 48px for high-res phones like Pixel 6 Pro
-    } else if (context.isLargeScreen) {
-      return AppDimensions.iconXL; // 64px for desktop
-    } else if (context.isMediumScreen) {
-      return AppDimensions.iconL; // 32px for tablets
-    }
-    return AppDimensions.iconL; // 32px minimum for all phones
-  }
-
-  double _getResponsiveSpacing(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.spaceM; // 16px for high-res phones (reduced from 24px)
-    } else if (context.isLargeScreen) {
-      return AppDimensions.spaceL; // 24px for desktop (reduced from 32px)
-    } else if (context.isMediumScreen) {
-      return AppDimensions.spaceS; // 8px for tablets (reduced from 16px)
-    }
-    return AppDimensions.spaceS; // 8px minimum for all phones (reduced from 16px)
-  }
-
-  double _getResponsiveTitleSize(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.textL; // 18px for high-res phones
-    } else if (context.isLargeScreen) {
-      return AppDimensions.textXL; // 26px for desktop
-    } else if (context.isMediumScreen) {
-      return AppDimensions.textM; // 14px for tablets
-    }
-    return AppDimensions.textM; // 14px minimum for all phones
-  }
-
-  double _getResponsivePadding(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.paddingS; // 8px for high-res phones (reduced from 16px)
-    } else if (context.isLargeScreen) {
-      return AppDimensions.paddingM; // 16px for desktop (reduced from 24px)
-    } else if (context.isMediumScreen) {
-      return AppDimensions.paddingXS; // 4px for tablets (reduced from 8px)
-    }
-    return AppDimensions.paddingXS; // 4px minimum for all phones (reduced from 8px)
-  }
-
-  double _getResponsiveLabelSize(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.textM; // 14px for high-res phones
-    } else if (context.isLargeScreen) {
-      return AppDimensions.textL; // 18px for desktop
-    } else if (context.isMediumScreen) {
-      return AppDimensions.textS; // 12px for tablets
-    }
-    return AppDimensions.textS; // 12px minimum for all phones
   }
 
 
@@ -209,212 +147,295 @@ class HomeView extends BaseView<HomeViewModel> {
       tabletMaxWidth: double.infinity,
       desktopMaxWidth: double.infinity,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: _getResponsivePadding(context)),
-        padding: EdgeInsets.symmetric(horizontal: _getResponsivePadding(context)),
+        margin:  context.responsiveMargin,
+        padding:  context.responsivePadding,
+        height: context.getConditionalButtonSize(),
         decoration: BoxDecoration(
           color: AppColors.onPrimary,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
         ),
         child: Row(
           children: [
+            SizedBox(width: context.getConditionalSpacing()),
+            // Conditional spacing for search icon - smaller on small screens
             Icon(
               Icons.search, 
               color: AppColors.onSurfaceVariant, 
-              size: _getResponsiveIconSize(context),
+              size: context.getConditionalIconSize(),
             ),
-            SizedBox(width: _getResponsiveSpacing(context)),
-
+            // Conditional spacing after search icon - adaptive sizing
+            SizedBox(width: context.getConditionalSpacing()),
             /// 🔹 Search Field
             Expanded(
-              child: StatefulBuilder(
-                builder: (context, setState) {
-                  return TextField(
-                    focusNode: viewModel.searchFocusNode,
-                    decoration: InputDecoration(
-                      hintText: AppStrings.searchHint,
-                      hintStyle: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: AppDimensions.textM,
-                      ),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      isDense: true,
-                      filled: false,
-                      fillColor: Colors.transparent,
-                      contentPadding: EdgeInsets.zero,
-                      suffixIcon: viewModel.currentSearchQuery.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, color: AppColors.primary, size: 20),
-                              onPressed: () {
-                                viewModel.clearSearch();
-                                setState(() {}); // Update the UI
-                              },
-                            )
-                          : null,
-                    ),
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: AppDimensions.textM,
-                    ),
-                    onChanged: (value) {
-                      viewModel.setSearchQuery(value);
-                    },
-                    onSubmitted: (value) {
-                      viewModel.unfocusSearch();
-                    },
-                    textInputAction: TextInputAction.search,
-                  );
+              child: TextField(
+                controller: viewModel.searchController,
+                focusNode: viewModel.searchFocusNode,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: AppStrings.searchHint,
+                  hintStyle: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: context.getConditionalFont(),
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  isDense: true,
+                  filled: false,
+                  fillColor: Colors.transparent,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: context.getConditionalFont(),
+                //  height: context.getConditionalButtonSize(),
+                ),
+                cursorColor: AppColors.primary,
+                onChanged: (value) {
+                  viewModel.setSearchQuery(value);
                 },
+                onSubmitted: (value) {
+                  viewModel.unfocusSearch();
+                },
+               textInputAction: TextInputAction.search,
               ),
             ),
 
-            /// 🔹 Dropdown Filter
-            DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: viewModel.currentFilter,
-                dropdownColor: AppColors.onPrimary.withOpacity(0.5), // Dark gray background
-                isExpanded: false,
-                menuWidth: double.infinity,
-                menuMaxHeight: context.screenHeight * 0.30,
-                icon: Container(
-                  padding: EdgeInsets.all(_getResponsivePadding(context) * 0.5),
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.keyboard_arrow_up, 
-                    color: AppColors.onPrimary, 
-                    size: _getResponsiveIconSize(context) * 0.6,
-                  ),
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value: 'all',
-                    child: Row(
-                      children: [
-                        Container(
-                          width: AppDimensions.iconS,
-                          height: AppDimensions.iconS,
-                          decoration: BoxDecoration(
-                            color: viewModel.currentFilter == 'all' ? AppColors.accent : AppColors.grey600,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
-                          ),
-                          child: Icon(
-                            Icons.grid_view,
-                            color: viewModel.currentFilter == 'all' ? AppColors.black : AppColors.white,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.spaceS),
-                        Text(
-                          AppStrings.allPosts,
-                          style: TextStyle(
-                            color: viewModel.currentFilter == 'all' ? AppColors.accent : AppColors.white,
-                            fontSize: AppDimensions.textM,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: AppStrings.live,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: AppDimensions.iconS,
-                          height: AppDimensions.iconS,
-                          decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.live ? AppColors.yellow : AppColors.white,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
-                          ),
-                          child: Icon(
-                            Icons.live_tv,
-                            color: viewModel.currentFilter == AppStrings.live ? AppColors.black : AppColors.white,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.spaceS),
-                        Text(
-                          AppStrings.live,
-                          style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.live ? AppColors.yellow : AppColors.white,
-                            fontSize: AppDimensions.textM,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: AppStrings.upcoming,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: AppDimensions.iconS,
-                          height: AppDimensions.iconS,
-                          decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.yellow : AppColors.white,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
-                          ),
-                          child: Icon(
-                            Icons.schedule,
-                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.black : AppColors.white,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.spaceS),
-                        Text(
-                          AppStrings.upcoming,
-                          style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.upcoming ? AppColors.yellow : AppColors.white,
-                            fontSize: AppDimensions.textM,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: AppStrings.past,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: AppDimensions.iconS,
-                          height: AppDimensions.iconS,
-                          decoration: BoxDecoration(
-                            color: viewModel.currentFilter == AppStrings.past ? AppColors.yellow : AppColors.white,
-                            borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
-                          ),
-                          child: Icon(
-                            Icons.history,
-                            color: viewModel.currentFilter == AppStrings.past ? AppColors.black : AppColors.white,
-                            size: 16,
-                          ),
-                        ),
-                        const SizedBox(width: AppDimensions.spaceS),
-                        Text(
-                          AppStrings.past,
-                          style: TextStyle(
-                            color: viewModel.currentFilter == AppStrings.past ? AppColors.yellow : AppColors.white,
-                            fontSize: AppDimensions.textM,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-                onChanged: (value) {
+            /// 🔹 Search Clear Button - Always reserve space
+            SizedBox(
+              width: context.getConditionalIconSize(),
+              child: viewModel.currentSearchQuery.isNotEmpty
+                  ? IconButton(
+                icon:  Icon(Icons.clear, color: AppColors.primary, size: context.getConditionalIconSize()),
+                onPressed: () {
+                  // ✅ Clear search and hide keyboard
+                  viewModel.clearSearch();
+                  FocusScope.of(context).unfocus();
+                },
+              )
+                  : const SizedBox.shrink(),
+            ),
+
+            /// 🔹 Filter Dropdown Menu (No Text Display)
+            SizedBox(
+              width: AppDimensions.iconL, // Fixed width to prevent layout issues
+              height: AppDimensions.iconL, // Fixed height to match search bar
+              child: DropdownMenu<String>(
+                initialSelection: viewModel.currentFilter,
+                onSelected: (value) {
                   if (value != null) {
                     viewModel.setFilter(value);
-                    debugPrint("Selected Filter: $value");
+                    debugPrint("${AppDimensions.debugSelectedFilter}$value");
                   }
                 },
+                // Hide the text input completely
+                textStyle: const TextStyle(color: Colors.transparent, fontSize: 0),
+                inputDecorationTheme: InputDecorationTheme(
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+                // Make the dropdown invisible but functional
+                expandedInsets: EdgeInsets.zero,
+                width: double.infinity,
+                  menuStyle: MenuStyle(
+                    backgroundColor: WidgetStateProperty.all(AppColors.onPrimary),
+                    elevation: WidgetStateProperty.all(8),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+                      ),
+                    ),
+                    minimumSize: WidgetStateProperty.all(Size(double.infinity, 0)),
+                    maximumSize: WidgetStateProperty.all(Size(double.infinity, double.infinity)),
+                  ),
+              trailingIcon: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                ),
+                child: const Icon(
+                  Icons.arrow_drop_down_outlined,
+                  color: AppColors.onPrimary,
+                  size: AppDimensions.searchBarDropdownIconSize,
+                ),
+              ),
+              dropdownMenuEntries: [
+                DropdownMenuEntry<String>(
+                  value: AppStrings.live,
+                  label: AppStrings.live,
+                  labelWidget: Container(
+                      width: double.infinity,
+                      padding: context.responsivePadding,
+                     margin: context.responsiveMargin,  // vertical: context.responsivePadding,
+
+                      decoration: BoxDecoration(
+                        color: viewModel.currentFilter == AppStrings.live
+                            ? AppColors.primary.withOpacity(0.1)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                      ),
+                      child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                            height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
+                            decoration: BoxDecoration(
+                              color: viewModel.currentFilter == AppStrings.live
+                                  ? AppColors.accent
+                                  : AppColors.primary,
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                              boxShadow: viewModel.currentFilter == AppStrings.live
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.primary.withOpacity(0.3),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Icon(
+                              Icons.live_tv,
+                              color: AppColors.onPrimary,
+                              size: AppDimensions.searchBarDropdownEntryIconSize,
+                            ),
+                          ),
+                          SizedBox(width: context.responsiveSpaceM),
+                          ResponsiveTextWidget(
+                            AppStrings.live,
+                            textType: TextType.body,
+                            color: viewModel.currentFilter == AppStrings.live
+                                ? AppColors.accent
+                                : AppColors.primary,
+                            fontSize: context.responsiveTextM,
+                            fontWeight: viewModel.currentFilter == AppStrings.live
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                DropdownMenuEntry<String>(
+                  value: AppStrings.upcoming,
+                  label: AppStrings.upcoming,
+                  labelWidget: Container(
+                      width: double.infinity,
+                    padding: context.responsivePadding,
+                    margin: context.responsiveMargin,
+                      child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                            height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
+                            decoration: BoxDecoration(
+                              color: viewModel.currentFilter == AppStrings.upcoming
+                                  ? AppColors.accent
+                                  : AppColors.primary,
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                              boxShadow: viewModel.currentFilter == AppStrings.upcoming
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.primary.withOpacity(0.3),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Icon(
+                              Icons.schedule,
+                              color: AppColors.onPrimary,
+                              size: AppDimensions.searchBarDropdownEntryIconSize,
+                            ),
+                          ),
+                          SizedBox(width: context.responsiveSpaceM),
+                          ResponsiveTextWidget(
+                            AppStrings.upcoming,
+                            textType: TextType.body,
+                            color: viewModel.currentFilter == AppStrings.upcoming
+                                ? AppColors.accent
+                                : AppColors.primary,
+                            fontSize: context.responsiveTextM,
+                            fontWeight: viewModel.currentFilter == AppStrings.upcoming
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                DropdownMenuEntry<String>(
+                  value: AppStrings.past,
+                  label: AppStrings.past,
+                  labelWidget: Container(
+                      width: double.infinity,
+                    padding: context.responsivePadding,
+                    margin: context.responsiveMargin,
+                      decoration: BoxDecoration(
+                        color: viewModel.currentFilter == AppStrings.past
+                            ? AppColors.primary.withOpacity(0.1)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
+                      ),
+                      child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: AppDimensions.searchBarDropdownEntryIconContainerSize,
+                            height: AppDimensions.searchBarDropdownEntryIconContainerHeight,
+                            decoration: BoxDecoration(
+                              color: viewModel.currentFilter == AppStrings.past
+                                  ? AppColors.accent
+                                  : AppColors.primary,
+                              borderRadius: BorderRadius.circular(AppDimensions.radiusXS),
+                              boxShadow: viewModel.currentFilter == AppStrings.past
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.primary.withOpacity(0.3),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Icon(
+                              Icons.history,
+                              color: AppColors.onPrimary,
+                              size: AppDimensions.searchBarDropdownEntryIconSize,
+                            ),
+                          ),
+                          SizedBox(width: context.responsiveSpaceM),
+                          ResponsiveTextWidget(
+                            AppStrings.past,
+                            textType: TextType.body,
+                            color: viewModel.currentFilter == AppStrings.past
+                                ? AppColors.accent
+                                : AppColors.primary,
+                            fontSize: context.responsiveTextM,
+                            fontWeight: viewModel.currentFilter == AppStrings.past
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
               ),
             ),
+            // Conditional spacing at end of search bar
+
           ],
         ),
       ),
@@ -438,15 +459,16 @@ class HomeView extends BaseView<HomeViewModel> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: AppDimensions.spaceS),
+      padding: EdgeInsets.symmetric(vertical: context.responsiveSpaceS),
       itemCount: viewModel.posts.length,
       itemBuilder: (context, index) {
         final post = viewModel.posts[index];
         return Column(
           children: [
             PostWidget(post: post),
+            // Conditional spacing between posts
             if (index != viewModel.posts.length - 1)
-              const SizedBox(height: AppDimensions.spaceM),
+              SizedBox(height: context.responsiveSpaceS),
           ],
         );
       },
@@ -463,42 +485,44 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
       builder: (_) {
         return Padding(
-          padding: const EdgeInsets.all(AppDimensions.paddingM),
+          padding: context.getConditionalPadding(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+           // crossAxisAlignment: CrossAxisAlignment.,
             children: [
-              const Center(
+               Center(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: context.getConditionalPadding(),
                   child: ResponsiveTextWidget(
                     AppStrings.jobDetails,
-                    textType: TextType.title,
+                  //  textType: TextType.title,
                     color: AppColors.yellow,
-                    fontSize: AppDimensions.textL,
-                    fontWeight: FontWeight.bold,
+                    fontSize: context.getConditionalFont(),
+                  //  fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               _buildJobTile(
                 image: AppAssets.job1,
                 title: AppStrings.festivalGizzaJob,
+                context: context,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                   // Navigate to add job screen if needed
                 },
               ),
               const Divider(color: Colors.yellow, thickness: 1),
-              const SizedBox(height: AppDimensions.spaceS),
+              // Conditional spacing between job tiles
+
               _buildJobTile(
                 image: AppAssets.job2,
                 title: AppStrings.festieHerosJob,
+                context: context,
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.festivalsJob);
                   // Navigate to another add post screen if needed
                 },
               ),
-              const SizedBox(height: AppDimensions.paddingS),
             ],
           ),
         );
@@ -510,12 +534,13 @@ class HomeView extends BaseView<HomeViewModel> {
     required String image,
     required String title,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: AppDimensions.spaceXS),
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingS, vertical: AppDimensions.paddingS),
+        margin: EdgeInsets.symmetric(vertical: context.responsiveSpaceXS),
+        padding: EdgeInsets.symmetric(horizontal: context.responsivePaddingS.left, vertical: context.responsivePaddingS.top),
         decoration: BoxDecoration(
           // color: Colors.white.withOpacity(0.1),
           // borderRadius: BorderRadius.circular(10),
@@ -542,7 +567,7 @@ class HomeView extends BaseView<HomeViewModel> {
                     ),
                   ),
 
-                  const SizedBox(width: AppDimensions.paddingS),
+                  // Conditional spacing between image and text
 
                   /// Text — flexible and ellipsis
                   Expanded(

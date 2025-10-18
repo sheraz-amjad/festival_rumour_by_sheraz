@@ -10,13 +10,21 @@ class AppDimensions {
   static const double paddingXL = 32.0;
   static const double paddingXXL = 48.0;
 
+
+  static const double marginXS = 4.0;
+  static const double marginS  = 8.0;
+  static const double marginM  = 16.0;
+  static const double marginL  = 24.0;
+  static const double marginXL = 32.0;
+  static const double marginXXL = 48.0;
+
   // Spacing
   static const double spaceXS = 4.0;
   static const double spaceS = 8.0;
-  static const double spaceM = 16.0;
-  static const double spaceL = 24.0;
-  static const double spaceXL = 32.0;
-  static const double spaceXXL = 55.0;
+  static const double spaceM = 12.0;
+  static const double spaceL = 16.0;
+  static const double spaceXL = 24.0;
+  static const double spaceXXL = 30.0;
 
   // Border Radius
   static const double radiusXS = 4.0;
@@ -63,7 +71,7 @@ class AppDimensions {
   static const double appBarVerticalTablet = 12.0;
   static const double appBarVerticalDesktop = 16.0;
 
-  static const double appBarHorizontalMobile = 15.0;
+  static const double appBarHorizontalMobile = 10.0;
   static const double appBarHorizontalTablet = 24.0;
   static const double appBarHorizontalDesktop = 32.0;
 
@@ -81,13 +89,23 @@ class AppDimensions {
   static const double iconM = 24.0;
   static const double iconL = 28.0;
   static const double iconXL = 36.0;
-  static const double iconXXL = 45.0;
+  static const double iconXXL =60.0;
+
+
+  static const double logoXS = 30.0;   // Very small logo (e.g. navbar, icon)
+  static const double logoS  = 38.0;   // Small logo (e.g. small card headers)
+  static const double logoM  = 48.0;   // Medium logo (default size)
+  static const double logoL  = 64.0;   // Large logo (e.g. login screens)
+  static const double logoXL = 80.0;   // Extra large logo (splash screen)
+  static const double logoXXL = 120.0; // Very large logo (onboarding, hero section)
 
   // Button Heights
+  static const double buttonHeightXS = 24.0;
   static const double buttonHeightS = 32.0;
   static const double buttonHeightM = 40.0;
   static const double buttonHeightL = 48.0;
   static const double buttonHeightXL = 56.0;
+  static const double buttonHeightXXL = 64.0;
   static const double buttonWidth = 180.0;
 
   // AppBar
@@ -139,9 +157,9 @@ class AppDimensions {
 
   // Text Sizes
   static const double textXS = 10.0;
-  static const double textS = 12.0;
+  static const double textS = 13.0;
   static const double textM = 14.0;
-  static const double textL = 18.0;
+  static const double textL = 22.0;
   static const double textXL = 26.0;
   static const double textXXL = 35.0;
   static const double textTitle = 22.0;
@@ -168,6 +186,21 @@ class AppDimensions {
   static const double avatarL = 64.0;
   static const double avatarXL = 96.0;
   static const double avatarProfile = 50.0;
+
+  // Search Bar Specific Sizes
+  static const double searchBarHeight = 48.0;
+  static const double searchBarIconSize = 20.0;
+  static const double searchBarClearButtonWidth = 40.0;
+  static const double searchBarDropdownWidth = 35.0;
+  static const double searchBarDropdownHeight = 40.0;
+  static const double searchBarDropdownIconSize = 20.0;
+  static const double searchBarDropdownEntryIconSize = 18.0;
+  static const double searchBarDropdownEntryIconContainerSize = 32.0;
+  static const double searchBarDropdownEntryIconContainerHeight = 32.0;
+  static const double searchBarTextHeight = 1.2;
+
+  // Debug Print Messages
+  static const String debugSelectedFilter = "Selected Filter: ";
 }
 
 

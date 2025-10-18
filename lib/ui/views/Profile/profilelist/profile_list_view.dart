@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/Profile/profilelist/widgets/festivals_tab.dart';
 import 'package:festival_rumour/ui/views/Profile/profilelist/widgets/followers_tab.dart';
 import 'package:festival_rumour/ui/views/Profile/profilelist/widgets/following_tab.dart';
@@ -14,13 +15,13 @@ import 'profile_list_view_model.dart';
 
 class ProfileListView extends BaseView<ProfileListViewModel> {
   final int initialTab; // 0 = Followers, 1 = Following, 2 = Festivals
-  final String username;
+  final String Username;
   final VoidCallback? onBack;
 
   const ProfileListView({
     super.key,
     required this.initialTab,
-    required this.username,
+    required this.Username,
     this.onBack,
   });
 
@@ -53,9 +54,8 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
               children: [
                 /// 🔹 App Bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingM),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomBackButton(onTap: () {
                         if (onBack != null) {
@@ -64,14 +64,16 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
                           Navigator.pop(context);
                         }
                       }),
+                      SizedBox(width: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 10),
                       ResponsiveTextWidget(
-                        username,
+                        Username,
                         style: const TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: AppDimensions.textL,
+                          fontSize: AppDimensions.textXL,
                         ),
                       ),
+                      const Spacer(),
                       IconButton(
                         icon: const Icon(Icons.refresh, color: AppColors.white),
                         onPressed: viewModel.refreshList,
@@ -147,14 +149,14 @@ class ProfileListView extends BaseView<ProfileListViewModel> {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL, vertical: AppDimensions.paddingM),
           decoration: BoxDecoration(
             color: isActive ? AppColors.accent : AppColors.onPrimary,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           ),
           child: ResponsiveTextWidget(
             label,
-            textType: TextType.body, 
+            textType: TextType.body,
               color: isActive ? AppColors.onPrimary : AppColors.primary,
               fontWeight: FontWeight.bold,
             ),

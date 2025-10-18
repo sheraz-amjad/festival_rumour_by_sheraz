@@ -37,7 +37,7 @@ class AppColors {
   static const Color lightBlack = Color(0xFF212121);
 
   // Error Colors
-  static const Color error = Color(0xFFB00020);  // Material red
+  static const Color error = white;  // Material red
   static const Color onError = Color(0xFFFFFFFF);
   static const Color errorContainer = Color(0xFFFCD8DF);
   static const Color onErrorContainer = Color(0xFF370617);
@@ -124,6 +124,7 @@ class AppColors {
 
   // Additional colors found in UI components
   static const Color googleRed = Color(0xFFDB4437);
+  static const Color emailBlue = Color(0xFF375CA1);
   static const Color googleBlue = Color(0xFF4285F4);
   static const Color googleGreen = Color(0xFF34A853);
   static const Color googleYellow = Color(0xFFFBBC05);

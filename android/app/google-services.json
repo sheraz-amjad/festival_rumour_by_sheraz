@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "932830993877",
+    "project_id": "festivalrumour",
+    "storage_bucket": "festivalrumour.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932830993877:android:7675c9053f9f315604315c",
+        "android_client_info": {
+          "package_name": "com.festival_rumour"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932830993877-tog9a0nt40iog9dc0crf52jua3492ovb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCESPbEY1pO4RLAyegbU-Ni6VXCzxp4pQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932830993877-tog9a0nt40iog9dc0crf52jua3492ovb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "932830993877-372tlrvjog6gvh3a672ib169bja1li1l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.festival-rumour"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,7 +19,9 @@ class FestivalViewModel extends BaseViewModel {
   List<FestivalModel> filteredFestivals = []; // Filtered festivals for search
   int currentPage = 0;
   String searchQuery = ''; // Search query
+  String currentFilter = 'live'; // Current filter (default to live)
   late FocusNode searchFocusNode; // Search field focus node
+  TextEditingController searchController = TextEditingController(); // Search field controller
 
   final PageController pageController = PageController(viewportFraction: AppDimensions.pageViewportFraction);
   Timer? _autoSlideTimer;
@@ -34,52 +36,51 @@ class FestivalViewModel extends BaseViewModel {
 
       allFestivals.addAll([
         FestivalModel(
-          title: "Electric Music Festival",
-          location: "Miami, Florida",
-          date: "March 15-17, 2024",
+          title: AppStrings.mockFestival1,
+          location: AppStrings.mockLocation1,
+          date: AppStrings.mockDate1,
           imagepath: AppAssets.festivalimage,
           isLive: true,
         ),
         FestivalModel(
-          title: "Coachella Valley Music Festival",
-          location: "Indio, California",
-          date: "April 12-14, 2024",
+          title: AppStrings.mockFestival2,
+          location: AppStrings.mockLocation2,
+          date: AppStrings.mockDate2,
           imagepath: AppAssets.festivalimage,
           isLive: false,
         ),
         FestivalModel(
-          title: "Tomorrowland Electronic Festival",
-          location: "Boom, Belgium",
-          date: "July 19-21, 2024",
+          title: AppStrings.mockFestival3,
+          location: AppStrings.mockLocation3,
+          date: AppStrings.mockDate3,
           imagepath: AppAssets.festivalimage,
           isLive: false,
         ),
         FestivalModel(
-          title: "Burning Man Festival",
-          location: "Black Rock City, Nevada",
-          date: "August 25-September 2, 2024",
+          title: AppStrings.mockFestival4,
+          location: AppStrings.mockLocation4,
+          date: AppStrings.mockDate4,
           imagepath: AppAssets.festivalimage,
           isLive: false,
         ),
         FestivalModel(
-          title: "Ultra Music Festival",
-          location: "Miami, Florida",
-          date: "March 22-24, 2024",
+          title: AppStrings.mockFestival5,
+          location: AppStrings.mockLocation1,
+          date: AppStrings.mockDate5,
           imagepath: AppAssets.festivalimage,
           isLive: true,
         ),
         FestivalModel(
-          title: "Glastonbury Festival",
-          location: "Pilton, England",
-          date: "June 26-30, 2024",
+          title: AppStrings.mockFestival6,
+          location: AppStrings.mockLocation5,
+          date: AppStrings.mockDate6,
           imagepath: AppAssets.festivalimage,
           isLive: false,
         ),
       ]);
       
-      // Initially show all festivals
-      festivals.addAll(allFestivals);
-      filteredFestivals.addAll(allFestivals);
+      // Apply default filter (live festivals)
+      _applyFilter();
     }, 
     errorMessage: AppStrings.failedToLoadFestivals,
     minimumLoadingDuration: AppDurations.minimumLoadingDuration);
@@ -181,7 +182,14 @@ class FestivalViewModel extends BaseViewModel {
 
   void clearSearch() {
     searchQuery = '';
+    searchController.clear();
     _applySearchFilter();
+    notifyListeners();
+  }
+
+  void setFilter(String filter) {
+    currentFilter = filter;
+    _applyFilter();
     notifyListeners();
   }
 
@@ -197,14 +205,35 @@ class FestivalViewModel extends BaseViewModel {
 
   void _applySearchFilter() {
     if (searchQuery.isEmpty) {
-      filteredFestivals = List.from(allFestivals);
+      filteredFestivals = List.from(festivals);
     } else {
-      filteredFestivals = allFestivals.where((festival) {
+      filteredFestivals = festivals.where((festival) {
         return festival.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
                festival.location.toLowerCase().contains(searchQuery.toLowerCase()) ||
                festival.date.toLowerCase().contains(searchQuery.toLowerCase());
       }).toList();
     }
+  }
+
+  void _applyFilter() {
+    switch (currentFilter) {
+      case 'live':
+        festivals.clear();
+        festivals.addAll(allFestivals.where((festival) => festival.isLive).toList());
+        break;
+      case 'upcoming':
+        festivals.clear();
+        festivals.addAll(allFestivals.where((festival) => !festival.isLive).toList());
+        break;
+      case 'past':
+        festivals.clear();
+        festivals.addAll(allFestivals.where((festival) => !festival.isLive).toList());
+        break;
+      default:
+        festivals.clear();
+        festivals.addAll(allFestivals);
+    }
+    _applySearchFilter();
   }
 
   String get currentSearchQuery => searchQuery;
@@ -214,6 +243,7 @@ class FestivalViewModel extends BaseViewModel {
     _autoSlideTimer?.cancel();
     pageController.dispose();
     searchFocusNode.dispose();
+    searchController.dispose();
     super.onDispose();
   }
 }

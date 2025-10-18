@@ -141,7 +141,7 @@ class NameView extends BaseView<NameViewModel> {
   Widget _buildNextButton(BuildContext context, NameViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: AppDimensions.buttonHeightXL,
+      height: context.responsiveButtonHeightL,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor:
@@ -165,9 +165,10 @@ class NameView extends BaseView<NameViewModel> {
             strokeWidth: 2,
           ),
         )
-            : const ResponsiveTextWidget(
+            :  ResponsiveTextWidget(
           AppStrings.next,
-          textType: TextType.body, color: AppColors.onPrimary),
+          fontSize: context.responsiveTextM,
+            color: AppColors.onPrimary),
         ),
     );
   }

@@ -20,7 +20,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
       backgroundColor: AppColors.primary,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.onPrimary),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.onPrimary),
@@ -54,7 +54,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
               child: const ResponsiveTextWidget(
                 AppStrings.proLabel,
                 textType: TextType.caption,
-                color: Colors.white, // ✅ White text on black background
+                color: AppColors.onPrimary, // ✅ White text on black background
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -62,7 +62,18 @@ class SettingsView extends BaseView<SettingsViewModel> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
+          padding: EdgeInsets.symmetric(
+          horizontal: context.isSmallScreen 
+              ? AppDimensions.paddingM
+              : context.isMediumScreen 
+                  ? AppDimensions.paddingL
+                  : AppDimensions.paddingXL,
+          vertical: context.isSmallScreen 
+              ? AppDimensions.paddingS
+              : context.isMediumScreen 
+                  ? AppDimensions.paddingM
+                  : AppDimensions.paddingL
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -163,7 +174,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
               title: AppStrings.termsAndConditions,
               onTap: viewModel.openTerms,
             ),
-        ]
+          ]
         ),
       ),
     );
@@ -240,19 +251,29 @@ class SettingsView extends BaseView<SettingsViewModel> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusL),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.primary,
           elevation: 8,
           child: Container(
-            padding: const EdgeInsets.all(AppDimensions.paddingL),
-            width: context.screenWidth * 0.85,
+            padding: EdgeInsets.all(
+              context.isSmallScreen 
+                  ? AppDimensions.paddingM
+                  : context.isMediumScreen 
+                      ? AppDimensions.paddingL
+                      : AppDimensions.paddingXL
+            ),
+            width: context.isSmallScreen 
+                ? context.screenWidth * 0.9
+                : context.isMediumScreen 
+                    ? context.screenWidth * 0.7
+                    : context.screenWidth * 0.5,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const ResponsiveTextWidget(
                   AppStrings.badges,
-                  textType: TextType.body,
+                  textType: TextType.heading,
                     fontWeight: FontWeight.bold,
-                    fontSize: AppDimensions.textXL,
+                    fontSize: AppDimensions.textL,
                     color: AppColors.onPrimary,
                   ),
                 const SizedBox(height: AppDimensions.paddingL),
@@ -260,21 +281,21 @@ class SettingsView extends BaseView<SettingsViewModel> {
                 // 🏅 Each badge item
                 _buildBadgeItem(
                   icon: Icons.emoji_events,
-                  title: "1  Top Rumour Spotter",
-                  subtitle: "          For viral or trending posts",
-                  color: Colors.orangeAccent,
+                  title: AppStrings.topRumourSpotter,
+                  subtitle: AppStrings.topRumourSpotterDescription,
+                  color: AppColors.orange,
                 ),
                 _buildBadgeItem(
                   icon: Icons.workspace_premium,
-                  title: "2  Media Master",
-                  subtitle: "          For contributing quality photos/videos",
-                  color: Colors.purpleAccent,
+                  title: AppStrings.mediaMaster,
+                  subtitle: AppStrings.mediaMasterDescription,
+                  color: AppColors.purple,
                 ),
                 _buildBadgeItem(
                   icon: Icons.star,
-                  title: "3  Crowd Favourite",
-                  subtitle: "          For most liked/reacted content",
-                  color: Colors.amber,
+                  title: AppStrings.crowdFavourite,
+                  subtitle: AppStrings.crowdFavouriteDescription,
+                  color: AppColors.amber,
                 ),
 
                 const SizedBox(height: AppDimensions.paddingM),
@@ -307,7 +328,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
         children: [
           Center( // 👈 icon stays centered
             child: CircleAvatar(
-              radius: AppDimensions.avatarL,
+              radius: AppDimensions.avatarM,
               backgroundColor: color.withOpacity(0.15),
               child: Icon(icon, color: color, size: AppDimensions.iconXXL),
             ),
@@ -317,6 +338,7 @@ class SettingsView extends BaseView<SettingsViewModel> {
             title,
             textAlign: TextAlign.left,
             textType: TextType.heading,
+            fontSize: AppDimensions.textL,
             fontWeight: FontWeight.w800,
             color: AppColors.grey900,
           ),
@@ -324,6 +346,8 @@ class SettingsView extends BaseView<SettingsViewModel> {
             subtitle,
             textAlign: TextAlign.left,
             textType: TextType.caption,
+            fontSize: AppDimensions.textM,
+            fontWeight: FontWeight.w600,
             color: AppColors.grey600,
           ),
         ],

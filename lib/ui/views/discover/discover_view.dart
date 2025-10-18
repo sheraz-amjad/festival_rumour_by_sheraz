@@ -57,10 +57,9 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                 desktopMaxWidth: AppDimensions.desktopWidth,
                 child: SingleChildScrollView(
                   child: ResponsivePadding(
-                    mobilePadding: const EdgeInsets.all(AppDimensions.paddingM),
-                    tabletPadding: const EdgeInsets.all(AppDimensions.paddingL),
-                    desktopPadding:
-                    const EdgeInsets.all(AppDimensions.paddingXL),
+                    mobilePadding: const EdgeInsets.all(AppDimensions.paddingS),
+                    tabletPadding: const EdgeInsets.all(AppDimensions.paddingM),
+                    desktopPadding: const EdgeInsets.all(AppDimensions.paddingXL),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -69,12 +68,13 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                           children: [
                             CustomBackButton(onTap: onBack ?? () {}),
                             
-                            SizedBox(width: context.isLargeScreen ? 16 : context.isMediumScreen ? 12 : 8),
+                            SizedBox(width: context.getConditionalSpacing()),
                             
                             /// Overview title
                             ResponsiveTextWidget(
                               AppStrings.overview,
                               textType: TextType.heading,
+                              fontSize: context.getConditionalMainFont(),
                               color: AppColors.primary,
                             ),
                             
@@ -108,20 +108,20 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                                         : AppColors.primary,
                                   ),
                                 ),
-                                const SizedBox(
-                                    width: AppDimensions.spaceM),
-                                const Icon(Icons.ios_share_sharp,
+
+                                 SizedBox(width:  context.getConditionalSpacing()),
+                                 Icon(Icons.ios_share_sharp,
                                     color: AppColors.primary),
                               ],
                             ),
                           ],
                         ),
 
-                        const SizedBox(height: AppDimensions.spaceL),
+                         SizedBox(height: context.getConditionalSpacing()),
 
                         const EventHeaderCard(),
 
-                        const SizedBox(height: AppDimensions.spaceL),
+                         SizedBox(height: context.getConditionalSpacing()),
 
                         const ResponsiveTextWidget(
                           AppStrings.getReady,
@@ -130,7 +130,7 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                             fontWeight: FontWeight.bold,
                           ),
 
-                        const SizedBox(height: AppDimensions.spaceL),
+                         SizedBox(height: context.getConditionalSpacing()),
 
                         /// Action Tiles
                         ActionTile(
@@ -144,7 +144,7 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                             );
                           },
                         ),
-                        const SizedBox(height: AppDimensions.spaceS),
+                         SizedBox(height: AppDimensions.spaceS),
                         ActionTile(
                           iconPath: AppAssets.iconcharcter,
                           text: AppStrings.inviteYourFestieBestie,
@@ -158,19 +158,19 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                           },
                         ),
 
-                        const SizedBox(height: AppDimensions.spaceM),
+                         SizedBox(height: context.getConditionalSpacing()),
 
                         /// Grid Options
                         GridView.count(
                           crossAxisCount: context.isLargeScreen
                               ? 4
                               : context.isMediumScreen
-                              ? 3
+                              ? 2
                               : 2,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           mainAxisSpacing: context.isLargeScreen
-                              ? AppDimensions.spaceL
+                              ? AppDimensions.spaceM
                               : AppDimensions.spaceM,
                           crossAxisSpacing: context.isLargeScreen
                               ? AppDimensions.spaceL
@@ -224,9 +224,9 @@ class ShareLocationPopup extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      insetPadding: const EdgeInsets.all(20),
+      insetPadding: context.responsivePadding,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: context.responsivePadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -247,7 +247,7 @@ class ShareLocationPopup extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   //fontSize: 20
             ),
-            SizedBox(height: AppDimensions.paddingL),
+            SizedBox(height: context.getConditionalSpacing()),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -258,7 +258,7 @@ class ShareLocationPopup extends StatelessWidget {
               },
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: context.responsivePadding,
                 decoration: BoxDecoration(
                   color: AppColors.accent,
                   borderRadius: BorderRadius.circular(12),
@@ -266,7 +266,7 @@ class ShareLocationPopup extends StatelessWidget {
                 child: const ResponsiveTextWidget(
                   AppStrings.locationSharingDescription,
                   textAlign: TextAlign.center,
-                  textType: TextType.body, 
+                  textType: TextType.body,
                       color: AppColors.black,
                       fontWeight: FontWeight.w800,
                       //fontSize: 16),
@@ -274,7 +274,7 @@ class ShareLocationPopup extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: AppDimensions.spaceM),
+            SizedBox(height: context.getConditionalSpacing()),
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(

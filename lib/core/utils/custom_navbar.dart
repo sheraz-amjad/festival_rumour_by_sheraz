@@ -47,10 +47,16 @@ class CustomNavBar extends StatelessWidget {
             return GestureDetector(
               onTap: () => onTap(index),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
+                duration: const Duration(milliseconds: 100),
                 width: containerWidth,
                 padding: EdgeInsets.symmetric(vertical: padding, horizontal: 8),
-                child: _buildButton(item, selected, iconSize, fontSize, spacing),
+                child: _buildButton(
+                  item,
+                  selected,
+                  iconSize,
+                  fontSize,
+                  spacing,
+                ),
               ),
             );
           }),
@@ -59,45 +65,59 @@ class CustomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(Map<String, dynamic> item, bool selected, double iconSize, double fontSize, double spacing) {
+  Widget _buildButton(
+    Map<String, dynamic> item,
+    bool selected,
+    double iconSize,
+    double fontSize,
+    double spacing,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: selected 
-            ? AppColors.accent // Use app accent color for selected
-            : Colors.transparent, // Transparent for unselected
+        color:
+            selected
+                ? AppColors
+                    .accent // Use app accent color for selected
+                : Colors.transparent, // Transparent for unselected
         borderRadius: BorderRadius.circular(20),
       ),
-      child: selected 
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
+        child:
+            selected
+                ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      item["icon"] as IconData,
+                      color:
+                          AppColors
+                              .black, // Black for selected (contrasts well with accent)
+                      size: iconSize,
+                    ),
+                    SizedBox(width: spacing),
+                    Flexible(
+                      child: Text(
+                        item["label"] as String,
+                        style: TextStyle(
+                          color:
+                              AppColors
+                                  .black, // Black for selected (contrasts well with accent)
+                          fontWeight: FontWeight.w600,
+                          fontSize: fontSize,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
+                )
+                : Icon(
                   item["icon"] as IconData,
-                  color: AppColors.black, // Black for selected (contrasts well with accent)
+                  color: const Color(0xFF9E9E9E), // Light gray for unselected
                   size: iconSize,
                 ),
-                SizedBox(width: spacing),
-                Flexible(
-                  child: Text(
-                    item["label"] as String,
-                    style: TextStyle(
-                      color: AppColors.black, // Black for selected (contrasts well with accent)
-                      fontWeight: FontWeight.w600,
-                      fontSize: fontSize,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-              ],
-            )
-          : Icon(
-              item["icon"] as IconData,
-              color: const Color(0xFF9E9E9E), // Light gray for unselected
-              size: iconSize,
-            ),
-    );
+      );
   }
 
   // Responsive helper methods
