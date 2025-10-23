@@ -108,8 +108,8 @@ class HomeView extends BaseView<HomeViewModel> {
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-             width: context.getConditionalMainIcon(),
-              height: context.getConditionalMainIcon(),
+             width: AppDimensions.iconXL,
+              height: AppDimensions.iconXL,
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
@@ -120,8 +120,7 @@ class HomeView extends BaseView<HomeViewModel> {
           GestureDetector(
             onTap: viewModel.goToSubscription,
             child: Container(
-              padding: context.responsivePadding,
-              margin: context.responsiveMargin,
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
                 color: AppColors.accent,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
@@ -129,7 +128,7 @@ class HomeView extends BaseView<HomeViewModel> {
               child: ResponsiveTextWidget(
                 AppStrings.proLabel,
                 textType: TextType.label,
-                fontSize: context.getConditionalFont(),
+                fontSize: AppDimensions.textS,
                 color: AppColors.proLabelText,
                 fontWeight: FontWeight.bold,
               ),
@@ -459,7 +458,7 @@ class HomeView extends BaseView<HomeViewModel> {
     }
 
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: context.responsiveSpaceS),
+      padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingXS),
       itemCount: viewModel.posts.length,
       itemBuilder: (context, index) {
         final post = viewModel.posts[index];

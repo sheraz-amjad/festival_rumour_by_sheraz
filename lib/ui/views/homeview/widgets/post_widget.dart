@@ -30,10 +30,10 @@ class _PostWidgetState extends State<PostWidget> {
     final post = widget.post;
     return Container(
       height: context.isLargeScreen 
-        ? MediaQuery.of(context).size.height * 0.5
+        ? MediaQuery.of(context).size.height * 0.6
         : context.isMediumScreen 
-          ? MediaQuery.of(context).size.height * 0.45
-          : MediaQuery.of(context).size.height * 0.4,
+          ? MediaQuery.of(context).size.height * 0.5
+          : MediaQuery.of(context).size.height * 0.6,
       decoration: BoxDecoration(
         color: AppColors.postBackground.withOpacity(0.7),
         borderRadius: const BorderRadius.only(
@@ -166,11 +166,11 @@ class _PostWidgetState extends State<PostWidget> {
                   // Reactions Popup
                   if (_showReactions)
                     Positioned(
-                      bottom: 60,
-                      right: 20,
+                      bottom: 88,
+                      right: 0,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 12),
+                            vertical: 1, horizontal: 12),
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),

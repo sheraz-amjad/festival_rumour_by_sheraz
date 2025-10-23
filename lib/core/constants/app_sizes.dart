@@ -24,7 +24,7 @@ class AppDimensions {
   static const double spaceM = 12.0;
   static const double spaceL = 16.0;
   static const double spaceXL = 24.0;
-  static const double spaceXXL = 30.0;
+  static const double spaceXXL = 40.0;
 
   // Border Radius
   static const double radiusXS = 4.0;
@@ -159,7 +159,7 @@ class AppDimensions {
   static const double textXS = 10.0;
   static const double textS = 13.0;
   static const double textM = 14.0;
-  static const double textL = 22.0;
+  static const double textL = 20.0;
   static const double textXL = 26.0;
   static const double textXXL = 35.0;
   static const double textTitle = 22.0;

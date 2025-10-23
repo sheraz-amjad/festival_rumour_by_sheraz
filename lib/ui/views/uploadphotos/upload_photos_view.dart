@@ -41,13 +41,21 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
           mobileMaxWidth: double.infinity,
           tabletMaxWidth: double.infinity,
           desktopMaxWidth: double.infinity,
-          child: Container(
-            padding:
-                context.isLargeScreen
-                    ? const EdgeInsets.symmetric(horizontal: AppDimensions.paddingXL, vertical: AppDimensions.paddingXL)
-                    : context.isMediumScreen
-                    ? const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingL)
-                    : const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingM),
+            child: Container(
+              padding: context.isLargeScreen
+                  ? const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingL,
+                vertical: AppDimensions.paddingL,
+              )
+                  : context.isMediumScreen
+                  ? const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingM,
+                vertical: AppDimensions.paddingM,
+              )
+                  : const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.paddingM,
+                  vertical: AppDimensions.paddingM
+              ),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(AppAssets.addpic),
@@ -60,19 +68,20 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
               children: [
                 // Header with back button
                 _buildHeader(context),
-                const SizedBox(height: AppDimensions.paddingL),
+                const SizedBox(height: AppDimensions.spaceM),
 
                 // Title and subtitle
                 _buildTitleSection(context),
-                const SizedBox(height: AppDimensions.paddingXL),
+                const SizedBox(height: AppDimensions.spaceM),
 
                 // Image container
                 Expanded(child: _buildImageContainer(context, viewModel)),
 
-                const SizedBox(height: AppDimensions.paddingL),
+                const SizedBox(height: AppDimensions.spaceM),
 
                 // Action buttons
                 _buildActionButtons(context, viewModel),
+                //const SizedBox(height: AppDimensions.space),
               ],
             ),
           ),
@@ -184,7 +193,8 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
           ),
           // Plus circle outside (bottom right)
           Positioned(
-            bottom: -AppDimensions.paddingS,
+            top: AppDimensions.imageXXL * 2.25,
+            //bottom: -AppDimensions.paddingXS,
             right: -AppDimensions.paddingM,
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.borderWidthS), // border thickness
@@ -213,11 +223,11 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
         // Next button
         SizedBox(
           width: double.infinity,
-          height: context.responsiveButtonHeightL,
+          height: context.getConditionalButtonSize(),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor:
-                  viewModel.hasImage ? AppColors.accent : AppColors.accent,
+                  viewModel.hasImage ? AppColors.accent : AppColors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
               ),
@@ -228,9 +238,9 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                     : null,
             child:
                 viewModel.isLoading
-                    ? const SizedBox(
-                      width: AppDimensions.iconS,
-                      height: AppDimensions.iconS,
+                    ?  SizedBox(
+                      width: context.getConditionalIconSize(),
+                      height: context.getConditionalIconSize(),
                       child: CircularProgressIndicator(
                         color: AppColors.accent,
                         strokeWidth: AppDimensions.borderWidthS,
@@ -238,8 +248,8 @@ class UploadPhotosViews extends BaseView<UploadPhotosViewModel> {
                     )
                     :  ResponsiveTextWidget(
                       AppStrings.next,
-                        fontSize: context.responsiveTextM,
-                        color: AppColors.onPrimary,
+                        fontSize: context.getConditionalButtonfont(),
+                        color: viewModel.hasImage ? AppColors.onPrimary : AppColors.transparent,
                       ),
                     ),
           ),

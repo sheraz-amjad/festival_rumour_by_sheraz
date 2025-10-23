@@ -159,11 +159,13 @@ class _CircleIcon extends StatelessWidget {
         shape: BoxShape.circle,
         color: AppColors.primary,
       ),
+      child: Center(
       child: SvgPicture.asset(
         asset,
-        height: AppDimensions.iconM,
-        width: AppDimensions.iconM,
+        height: AppDimensions.iconL,
+        width: AppDimensions.iconL,
       ),
+    ),
     );
   }
 }
@@ -187,7 +189,7 @@ class _SignupText extends StatelessWidget {
             TextSpan(
               text: AppStrings.signupNow,
               style: TextStyle(
-                color: AppColors.accent,
+                color: AppColors.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: context.responsiveTextL,
               ),

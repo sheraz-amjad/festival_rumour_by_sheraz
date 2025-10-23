@@ -311,9 +311,9 @@ extension ContextExtensions on BuildContext {
   /// Get responsive padding
   EdgeInsets get responsivePadding {
     if (isSmallScreen) {
-      return const EdgeInsets.all(3);
-    } else if (isMediumScreen) {
       return const EdgeInsets.all(5);
+    } else if (isMediumScreen) {
+      return const EdgeInsets.all(8);
     }
       else if (isHighResolutionPhone){
         return const EdgeInsets.all(8);
@@ -475,14 +475,14 @@ extension ContextExtensions on BuildContext {
     if (isSmallScreen) {
       return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.iconS);
     } else if (isMediumScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.iconM);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.iconS);
     } else if (isHighResolutionPhone) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.iconL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.iconS);
     }
     else if (isLargeScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.iconXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.iconM);
     } else {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.iconXXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.iconM);
     }
   }
 
@@ -533,16 +533,16 @@ extension ContextExtensions on BuildContext {
     double? extraLarge,
   }) {
     if (isSmallScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.buttonHeightXS);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.textM);
     } else if (isMediumScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.buttonHeightS);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.textL);
     } else if (isHighResolutionPhone) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.buttonHeightM);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.textL);
     }
     else if (isLargeScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.buttonHeightL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.textXL);
     } else {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.buttonHeightXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.textXXL);
     }
   }
 
@@ -555,14 +555,14 @@ extension ContextExtensions on BuildContext {
     if (isSmallScreen) {
       return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.logoM);
     } else if (isMediumScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.logoL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.logoM);
     } else if (isHighResolutionPhone) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.logoXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.logoM);
     }
     else if (isLargeScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.logoXXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.logoL);
     } else {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.logoXXL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.logoL);
     }
   }
 
@@ -636,14 +636,14 @@ extension ContextExtensions on BuildContext {
     double? extraLarge,
   }) {
     if (isSmallScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.size14);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.size10);
     } else if (isMediumScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.size18);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.size12);
     } else if (isHighResolutionPhone) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.size18);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.size12);
     }
     else if (isLargeScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.size18);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, large ?? AppDimensions.size14);
     } else {
       return ResponsiveTextService.instance.getResponsiveFontSize(this, extraLarge ?? AppDimensions.size18);
     }
@@ -657,7 +657,7 @@ extension ContextExtensions on BuildContext {
     double? extraLarge,
   }) {
     if (isSmallScreen) {
-      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.textL);
+      return ResponsiveTextService.instance.getResponsiveFontSize(this, small ?? AppDimensions.textM);
     } else if (isMediumScreen) {
       return ResponsiveTextService.instance.getResponsiveFontSize(this, medium ?? AppDimensions.textL);
     } else if (isHighResolutionPhone) {

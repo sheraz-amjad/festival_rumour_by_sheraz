@@ -62,15 +62,16 @@ class FestivalView extends BaseView<FestivalViewModel> {
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: context.getConditionalSpacing()),
+                SizedBox(height: AppDimensions.spaceS),
                 _buildTopBarWithSearch(context, viewModel),
-                 SizedBox(height: context.getConditionalSpacing()),
+                SizedBox(height: AppDimensions.spaceS),
+              //   SizedBox(height: context.getConditionalSpacing()),
                 _titleHeadline(context),
-                 SizedBox(height: context.getConditionalSpacing()),
+                SizedBox(height: AppDimensions.spaceS),
                 Expanded(
                     child: _buildFestivalsSlider(context, viewModel, pageController),
                 ),
-                 SizedBox(height: context.getConditionalSpacing()),
+                SizedBox(height: AppDimensions.spaceS),
                 _buildBottomIcon(context),
               ],
               ),
@@ -133,39 +134,6 @@ class FestivalView extends BaseView<FestivalViewModel> {
     );
   }
 
-  // Helper methods for responsive sizing - same as home view
-  // double _getResponsiveIconSize(BuildContext context) {
-  //   if (context.isHighResolutionPhone) {
-  //     return AppDimensions.iconL; // 48px for high-res phones like Pixel 6 Pro
-  //   } else if (context.isLargeScreen) {
-  //     return AppDimensions.iconXL; // 64px for desktop
-  //   } else if (context.isMediumScreen) {
-  //     return AppDimensions.iconL; // 32px for tablets
-  //   }
-  //   return AppDimensions.iconL; // 32px minimum for all phones
-  // }
-
-  double _getResponsiveSpacing(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.spaceM; // 16px for high-res phones (reduced from 24px)
-    } else if (context.isLargeScreen) {
-      return AppDimensions.spaceL; // 24px for desktop (reduced from 32px)
-    } else if (context.isMediumScreen) {
-      return AppDimensions.spaceS; // 8px for tablets (reduced from 16px)
-    }
-    return AppDimensions.spaceS; // 8px minimum for all phones (reduced from 16px)
-  }
-
-  double _getResponsivePadding(BuildContext context) {
-    if (context.isHighResolutionPhone) {
-      return AppDimensions.paddingXS; // 16px for high-res phones
-    } else if (context.isLargeScreen) {
-      return AppDimensions.paddingL; // 24px for desktop
-    } else if (context.isMediumScreen) {
-      return AppDimensions.paddingS; // 8px for tablets
-    }
-    return AppDimensions.paddingS; // 8px minimum for all phones
-  }
 
   Widget _buildTopBarWithSearch(BuildContext context, FestivalViewModel viewModel) {
     return Padding(
@@ -185,7 +153,7 @@ class FestivalView extends BaseView<FestivalViewModel> {
             color: AppColors.primary,
           ),
         ),
-         SizedBox(width: context.getConditionalSpacing() ),
+         SizedBox(width: AppDimensions.spaceM ),
           
           // Search Bar (same design as home view)
         Expanded(
@@ -193,8 +161,8 @@ class FestivalView extends BaseView<FestivalViewModel> {
             height: context.isSmallScreen 
                 ? AppDimensions.searchBarHeight * 0.8
                 : context.isMediumScreen 
-                    ? AppDimensions.searchBarHeight * 1.0
-                    : AppDimensions.searchBarHeight * 1.0,
+                    ? AppDimensions.searchBarHeight * 0.9
+                    : AppDimensions.searchBarHeight * 0.9,
             margin: context.responsiveMargin,
             padding: context.responsivePadding,
             decoration: BoxDecoration(
@@ -583,12 +551,12 @@ class FestivalView extends BaseView<FestivalViewModel> {
             ? AppDimensions.paddingXS
             : context.isMediumScreen 
                 ? AppDimensions.paddingS
-                : AppDimensions.paddingXS,
+                : AppDimensions.paddingS,
         vertical: context.isSmallScreen
             ? AppDimensions.paddingXS
             : context.isMediumScreen 
                 ? AppDimensions.paddingS
-                : AppDimensions.paddingXS
+                : AppDimensions.paddingS
       ),
       decoration: BoxDecoration(
         color: AppColors.headlineBackground,
@@ -596,8 +564,8 @@ class FestivalView extends BaseView<FestivalViewModel> {
       child: ResponsiveTextWidget(
         AppStrings.headlineText,
         textAlign: TextAlign.center,
-        fontSize: context.getConditionalMainFont(),
-        fontWeight: FontWeight.bold,
+        fontSize: AppDimensions.textL,
+      //  fontWeight: FontWeight.bold,
         color: AppColors.primary,
       ),
     );

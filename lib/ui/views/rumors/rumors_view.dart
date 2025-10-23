@@ -60,75 +60,61 @@ class RumorsView extends BaseView<RumorsViewModel> {
 
   Widget _buildAppBar(BuildContext context, RumorsViewModel viewModel) {
     return ResponsivePadding(
-      mobilePadding: const EdgeInsets.symmetric(
+      mobilePadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalMobile,
         vertical: AppDimensions.appBarVerticalMobile,
       ),
-      tabletPadding: const EdgeInsets.symmetric(
+      tabletPadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalTablet,
         vertical: AppDimensions.appBarVerticalTablet,
       ),
-      desktopPadding: const EdgeInsets.symmetric(
+      desktopPadding: EdgeInsets.symmetric(
         horizontal: AppDimensions.appBarHorizontalDesktop,
         vertical: AppDimensions.appBarVerticalDesktop,
       ),
       child: Row(
         children: [
-          // Back Button
-          IconButton(
-            icon:  Icon(
-              Icons.arrow_back,
-              color: AppColors.primary,
-              size: context.getConditionalIconSize(),
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
-          
-          SizedBox(width: context.getConditionalSpacing()),
-          
+          // Logo with responsive sizing
+
           // Title - Flexible to prevent overflow
           Expanded(
             child: ResponsiveTextWidget(
               AppStrings.rumors,
-              textType: TextType.heading,
-              color: AppColors.primary,
               fontSize: context.getConditionalMainFont(),
+              color: AppColors.primary,
               fontWeight: FontWeight.bold,
               maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          
-          SizedBox(width: context.getConditionalSpacing()),
 
-          // Job Icon Button
+          // Job Icon Button with responsive sizing
           IconButton(
             icon: SvgPicture.asset(
               AppAssets.jobicon,
-              width: context.getConditionalIconSize(),
-              height: context.getConditionalIconSize(),
+              width: AppDimensions.iconXL,
+              height: AppDimensions.iconXL,
             ),
             onPressed: () => _showPostBottomSheet(context),
           ),
-          
-          SizedBox(width: context.getConditionalSpacing()),
-          
-          // Pro Label - Flexible container
-          Flexible(
-            child: GestureDetector(
-              onTap: viewModel.goToSubscription,
-              child: Container(
-                padding: context.responsivePadding,
-                decoration: BoxDecoration(
-                  color: AppColors.proLabelBackground,
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                ),
-                child: ResponsiveTextWidget(
-                  AppStrings.proLabel,
-                  textType: TextType.label,
-                  color: AppColors.proLabelText,
-                  fontWeight: FontWeight.bold,
-                  fontSize: context.isLargeScreen ? AppDimensions.textM : AppDimensions.textS,
-                ),
+
+          // Conditional spacing before Pro label
+
+          // Pro Label - Aligned with search bar dropdown position
+          GestureDetector(
+            onTap: viewModel.goToSubscription,
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+              ),
+              child: ResponsiveTextWidget(
+                AppStrings.proLabel,
+                textType: TextType.label,
+                fontSize: AppDimensions.textS,
+                color: AppColors.proLabelText,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

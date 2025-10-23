@@ -89,8 +89,8 @@ class _UsernameViewState extends State<UsernameView> {
                               desktopMaxWidth: AppDimensions.desktopWidth,
                               child: ResponsivePadding(
                                 mobilePadding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.02,
-                                  vertical: screenHeight * 0.02,
+                                  horizontal: screenWidth * 0.03,
+                                  vertical: screenHeight * 0.05,
                                 ),
                                 tabletPadding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.2,

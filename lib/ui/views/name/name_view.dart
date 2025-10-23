@@ -52,7 +52,7 @@ class NameView extends BaseView<NameViewModel> {
                   )
                       : const EdgeInsets.symmetric(
                     horizontal: AppDimensions.paddingM,
-                    vertical: AppDimensions.paddingL,
+                    vertical: AppDimensions.paddingM,
                   ),
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -75,9 +75,9 @@ class NameView extends BaseView<NameViewModel> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: AppDimensions.paddingL),
+                      const SizedBox(height: AppDimensions.spaceM),
                       _buildNameInput(context, viewModel),
-                      const SizedBox(height: AppDimensions.paddingXL),
+                      const SizedBox(height: AppDimensions.spaceXL),
                       const ResponsiveTextWidget(
                         AppStrings.firstNameInfo,
                         textType: TextType.body,
@@ -141,7 +141,7 @@ class NameView extends BaseView<NameViewModel> {
   Widget _buildNextButton(BuildContext context, NameViewModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: context.responsiveButtonHeightL,
+      height: context.getConditionalButtonSize(),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor:
@@ -149,7 +149,7 @@ class NameView extends BaseView<NameViewModel> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: const EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+          padding: context.responsivePadding,
         ),
         onPressed: viewModel.isNameEntered && !viewModel.isLoading
             ? () {
@@ -157,9 +157,9 @@ class NameView extends BaseView<NameViewModel> {
         }
             : null,
         child: viewModel.isLoading
-            ? const SizedBox(
-          width: AppDimensions.iconS,
-          height: AppDimensions.iconS,
+            ?  SizedBox(
+          width: context.getConditionalIconSize(),
+          height: context.getConditionalIconSize(),
           child: CircularProgressIndicator(
             color: AppColors.accent,
             strokeWidth: 2,
@@ -167,8 +167,9 @@ class NameView extends BaseView<NameViewModel> {
         )
             :  ResponsiveTextWidget(
           AppStrings.next,
-          fontSize: context.responsiveTextM,
-            color: AppColors.onPrimary),
+          fontSize: context.getConditionalMainFont(),
+          color:  viewModel.isNameEntered ? AppColors.onPrimary : Colors.transparent,
+          fontWeight: FontWeight.w600,),
         ),
     );
   }

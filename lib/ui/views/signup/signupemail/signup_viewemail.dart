@@ -55,7 +55,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
               desktopMaxWidth: double.infinity,
               child: Container(
                 width: double.infinity,
-                margin: EdgeInsets.zero,
+               // margin: EdgeInsets.zero,
                 padding:context.responsivePadding,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -253,14 +253,15 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
   Widget _buildContinueButton(BuildContext context, SignupViewEmailModel viewModel) {
     return SizedBox(
       width: double.infinity,
-      height: context.responsiveButtonHeightL,
+      height: context.getConditionalButtonSize(),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
           ),
-          padding: context.responsivePadding,
+          padding: EdgeInsets.symmetric(),
+
         ),
         onPressed: viewModel.isLoading
             ? null
@@ -270,7 +271,7 @@ class SignupViewEmail extends BaseView<SignupViewEmailModel> {
         },
         child: viewModel.isLoading
             ? SizedBox(
-          width: context.getConditionalLogoSize(),
+          width: context.getConditionalIconSize(),
           height: context.getConditionalIconSize(),
           child: const CircularProgressIndicator(
             color: AppColors.onPrimary,
