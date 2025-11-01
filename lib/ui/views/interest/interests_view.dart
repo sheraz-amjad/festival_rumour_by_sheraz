@@ -172,7 +172,7 @@ class InterestsView extends BaseView<InterestsViewModel> {
                       width: context.getConditionalIconSize(),
                       height: context.getConditionalIconSize(),
                       child: CircularProgressIndicator(
-                        color: AppColors.onPrimary,
+                        color: AppColors.accent,
                         strokeWidth: AppDimensions.loadingIndicatorStrokeWidth,
                       ),
                     )

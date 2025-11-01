@@ -7,6 +7,7 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../shared/extensions/context_extensions.dart';
 import '../../../../shared/widgets/responsive_widget.dart';
+import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import 'username_view_model.dart';
 
@@ -48,10 +49,10 @@ class _UsernameViewState extends State<UsernameView> {
           final screenWidth = MediaQuery.of(context).size.width;
           final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-          return Scaffold(
+          return SafeArea(child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Stack(
-              fit: StackFit.expand,
+           //   fit: StackFit.expand,
               children: [
                 /// 🔹 Background
                 Image.asset(AppAssets.usernameback, fit: BoxFit.cover),
@@ -365,14 +366,20 @@ class _UsernameViewState extends State<UsernameView> {
                                       color: AppColors.primary),
                                       ],
                                     ),
-
-
-                                    const ResponsiveTextWidget(
-                                      AppStrings.forgotPassword,
-                                      fontSize: AppDimensions.textS,
-                                      color: AppColors.accent,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(context, AppRoutes.forgotpassword);
+                                      },
+                                      child: const ResponsiveTextWidget(
+                                        AppStrings.forgotPassword,
+                                        fontSize: AppDimensions.textS,
+                                        color: AppColors.accent,
                                         fontWeight: FontWeight.bold,
                                       ),
+                                    ),
+
+
+
                                   ],
                                 ),
 
@@ -472,6 +479,7 @@ class _UsernameViewState extends State<UsernameView> {
                 ),
               ],
             ),
+          ),
           );
         },
       ),

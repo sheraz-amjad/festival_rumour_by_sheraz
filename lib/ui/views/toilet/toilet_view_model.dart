@@ -65,9 +65,9 @@ class ToiletViewModel extends BaseViewModel {
     _selectedToilet = toilet;
     notifyListeners();
   }
-  void navigateBack(BuildContext context) {
-    Navigator.pop(context);
-  }
+  // void navigateBack(BuildContext context) {
+  //   Navigator.pop(context);
+  // }
 
   void navigateToDetail(ToiletItem toilet) {
     _selectedToilet = toilet;

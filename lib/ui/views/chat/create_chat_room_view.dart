@@ -7,6 +7,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import 'create_chat_room_view_model.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
   const CreateChatRoomView({super.key});
@@ -17,6 +18,7 @@ class CreateChatRoomView extends BaseView<CreateChatRoomViewModel> {
   @override
   Widget buildView(BuildContext context, CreateChatRoomViewModel viewModel) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.black,
       body: Stack(
         children: [

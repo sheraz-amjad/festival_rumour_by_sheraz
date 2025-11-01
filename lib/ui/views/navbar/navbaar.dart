@@ -36,10 +36,12 @@ class NavBaar extends BaseView<NavBaarViewModel> {
       },
       child: Scaffold(
         body: _buildBody(viewModel),
-        bottomNavigationBar: CustomNavBar(
-          currentIndex: viewModel.currentIndex,
-          onTap: viewModel.setIndex,
-        ),
+        bottomNavigationBar: _shouldHideNavBar(viewModel.subNavigation)
+            ? null
+            : CustomNavBar(
+                currentIndex: viewModel.currentIndex,
+                onTap: viewModel.setIndex,
+              ),
       ),
     );
   }
@@ -70,6 +72,13 @@ class NavBaar extends BaseView<NavBaarViewModel> {
     }
   }
 
+  bool _shouldHideNavBar(String? subNavigation) {
+    return subNavigation == 'toilets' || 
+           subNavigation == 'news' ||
+           subNavigation == 'performance' ||
+           subNavigation == 'event';
+  }
+
   Widget _buildSubNavigation(NavBaarViewModel viewModel) {
     switch (viewModel.subNavigation) {
       case 'detail':
@@ -85,6 +94,8 @@ class NavBaar extends BaseView<NavBaarViewModel> {
         return NewsView(onBack: () => viewModel.setSubNavigation(null));
       case 'posts':
         return PostsView(onBack: () => viewModel.setSubNavigation(null));
+      case 'toilets':
+        return ToiletView(onBack: () => viewModel.setSubNavigation(null));
       case 'followers':
         return ProfileListView(
           initialTab: 0,
@@ -103,8 +114,6 @@ class NavBaar extends BaseView<NavBaarViewModel> {
           Username: AppStrings.name,
           onBack: () => viewModel.setSubNavigation(null),
         );
-      case 'toilets':
-        return ToiletView(onBack: () => viewModel.setSubNavigation(null));
       default:
         return DiscoverView(
           onBack: viewModel.goToHome,

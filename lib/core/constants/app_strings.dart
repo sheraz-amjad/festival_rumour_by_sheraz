@@ -92,9 +92,7 @@ class AppStrings {
   static const String taponupload = 'Tap to upload image';
   static const String headlineText = 'Skip the silence, lead me to the  wild alliance';
   static const String phoneHint = '878 7764 2922';
-  static const String description =
-      'Please enter your mobile number to sign up. '
-      'We’ll send you a One-Time Password (OTP) to verify your number.';
+  static const String otpdescription =  'Please enter your mobile number to sign up. We send you a One-Time Password (OTP) to verify your number.' ;
   static const String countryPk = 'PK';
   static const String countryUs = 'US';
   static const String localeEnglish = 'en';
@@ -113,6 +111,28 @@ class AppStrings {
   static const String loadingPosts = "Loading posts...";
   static const String noPostsAvailable = "No posts available";
 
+  // Forgot Password
+  static const String forgotPasswordTitle = 'Forgot Password?';
+  static const String forgotPasswordSubtitle = 'No worries! Enter your email address and we\'ll send you a link to reset your password.';
+  static const String enterEmailAddress = 'Enter your email address';
+  static const String emailAddressHint = 'Enter your email address';
+  static const String sendResetLink = 'Send Reset Link';
+  static const String sendingResetLink = 'Sending Reset Link...';
+  static const String backToLogin = 'Back to Login';
+  static const String resetEmailSent = 'Reset Email Sent';
+  static const String resetEmailSentMessage = 'We\'ve sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password.';
+  static const String didntReceiveEmail = 'Didn\'t receive the email?';
+  static const String checkSpamFolder = 'Check your spam folder or try again.';
+  static const String resendEmail = 'Resend Email';
+  static const String resendingEmail = 'Resending...';
+  static const String emailSentSuccessfully = 'Email sent successfully!';
+  static const String tryAgainLater = 'Please try again later.';
+  static const String emailNotFound = 'No account found with this email address.';
+  static const String invalidEmailFormat = 'Please enter a valid email address.';
+  static const String tooManyRequests = 'Too many requests. Please try again later.';
+  static const String networkError = 'Network error. Please check your connection.';
+  static const String resetPasswordFailed = 'Failed to send password reset email. Please try again.';
+  static const String unexpectedError = 'An unexpected error occurred. Please try again.';
 
   static const rememberMe = "Remember me";
 
@@ -162,6 +182,9 @@ class AppStrings {
   static const String upcoming = "Upcoming";
   static const String past = "Past";
   static const String toilets = "Toilets";
+  static const String news = "News";
+  static const String Performance = "Performance";
+  static const String event = "Event";
   static const String viewDetail = "View Detail";
   static const String toiletDetail = "Toilet Detail";
   static const String festivalInformation = "Festival Information";
@@ -237,7 +260,7 @@ class AppStrings {
 
   // Error Messages
   static const String errorOccurred = 'An error occurred';
-  static const String networkError = 'Network error. Please check your connection.';
+ // static const String networkError = 'Network error. Please check your connection.';
   static const String serverError = 'Server error. Please try again later.';
   static const String unknownError = 'Unknown error occurred';
   static const String validationError = 'Validation error';
@@ -290,11 +313,11 @@ class AppStrings {
   static const String band = 'Band';
   static const String artist = 'Artist';
   static const String specialGuests = 'Special Guests';
-  static const String participantName = 'Participant Name';
+  static const String participantName = 'Atif Aslam';
   static const String notes = 'Notes';
   
   // News Related
-  static const String bulletinManagement = 'Bulletin Management';
+  static const String bulletinManagement = 'Bulletin';
   static const String newBulletin = 'New Bulletin';
   static const String latestFestivalUpdates = 'Latest Festival Updates';
   
@@ -330,8 +353,8 @@ class AppStrings {
   static const String marvinMcKinney = 'Marvin McKinney';
   static const String jeromeBell = 'Jerome Bell';
   static const String kathrynMurphy = 'Kathryn Murphy';
-  static const String luna = 'Luna';
-  static const String luna2 = 'Luna 2';
+  static const String luna = 'Luna Private Chat Room';
+  static const String luna2 = 'Luna Private';
   
   // Phone Numbers
   static const String phone0123456789 = '0123456789';
@@ -448,6 +471,13 @@ class AppStrings {
   static const String invite = 'INVITE';
   static const String privateChats = 'Private Chats';
   static const String post = 'POST';
+  static const String createPost = 'Create Post';
+  static const String whatsOnYourMind = "What's on your mind?";
+  static const String pickImages = 'Pick Images';
+  static const String pickVideos = 'Pick Videos';
+  static const String uploadPost = 'Upload Post';
+  static const String failedToUploadPost = 'Failed to upload post. Please try again.';
+  static const String failedToUploadVideo = 'Failed to pick video. Please try again.';
   
   // Chat Room Related
   static const String public = 'Public';
@@ -459,7 +489,7 @@ class AppStrings {
   static const String artCulture = 'Art & Culture';
   static const String foodDrinks = 'Food & Drinks';
   static const String photography = 'Photography';
-  static const String lunaCommunityRoom = 'Luna community room';
+  static const String lunaCommunityRoom = 'Luna Community Room';
   static const String inviteYourFriends = 'INVITE YOUR FRIENDS';
   static const String typeSomething = 'Type something';
   static const String chatName = 'Chat Name';
@@ -603,11 +633,27 @@ class AppStrings {
 
   // Performance & Event Strings
 
-  static const String loremIpsumDummy = 'Lorem Ipsum is simply dummy text.';
-  static const String loremIpsumLong = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the,';
+  static const String loremIpsumDummy = '';
+  static const String performancetitle = 'Get Ready for the Grand Performance!';
+  static const String duaLipa = 'Dua Lipa';
 
+
+  static const String brand = 'Sony Tseries Apple or Saragama';
+  static const String loremIpsumLong = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the,';
+  static const String festivalPerformanceNote =
+      '📝 Important Festival Performance Notes:\n\n'
+      '⏰ Gates Open: 5:00 PM\n'
+      '🚪 Gates Close: 6:30 PM sharp — no entry will be allowed afterward.\n'
+      '🎟️ Please keep your entry pass or QR code ready at the gate.\n'
+      '🎶 Performances will begin promptly after gate closure.\n'
+      '🚫 No re-entry is allowed once you leave the venue.\n'
+      '⚠️ Misbehavior, use of abusive language, or disturbance during the event will lead to immediate removal.\n'
+      '📸 Photography and videography may be restricted in certain areas — please follow on-site instructions.\n'
+      '🧃 Food and beverages will be available inside; outside items are not permitted.\n'
+      '🙏 Enjoy responsibly and help maintain a respectful environment for all attendees.';
   // Performance Category Strings
   static const String liveMusicPerformances = 'Live music performances';
+  static const String Atrist = 'Atif Aslam';
   static const String sportsAndGames = 'Sports And Games';
   static const String sportsActivitiesAndGames = 'Sports activities and games';
   static const String exhibitionsAndArtDisplays = 'Exhibitions And Art Displays';

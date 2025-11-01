@@ -7,6 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/extensions/context_extensions.dart';
+import '../../../core/router/app_router.dart';
 import 'event_view_model.dart';
 
 class EventView extends BaseView<EventViewModel> {
@@ -79,8 +80,9 @@ class EventView extends BaseView<EventViewModel> {
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
             AppStrings.events,
-            textType: TextType.body, 
-              color: AppColors.black,
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
            //                 fontWeight: FontWeight.bold,
             ),
         ],
@@ -111,7 +113,7 @@ class EventView extends BaseView<EventViewModel> {
         children: [
           const ResponsiveTextWidget(
             AppStrings.events,
-            textType: TextType.body, 
+            textType: TextType.heading,
               color: AppColors.white,
               //fontSize: AppDimensions.textXXL,
               fontWeight: FontWeight.bold,
@@ -141,14 +143,15 @@ class EventView extends BaseView<EventViewModel> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const ResponsiveTextWidget(
-            AppStrings.toilets,
-            textType: TextType.body, 
-              color: AppColors.black,
+            AppStrings.events,
+            textType: TextType.title,
+            color: AppColors.black,
+            fontWeight: FontWeight.bold,
               //              fontWeight: FontWeight.bold,
             ),
           GestureDetector(
             onTap: () {
-              // Handle view all action
+              Navigator.pushNamed(context, AppRoutes.viewAll, arguments: 0);
             },
             child: const ResponsiveTextWidget(
               AppStrings.viewAll,
@@ -177,7 +180,7 @@ class EventView extends BaseView<EventViewModel> {
     final isSelected = index == 1; // Film Screenings is highlighted
     
     return Container(
-      margin: const EdgeInsets.only(bottom: AppDimensions.spaceM),
+      margin: const EdgeInsets.only(bottom: AppDimensions.marginS),
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -284,7 +287,7 @@ class EventView extends BaseView<EventViewModel> {
         vertical: AppDimensions.paddingS,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.eventLightGreen,
+        color: AppColors.primary,
       ),
       child: Row(
         children: [
@@ -301,7 +304,7 @@ class EventView extends BaseView<EventViewModel> {
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: AppColors.white,
+                color: AppColors.primary,
                 size: AppDimensions.iconM,
               ),
             ),
@@ -322,13 +325,6 @@ class EventView extends BaseView<EventViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ResponsiveTextWidget(
-          AppStrings.newEventInformation,
-          textType: TextType.body, 
-            color: AppColors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        const SizedBox(height: AppDimensions.spaceM),
         
         // Festival Name Card
         _buildInfoCard(

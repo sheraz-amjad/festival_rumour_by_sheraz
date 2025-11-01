@@ -56,7 +56,7 @@ class GridOption extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Positioned.fill(
-                top: 115,
+                top: 120,
                 child: Container(color: Colors.black.withOpacity(0.35)),
               ),
 
@@ -65,7 +65,7 @@ class GridOption extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(AppDimensions.spaceS),
+                  padding: const EdgeInsets.all(AppDimensions.paddingS),
                   child: ResponsiveText(
                     title,
                     textAlign: TextAlign.center,

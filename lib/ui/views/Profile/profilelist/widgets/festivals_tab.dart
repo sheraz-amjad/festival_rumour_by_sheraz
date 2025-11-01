@@ -41,11 +41,16 @@ class _FestivalsTabState extends State<FestivalsTab> {
               prefixIcon: const Icon(Icons.search, color: AppColors.primary),
               filled: true,
               fillColor: AppColors.onPrimary.withOpacity(0.3),
-              border: OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
-
+                borderSide: const BorderSide(color: Colors.transparent), // No border when not focused
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
+                borderSide: const BorderSide(color: AppColors.onPrimary, width: 2), // ✅ White border when active
               ),
             ),
+
             onChanged: widget.viewModel.searchFestivals,
           ),
         ),

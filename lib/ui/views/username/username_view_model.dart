@@ -211,7 +211,7 @@ class UsernameViewModel extends BaseViewModel {
       if (await _performLogin(email, password)) {
         _showSuccessSnackBar(context, AppStrings.loginSuccess);
         // Navigate to Home Screen using navigation service
-        _navigationService.navigateTo(AppRoutes.festivals);
+        _navigationService.navigateTo(AppRoutes.navbaar);
       } else {
         _showErrorSnackBar(context, AppStrings.loginFailed);
       }

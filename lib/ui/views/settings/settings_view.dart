@@ -261,54 +261,62 @@ class SettingsView extends BaseView<SettingsViewModel> {
                       ? AppDimensions.paddingL
                       : AppDimensions.paddingXL
             ),
-            width: context.isSmallScreen 
-                ? context.screenWidth * 0.9
-                : context.isMediumScreen 
-                    ? context.screenWidth * 0.7
-                    : context.screenWidth * 0.5,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const ResponsiveTextWidget(
-                  AppStrings.badges,
-                  textType: TextType.heading,
+            constraints: BoxConstraints(
+              maxWidth: context.isSmallScreen 
+                  ? context.screenWidth * 0.9
+                  : context.isMediumScreen 
+                      ? context.screenWidth * 0.7
+                      : context.screenWidth * 0.5,
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const ResponsiveTextWidget(
+                    AppStrings.badges,
+                    textType: TextType.heading,
                     fontWeight: FontWeight.bold,
                     fontSize: AppDimensions.textL,
                     color: AppColors.onPrimary,
                   ),
-                const SizedBox(height: AppDimensions.paddingL),
+                  const SizedBox(height: AppDimensions.paddingL),
 
-                // 🏅 Each badge item
-                _buildBadgeItem(
-                  icon: Icons.emoji_events,
-                  title: AppStrings.topRumourSpotter,
-                  subtitle: AppStrings.topRumourSpotterDescription,
-                  color: AppColors.orange,
-                ),
-                _buildBadgeItem(
-                  icon: Icons.workspace_premium,
-                  title: AppStrings.mediaMaster,
-                  subtitle: AppStrings.mediaMasterDescription,
-                  color: AppColors.purple,
-                ),
-                _buildBadgeItem(
-                  icon: Icons.star,
-                  title: AppStrings.crowdFavourite,
-                  subtitle: AppStrings.crowdFavouriteDescription,
-                  color: AppColors.amber,
-                ),
+                  // 🏅 Each badge item
+                  _buildBadgeItem(
+                    icon: Icons.emoji_events,
+                    title: AppStrings.topRumourSpotter,
+                    subtitle: AppStrings.topRumourSpotterDescription,
+                    color: AppColors.orange,
+                  ),
+                  _buildBadgeItem(
+                    icon: Icons.workspace_premium,
+                    title: AppStrings.mediaMaster,
+                    subtitle: AppStrings.mediaMasterDescription,
+                    color: AppColors.purple,
+                  ),
+                  _buildBadgeItem(
+                    icon: Icons.star,
+                    title: AppStrings.crowdFavourite,
+                    subtitle: AppStrings.crowdFavouriteDescription,
+                    color: AppColors.amber,
+                  ),
 
-                const SizedBox(height: AppDimensions.paddingM),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.onPrimary,
+                  const SizedBox(height: AppDimensions.paddingM),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.onPrimary,
+                    ),
+                    child: const ResponsiveTextWidget(
+                      AppStrings.close,
+                      textType: TextType.body, 
+                      fontSize: AppDimensions.textM, 
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  child: const ResponsiveTextWidget(
-                    AppStrings.close,
-                    textType: TextType.body, fontSize: AppDimensions.textM, fontWeight: FontWeight.bold),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         );

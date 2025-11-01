@@ -7,10 +7,12 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
+import '../../../core/router/app_router.dart';
 import 'news_view_model.dart';
 
 class NewsView extends BaseView<NewsViewModel> {
   final VoidCallback? onBack;
+
   const NewsView({super.key, this.onBack});
 
   @override
@@ -26,17 +28,9 @@ class NewsView extends BaseView<NewsViewModel> {
       return _buildPerformancePreview(context, viewModel);
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (onBack != null) {
-          onBack!();
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Container(
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -61,7 +55,6 @@ class NewsView extends BaseView<NewsViewModel> {
           ),
         ),
       ),
-    ),
     );
   }
 
@@ -73,11 +66,20 @@ class NewsView extends BaseView<NewsViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(
-            onTap: onBack ?? () {
-              // Navigate back to discover screen using ViewModel
-              viewModel.navigateBack(context);
-            },
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.eventGreen,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.primary,
+                size: AppDimensions.iconM,
+              ),
+            ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           ResponsiveTextWidget(
@@ -143,14 +145,14 @@ class NewsView extends BaseView<NewsViewModel> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ResponsiveTextWidget(
-            AppStrings.toilets,
+            AppStrings.news,
             textType: TextType.title,
             color: AppColors.black,
             fontWeight: FontWeight.bold,
           ),
           GestureDetector(
             onTap: () {
-              // Handle view all action
+              Navigator.pushNamed(context, AppRoutes.viewAll, arguments: 1);
             },
             child: ResponsiveTextWidget(
               AppStrings.viewAll,
@@ -175,14 +177,16 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildFestivalCard(BuildContext context, FestivalItem festival, NewsViewModel viewModel) {
+  Widget _buildFestivalCard(BuildContext context, FestivalItem festival,
+      NewsViewModel viewModel) {
     return Container(
-      margin: const EdgeInsets.only(bottom: AppDimensions.spaceM),
+      margin: const EdgeInsets.only(bottom: AppDimensions.marginS),
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-        border: Border.all(color: AppColors.newsLightGreen, width: AppDimensions.borderWidthS),
+        border: Border.all(
+            color: AppColors.newsLightGreen, width: AppDimensions.borderWidthS),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.05),
@@ -249,7 +253,7 @@ class NewsView extends BaseView<NewsViewModel> {
 
   Widget _buildBulletinPreview(BuildContext context, NewsViewModel viewModel) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -275,29 +279,34 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildBulletinPreviewAppBar(
-    BuildContext context,
-    NewsViewModel viewModel,
-  ) {
+  Widget _buildBulletinPreviewAppBar(BuildContext context,
+      NewsViewModel viewModel,) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
         vertical: AppDimensions.paddingS,
       ),
       decoration: const BoxDecoration(
-        color: AppColors.newsLightGreen, // Light green background
+        color: AppColors.black, // Light green background
       ),
       child: Row(
         children: [
           GestureDetector(
             onTap: () {
-              // Navigate back from bulletin preview using ViewModel
-              viewModel.navigateBackFromBulletinPreview();
+              viewModel.showBulletinPreview = false;
+              viewModel.notifyListeners();
             },
-            child: const Icon(
-              Icons.arrow_back,
-              color: AppColors.black,
-              size: AppDimensions.iconL,
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.eventGreen,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.primary,
+                size: AppDimensions.iconM,
+              ),
             ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
@@ -316,16 +325,10 @@ class NewsView extends BaseView<NewsViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ResponsiveTextWidget(
-          AppStrings.bulletinInformation,
-          textType: TextType.title,
-          color: AppColors.black,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: AppDimensions.spaceM),
 
         // Title Name Card
-        _buildInfoCard(context, AppStrings.titleName, AppStrings.magicShow, Icons.description),
+        _buildInfoCard(context, AppStrings.titleName, AppStrings.magicShow,
+            Icons.description),
         const SizedBox(height: AppDimensions.spaceM),
 
         // Content Card
@@ -334,12 +337,10 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildInfoCard(
-    BuildContext context,
-    String label,
-    String value,
-    IconData icon,
-  ) {
+  Widget _buildInfoCard(BuildContext context,
+      String label,
+      String value,
+      IconData icon,) {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
@@ -354,7 +355,8 @@ class NewsView extends BaseView<NewsViewModel> {
               color: AppColors.newsGreen,
               borderRadius: BorderRadius.circular(AppDimensions.radiusS),
             ),
-            child: Icon(icon, color: AppColors.white, size: AppDimensions.iconM),
+            child: Icon(
+                icon, color: AppColors.white, size: AppDimensions.iconM),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           Expanded(
@@ -501,9 +503,10 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildPerformancePreview(BuildContext context, NewsViewModel viewModel) {
+  Widget _buildPerformancePreview(BuildContext context,
+      NewsViewModel viewModel) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -533,12 +536,25 @@ class NewsView extends BaseView<NewsViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(
+          GestureDetector(
             onTap: () {
               // Navigate back from performance preview using ViewModel
               viewModel.navigateBackFromPerformancePreview();
             },
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.eventGreen,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.primary,
+                size: AppDimensions.iconM,
+              ),
+            ),
           ),
+
           const SizedBox(width: AppDimensions.spaceM),
           ResponsiveTextWidget(
             AppStrings.bulletinPreview,
@@ -555,13 +571,6 @@ class NewsView extends BaseView<NewsViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ResponsiveTextWidget(
-          AppStrings.bulletinInformation,
-          textType: TextType.title,
-          color: AppColors.black,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: AppDimensions.spaceM),
 
         // Festival Name
         _buildPerformanceInfoCard(
@@ -586,12 +595,13 @@ class NewsView extends BaseView<NewsViewModel> {
           context,
           AppStrings.scheduleOptions,
           AppStrings.publishNow,
-          Icons.verified ,
+          Icons.verified,
         ),
         const SizedBox(height: AppDimensions.spaceM),
 
         ResponsiveTextWidget(
           AppStrings.scheduleForLater,
+          fontSize: AppDimensions.textL,
           textType: TextType.title,
           color: AppColors.black,
           fontWeight: FontWeight.bold,
@@ -622,7 +632,8 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildPerformanceInfoCard(BuildContext context, String label, String value, IconData icon) {
+  Widget _buildPerformanceInfoCard(BuildContext context, String label,
+      String value, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
@@ -668,7 +679,8 @@ class NewsView extends BaseView<NewsViewModel> {
     );
   }
 
-  Widget _buildPerformanceInfoCard2(BuildContext context, String label, String value, IconData icon) {
+  Widget _buildPerformanceInfoCard2(BuildContext context, String label,
+      String value, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
@@ -713,6 +725,11 @@ class NewsView extends BaseView<NewsViewModel> {
       ),
     );
   }
+
+//   Widget _buildviewall(BuildContext context)  {
+//
+//
+// }
 }
 
 class PerformanceCategory {

@@ -1,13 +1,10 @@
-import 'dart:ui';
 import 'package:festival_rumour/core/router/app_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:festival_rumour/ui/views/discover/widgets/action_tile.dart';
 import 'package:festival_rumour/ui/views/discover/widgets/event_header_card.dart';
 import 'package:festival_rumour/ui/views/discover/widgets/grid_option.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
@@ -29,14 +26,12 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
 
   @override
   Widget buildView(BuildContext context, DiscoverViewModel viewModel) {
-    final screenWidth = context.screenWidth;
-
     return WillPopScope(
       onWillPop: () async {
         print("🔙 Discover screen back button pressed");
         if (onBack != null) {
-          onBack!(); // Navigate to home tab
-          return false; // Prevent default back behavior
+          onBack!();
+          return false;
         }
         return true;
       },
@@ -44,18 +39,14 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-            Positioned.fill(
-              child: Image.asset(
-                AppAssets.bottomsheet,
-                fit: BoxFit.cover,
-              ),
-            ),
+            _buildBackground(),
             SafeArea(
               child: ResponsiveContainer(
                 mobileMaxWidth: double.infinity,
                 tabletMaxWidth: AppDimensions.tabletWidth,
                 desktopMaxWidth: AppDimensions.desktopWidth,
                 child: SingleChildScrollView(
+
                   child: ResponsivePadding(
                     mobilePadding: const EdgeInsets.all(AppDimensions.paddingS),
                     tabletPadding: const EdgeInsets.all(AppDimensions.paddingM),
@@ -63,143 +54,15 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// Header
-                        Row(
-                          children: [
-                            CustomBackButton(onTap: onBack ?? () {}),
-                            
-                            SizedBox(width: context.getConditionalSpacing()),
-                            
-                            /// Overview title
-                            ResponsiveTextWidget(
-                              AppStrings.overview,
-                              textType: TextType.heading,
-                              fontSize: context.getConditionalMainFont(),
-                              color: AppColors.primary,
-                            ),
-                            
-                            /// Spacer to push icons to the right
-                            const Spacer(),
-                            
-                            /// Right-side icons
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    viewModel.toggleFavorite();
-                                    if (viewModel.isFavorited) {
-                                      SnackbarUtil.showSuccessSnackBar(
-                                        context,
-                                        AppStrings.addedToFavorites,
-                                      );
-                                    } else {
-                                      SnackbarUtil.showInfoSnackBar(
-                                        context,
-                                        AppStrings.removedFromFavorites,
-                                      );
-                                    }
-                                  },
-                                  child: Icon(
-                                    viewModel.isFavorited
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: viewModel.isFavorited
-                                        ? AppColors.error
-                                        : AppColors.primary,
-                                  ),
-                                ),
-
-                                 SizedBox(width:  context.getConditionalSpacing()),
-                                 Icon(Icons.ios_share_sharp,
-                                    color: AppColors.primary),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                         SizedBox(height: context.getConditionalSpacing()),
-
+                        _buildTopBar(context, viewModel),
+                        _divider(),
                         const EventHeaderCard(),
-
-                         SizedBox(height: context.getConditionalSpacing()),
-
-                        const ResponsiveTextWidget(
-                          AppStrings.getReady,
-                          textType: TextType.body, 
-                            color: AppColors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-
-                         SizedBox(height: context.getConditionalSpacing()),
-
-                        /// Action Tiles
-                        ActionTile(
-                          iconPath: AppAssets.handicon,
-                          text: AppStrings.countMeInCatchYaAtLunaFest,
-                          onTap: () {
-                            // 👇 Show share location popup here
-                            showDialog(
-                              context: context,
-                              builder: (context) => const ShareLocationPopup(),
-                            );
-                          },
-                        ),
-                         SizedBox(height: AppDimensions.spaceS),
-                        ActionTile(
-                          iconPath: AppAssets.iconcharcter,
-                          text: AppStrings.inviteYourFestieBestie,
-                          onTap: () async {
-                            // 👇 Trigger native social share
-                            await Share.share(
-                                  AppStrings.shareMessage,
-                              subject: AppStrings.shareSubject,
-                              sharePositionOrigin: const Rect.fromLTWH(0, 0, 0, 0),
-                            );
-                          },
-                        ),
-
-                         SizedBox(height: context.getConditionalSpacing()),
-
-                        /// Grid Options
-                        GridView.count(
-                          crossAxisCount: context.isLargeScreen
-                              ? 4
-                              : context.isMediumScreen
-                              ? 2
-                              : 2,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          mainAxisSpacing: context.isLargeScreen
-                              ? AppDimensions.spaceM
-                              : AppDimensions.spaceM,
-                          crossAxisSpacing: context.isLargeScreen
-                              ? AppDimensions.spaceL
-                              : AppDimensions.spaceM,
-                          childAspectRatio: context.isLargeScreen
-                              ? 1.3
-                              : context.isMediumScreen
-                              ? 1.2
-                              : 1.1,
-                          children: [
-                            GridOption(
-                                title: AppStrings.location,
-                                icon: AppAssets.mapicon,
-                                onNavigateToSub: onNavigateToSub),
-                            GridOption(
-                                title: AppStrings.chatRooms,
-                                icon: AppAssets.chaticon,
-                                onNavigateToSub: onNavigateToSub),
-                            GridOption(
-                                title: AppStrings.rumors,
-                                icon: AppAssets.rumors,
-                              onTap: () => viewModel.goToRumors(context),
-                            ),
-                            GridOption(
-                                title: AppStrings.detail,
-                                icon: AppAssets.detailicon,
-                                onNavigateToSub: onNavigateToSub),
-                          ],
-                        ),
+                        SizedBox(height: AppDimensions.spaceS),
+                        _buildGetReadyText(),
+                        SizedBox(height: AppDimensions.spaceS),
+                        _buildActionTiles(context),
+                        SizedBox(height: AppDimensions.spaceS),
+                        _buildGridOptions(context, viewModel),
                       ],
                     ),
                   ),
@@ -211,9 +74,150 @@ class DiscoverView extends BaseView<DiscoverViewModel> {
       ),
     );
   }
-}
 
-/// 🟡 POPUP WIDGET (inside the same file)
+  /// ---------------- BACKGROUND ----------------
+  Widget _buildBackground() {
+    return Positioned.fill(
+      child: Image.asset(
+        AppAssets.bottomsheet,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  /// ---------------- TOP BAR ----------------
+  Widget _buildTopBar(BuildContext context, DiscoverViewModel viewModel) {
+    return Row(
+      children: [
+        CustomBackButton(onTap: onBack ?? () {}),
+        SizedBox(width: context.getConditionalSpacing()),
+        ResponsiveTextWidget(
+          AppStrings.overview,
+          textType: TextType.title,
+          fontSize: context.getConditionalMainFont(),
+          color: AppColors.primary,
+        ),
+        const Spacer(),
+        _buildFavoriteButton(context, viewModel),
+      ],
+    );
+  }
+
+  /// ---------------- FAVORITE BUTTON ----------------
+  Widget _buildFavoriteButton(BuildContext context, DiscoverViewModel viewModel) {
+    return GestureDetector(
+      onTap: () {
+        viewModel.toggleFavorite();
+        if (viewModel.isFavorited) {
+          SnackbarUtil.showSuccessSnackBar(
+            context,
+            AppStrings.addedToFavorites,
+          );
+        } else {
+          SnackbarUtil.showInfoSnackBar(
+            context,
+            AppStrings.removedFromFavorites,
+          );
+        }
+      },
+      child: Icon(
+        viewModel.isFavorited ? Icons.favorite : Icons.favorite_border,
+        color: viewModel.isFavorited ? AppColors.error : AppColors.primary,
+      ),
+    );
+  }
+
+  /// ---------------- GET READY TEXT ----------------
+  Widget _buildGetReadyText() {
+    return const ResponsiveTextWidget(
+      AppStrings.getReady,
+      textType: TextType.body,
+      color: AppColors.white,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
+  /// ---------------- ACTION TILES ----------------
+  Widget _buildActionTiles(BuildContext context) {
+    return Column(
+      children: [
+        ActionTile(
+          iconPath: AppAssets.handicon,
+          text: AppStrings.countMeInCatchYaAtLunaFest,
+          onTap: () => _showShareLocationDialog(context),
+        ),
+        SizedBox(height: AppDimensions.spaceS),
+        ActionTile(
+          iconPath: AppAssets.iconcharcter,
+          text: AppStrings.inviteYourFestieBestie,
+          onTap: () => _shareFestival(context),
+        ),
+      ],
+    );
+  }
+
+  /// ---------------- GRID OPTIONS ----------------
+  Widget _buildGridOptions(BuildContext context, DiscoverViewModel viewModel) {
+    return GridView.count(
+      crossAxisCount: context.isLargeScreen ? 4 : 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: AppDimensions.spaceM,
+      crossAxisSpacing: context.isLargeScreen ? AppDimensions.spaceL : AppDimensions.spaceM,
+      childAspectRatio: context.isLargeScreen ? 1.3 : context.isMediumScreen ? 1.2 : 1.1,
+      children: [
+        GridOption(
+          title: AppStrings.location,
+          icon: AppAssets.mapicon,
+          onNavigateToSub: onNavigateToSub,
+        ),
+        GridOption(
+          title: AppStrings.chatRooms,
+          icon: AppAssets.chaticon,
+          onNavigateToSub: onNavigateToSub,
+        ),
+        GridOption(
+          title: AppStrings.rumors,
+          icon: AppAssets.rumors,
+          onTap: () => viewModel.goToRumors(context),
+        ),
+        GridOption(
+          title: AppStrings.detail,
+          icon: AppAssets.detailicon,
+          onNavigateToSub: onNavigateToSub,
+        ),
+      ],
+    );
+  }
+
+  /// ---------------- HELPERS ----------------
+  void _showShareLocationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const ShareLocationPopup(),
+    );
+  }
+
+  Future<void> _shareFestival(BuildContext context) async {
+    await Share.share(
+      AppStrings.shareMessage,
+      subject: AppStrings.shareSubject,
+      sharePositionOrigin: const Rect.fromLTWH(0, 0, 0, 0),
+    );
+  }
+  Widget _divider(){
+    return  Container(
+      width: double.infinity,
+      // Remove any outer spacing
+      child: const Divider(
+        color: AppColors.primary,
+        thickness: 1,
+        height: 20, // 👈 end at very right
+      ),
+    );
+  }
+}
+/// ---------------- SHARE LOCATION POPUP ----------------
 class ShareLocationPopup extends StatelessWidget {
   const ShareLocationPopup({super.key});
 
@@ -230,71 +234,86 @@ class ShareLocationPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                onTap: () => Navigator.pop(context),
-                child: const Icon(Icons.close, color: AppColors.primary),
-              ),
+            _buildCloseButton(context),
+            const Icon(
+              Icons.location_on,
+              color: AppColors.accent,
+              size: 60,
             ),
-            const Icon(Icons.location_on,
-                color: AppColors.accent, size: 60),
             SizedBox(height: AppDimensions.spaceS),
-            const ResponsiveTextWidget(
-              AppStrings.shareLocation,
-              textType: TextType.body, 
-                  color: AppColors.accent,
-                  fontWeight: FontWeight.bold,
-                  //fontSize: 20
-            ),
+            _buildTitle(),
             SizedBox(height: context.getConditionalSpacing()),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                SnackbarUtil.showSuccessSnackBar(
-                  context,
-                  AppStrings.locationSharingEnabled,
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                padding: context.responsivePadding,
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const ResponsiveTextWidget(
-                  AppStrings.locationSharingDescription,
-                  textAlign: TextAlign.center,
-                  textType: TextType.body,
-                      color: AppColors.black,
-                      fontWeight: FontWeight.w800,
-                      //fontSize: 16),
-                ),
-              ),
-            ),
+            _buildShareButton(context),
+            SizedBox(height: context.getConditionalSpacing()),
+            _buildCancelButton(context),
+          ],
+        ),
+      ),
+    );
+  }
 
-            SizedBox(height: context.getConditionalSpacing()),
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const ResponsiveTextWidget(
-                  AppStrings.hidingMyVibe,
-                  textAlign: TextAlign.center,
-                  textType: TextType.body, 
-                      color: AppColors.black,
-                      fontWeight: FontWeight.w800,
-                      //fontSize: 16
-                  ),
-                ),
-              ),
-        ],
+  Widget _buildCloseButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: InkWell(
+        onTap: () => Navigator.pop(context),
+        child: const Icon(Icons.close, color: AppColors.primary),
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return const ResponsiveTextWidget(
+      AppStrings.shareLocation,
+      textType: TextType.body,
+      color: AppColors.accent,
+      fontWeight: FontWeight.bold,
+    );
+  }
+
+  Widget _buildShareButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+        SnackbarUtil.showSuccessSnackBar(
+          context,
+          AppStrings.locationSharingEnabled,
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: context.responsivePadding,
+        decoration: BoxDecoration(
+          color: AppColors.accent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const ResponsiveTextWidget(
+          AppStrings.locationSharingDescription,
+          textAlign: TextAlign.center,
+          textType: TextType.body,
+          color: AppColors.black,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCancelButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const ResponsiveTextWidget(
+          AppStrings.hidingMyVibe,
+          textAlign: TextAlign.center,
+          textType: TextType.body,
+          color: AppColors.black,
+          fontWeight: FontWeight.w800,
         ),
       ),
     );

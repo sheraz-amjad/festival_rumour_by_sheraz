@@ -1,4 +1,3 @@
-import 'package:festival_rumour/core/constants/app_durations.dart';
 import 'package:festival_rumour/ui/views/homeview/widgets/post_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,6 +64,20 @@ class HomeView extends BaseView<HomeViewModel> {
       ),
     );
   }
+  Widget _buildFloatingButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10, right: 5), // Fine-tuned position
+      child: FloatingActionButton(
+        onPressed: () {
+          //   _showPostBottomSheet(context);
+        },
+        backgroundColor: AppColors.onPrimary,
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
+        elevation: 8,
+        shape: const CircleBorder(),
+      ),
+    );
+  }
 
   Widget _buildAppBar(BuildContext context, HomeViewModel viewModel) {
     return ResponsivePadding(
@@ -102,6 +115,16 @@ class HomeView extends BaseView<HomeViewModel> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
+          ),
+
+          // Create Post Icon Button with responsive sizing
+          IconButton(
+            icon: Icon(
+              Icons.add_circle_outline,
+              color: AppColors.primary,
+              size: AppDimensions.iconXL,
+            ),
+            onPressed: () => viewModel.goToCreatePost(),
           ),
 
           // Job Icon Button with responsive sizing
@@ -451,7 +474,7 @@ class HomeView extends BaseView<HomeViewModel> {
         child: ResponsiveTextWidget(
           AppStrings.noPostsAvailable,
           textType: TextType.body,
-          color: AppColors.onPrimary,
+          color: AppColors.primary,
           fontSize: AppDimensions.textM,
         ),
       );

@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../shared/extensions/context_extensions.dart';
 import '../post_model.dart';
+
 class PostWidget extends StatefulWidget {
   final PostModel post;
 
@@ -14,10 +19,84 @@ class PostWidget extends StatefulWidget {
   State<PostWidget> createState() => _PostWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _PostWidgetState extends State<PostWidget> with AutomaticKeepAliveClientMixin {
   bool _showReactions = false;
   String? _selectedReaction; // stores emoji / icon selected
   Color _reactionColor = AppColors.white; // default Like color
+  PageController? _pageController;
+  int _currentPage = 0;
+  
+  // Video controllers for each media item (only initialize when needed)
+  Map<int, VideoPlayerController?> _videoControllers = {};
+  Map<int, ChewieController?> _chewieControllers = {};
+  Map<int, bool> _isVideoInitialized = {};
+  Map<int, bool> _isInitializingVideo = {};
+
+  @override
+  bool get wantKeepAlive => true; // Keep state alive when scrolled
+
+  @override
+  void initState() {
+    super.initState();
+    final mediaCount = widget.post.allMediaPaths.length;
+    if (mediaCount > 1) {
+      _pageController = PageController();
+    }
+  }
+
+  void _initializeVideo(int index) async {
+    if ((_isVideoInitialized[index] ?? false) || (_isInitializingVideo[index] ?? false)) return;
+    
+    setState(() {
+      _isInitializingVideo[index] = true;
+    });
+
+    try {
+      final mediaPaths = widget.post.allMediaPaths;
+      if (index >= mediaPaths.length) return;
+      
+      final videoPath = mediaPaths[index];
+      _videoControllers[index] = VideoPlayerController.file(File(videoPath));
+      await _videoControllers[index]!.initialize();
+      
+      if (mounted) {
+        _chewieControllers[index] = ChewieController(
+          videoPlayerController: _videoControllers[index]!,
+          autoPlay: false,
+          looping: false,
+          aspectRatio: _videoControllers[index]!.value.aspectRatio,
+          showControls: true,
+          materialProgressColors: ChewieProgressColors(
+            playedColor: AppColors.primary,
+            handleColor: AppColors.primary,
+            backgroundColor: AppColors.onSurface.withOpacity(0.3),
+            bufferedColor: AppColors.onSurface.withOpacity(0.5),
+          ),
+        );
+        setState(() {
+          _isVideoInitialized[index] = true;
+          _isInitializingVideo[index] = false;
+        });
+      }
+    } catch (error) {
+      debugPrint('Error initializing video at index $index: $error');
+      if (mounted) {
+        setState(() {
+          _isInitializingVideo[index] = false;
+        });
+      }
+    }
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentPage = index;
+    });
+    // Initialize video if current page is a video
+    if (widget.post.isVideoAtIndex(index)) {
+      _initializeVideo(index);
+    }
+  }
 
   void _toggleReactions() {
     setState(() {
@@ -26,7 +105,23 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   @override
+  void dispose() {
+    _pageController?.dispose();
+    // Dispose all video controllers
+    for (var controller in _chewieControllers.values) {
+      controller?.dispose();
+    }
+    for (var controller in _videoControllers.values) {
+      controller?.dispose();
+    }
+    _chewieControllers.clear();
+    _videoControllers.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final post = widget.post;
     return Container(
       height: context.isLargeScreen 
@@ -52,7 +147,7 @@ class _PostWidgetState extends State<PostWidget> {
 //          Header
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage(post.imagePath),
+              backgroundImage: const AssetImage(AppAssets.profile),
             ),
             title: Text(
               post.username,
@@ -87,13 +182,11 @@ class _PostWidgetState extends State<PostWidget> {
               borderRadius: BorderRadius.circular(AppDimensions.postBorderRadius),
               child: Stack(
                 children: [
-                  // Background Image
+                  // Background Image or Video (single or multiple with slider)
                   Positioned.fill(
-                    child: Image.asset(
-                      post.imagePath,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
+                    child: post.hasMultipleMedia
+                        ? _buildMediaCarousel()
+                        : _buildSingleMedia(),
                   ),
 
                   // Floating Likes/Comments
@@ -254,6 +347,168 @@ class _PostWidgetState extends State<PostWidget> {
           style: TextStyle(fontSize: AppDimensions.textXXL, color: (emoji == AppStrings.emojiLike) ? AppColors.reactionLike : null),
         ),
       ),
+    );
+  }
+
+  /// Check if the path is an asset path (starts with 'assets/') or a file path
+  bool _isAssetPath(String path) {
+    return path.startsWith('assets/');
+  }
+
+  /// Build media carousel for multiple items
+  Widget _buildMediaCarousel() {
+    final mediaPaths = widget.post.allMediaPaths;
+    
+    return Stack(
+      children: [
+        PageView.builder(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          itemCount: mediaPaths.length,
+          itemBuilder: (context, index) {
+            return _buildMediaItem(index);
+          },
+        ),
+        // Page indicators
+        if (mediaPaths.length > 1)
+          Positioned(
+            bottom: 80,
+            left: 0,
+            right: 0,
+            child: _buildPageIndicators(mediaPaths.length),
+          ),
+      ],
+    );
+  }
+
+  /// Build single media item (image or video)
+  Widget _buildSingleMedia() {
+    // Check if it's a video using the new structure (mediaPaths) or old structure (isVideo)
+    final isVideo = widget.post.isVideoAtIndex(0);
+    
+    if (isVideo) {
+      return _buildVideoThumbnailOrPlayer(0);
+    } else {
+      // Use allMediaPaths to support both old and new formats
+      final mediaPaths = widget.post.allMediaPaths;
+      final mediaPath = mediaPaths.isNotEmpty ? mediaPaths[0] : widget.post.imagePath;
+      
+      return _isAssetPath(mediaPath)
+          ? Image.asset(
+              mediaPath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            )
+          : Image.file(
+              File(mediaPath),
+              fit: BoxFit.cover,
+              width: double.infinity,
+            );
+    }
+  }
+
+  /// Build a single media item at given index
+  Widget _buildMediaItem(int index) {
+    final mediaPaths = widget.post.allMediaPaths;
+    final mediaPath = mediaPaths[index];
+    final isVideo = widget.post.isVideoAtIndex(index);
+
+    if (isVideo) {
+      return _buildVideoThumbnailOrPlayer(index);
+    } else {
+      return _isAssetPath(mediaPath)
+          ? Image.asset(
+              mediaPath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            )
+          : Image.file(
+              File(mediaPath),
+              fit: BoxFit.cover,
+              width: double.infinity,
+            );
+    }
+  }
+
+  /// Build page indicators (dots)
+  Widget _buildPageIndicators(int count) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        count,
+        (index) => Container(
+          width: 8,
+          height: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _currentPage == index
+                ? AppColors.accent
+                : AppColors.primary.withOpacity(0.5),
+          ),
+        ),
+      ),
+    ),
+    );
+  }
+
+  /// Build video thumbnail with play button or video player
+  Widget _buildVideoThumbnailOrPlayer(int index) {
+    if ((_isVideoInitialized[index] ?? false) && _chewieControllers[index] != null) {
+      return Chewie(controller: _chewieControllers[index]!);
+    } else {
+      // Show thumbnail with play button - lazy load video on tap
+      return GestureDetector(
+        onTap: () => _initializeVideo(index),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Background placeholder/thumbnail
+            _buildVideoThumbnail(index),
+            // Dark overlay
+            Container(
+              color: AppColors.black.withOpacity(0.3),
+            ),
+            // Loading indicator or play button
+            Center(
+              child: (_isInitializingVideo[index] ?? false)
+                  ? const CircularProgressIndicator(color: AppColors.primary)
+                  : const Icon(
+                      Icons.play_circle_filled,
+                      color: AppColors.white,
+                      size: 64,
+                    ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  /// Build video thumbnail from first frame (if available)
+  Widget _buildVideoThumbnail(int index) {
+    // Try to get thumbnail from video file
+    try {
+      final mediaPaths = widget.post.allMediaPaths;
+      if (index >= mediaPaths.length) {
+        return Container(color: AppColors.black);
+      }
+      
+      final videoFile = File(mediaPaths[index]);
+      if (videoFile.existsSync()) {
+        // Use a placeholder image for now
+        // In production, you could use video_thumbnail package to extract first frame
+        return Container(
+          color: AppColors.black,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error checking video file: $e');
+    }
+    return Container(
+      color: AppColors.black,
     );
   }
 }

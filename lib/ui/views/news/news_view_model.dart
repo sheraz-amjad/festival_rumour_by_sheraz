@@ -62,9 +62,9 @@ class NewsViewModel extends BaseViewModel {
   }
 
   // Navigation methods
-  void navigateBack(BuildContext context) {
-    Navigator.pop(context);
-  }
+  // void navigateBack(BuildContext context) {
+  //   Navigator.pop(context);
+  // }
 
   void navigateToBulletinPreview() {
     _showBulletinPreview = true;

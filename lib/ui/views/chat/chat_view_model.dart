@@ -32,25 +32,25 @@ class ChatViewModel extends BaseViewModel {
     {
       'title': AppStrings.musicFestival,
       'subtitle': AppStrings.privateRoom,
-      'image': AppAssets.post1,
+      'image': AppAssets.post,
       'members': 89,
     },
     {
       'title': AppStrings.artCulture,
       'subtitle': AppStrings.communityRoom,
-      'image': AppAssets.post2,
+      'image': AppAssets.post,
       'members': 234,
     },
     {
       'title': AppStrings.foodDrinks,
       'subtitle': AppStrings.communityRoom,
-      'image': AppAssets.post3,
+      'image': AppAssets.post,
       'members': 178,
     },
     {
       'title': AppStrings.photography,
       'subtitle': AppStrings.privateRoom,
-      'image': AppAssets.post5,
+      'image': AppAssets.post,
       'members': 67,
     },
   ];
@@ -115,8 +115,13 @@ class ChatViewModel extends BaseViewModel {
   List<Map<String, dynamic>> chatRooms1 = [
     {
       'name': 'Luna Festival Community',
-      'image': AppAssets.post1,
+      'image': AppAssets.post,
     },
+    {
+      'name': 'Luna Festival Community',
+      'image': AppAssets.post,
+    },
+
   ];
 
   // Chat room functionality

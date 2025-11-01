@@ -5,6 +5,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/backbutton.dart';
 import '../../../core/utils/base_view.dart';
 import '../../../core/router/app_router.dart';
 import '../../../shared/widgets/responsive_widget.dart';
@@ -14,7 +15,8 @@ import '../../../shared/extensions/context_extensions.dart';
 import 'rumors_viewmodel.dart';
 
 class RumorsView extends BaseView<RumorsViewModel> {
-  const RumorsView({super.key});
+  const RumorsView({super.key, this.onBack});
+  final VoidCallback? onBack;
 
   @override
   RumorsViewModel createViewModel() => RumorsViewModel();
@@ -27,33 +29,36 @@ class RumorsView extends BaseView<RumorsViewModel> {
 
   @override
   Widget buildView(BuildContext context, RumorsViewModel viewModel) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          // Background Image - Full screen coverage
-          Positioned.fill(
-            child: Image.asset(
-              AppAssets.bottomsheet,
-              fit: BoxFit.cover,
-            ),
-          ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (onBack != null) {
+          onBack!();
+          return false;
+        }
+        return true;
+      },
 
-          // Main Content
-          SafeArea(
-            child: Column(
-              children: [
-                _buildAppBar(context, viewModel),
-                _buildSearchBar(context),
-                 SizedBox(height: context.getConditionalSpacing()),
-                Expanded(
-                  child: _buildRumorsList(context, viewModel),
-                ),
-              ],
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            // Background Image - Full screen coverage
+            Positioned.fill(
+              child: Image.asset(AppAssets.bottomsheet, fit: BoxFit.cover),
             ),
-          ),
-        ],
+
+            // Main Content
+            SafeArea(
+              child: Column(
+                children: [
+                  _buildAppBar(context, viewModel),
+                  Expanded(child: _buildRumorsList(context, viewModel)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -74,8 +79,16 @@ class RumorsView extends BaseView<RumorsViewModel> {
       ),
       child: Row(
         children: [
+          CustomBackButton(
+            onTap:
+                onBack ??
+                () {
+                  // Navigate back to discover screen
+                  Navigator.pop(context);
+                },
+          ),
           // Logo with responsive sizing
-
+          const SizedBox(width: AppDimensions.spaceM),
           // Title - Flexible to prevent overflow
           Expanded(
             child: ResponsiveTextWidget(
@@ -88,148 +101,16 @@ class RumorsView extends BaseView<RumorsViewModel> {
             ),
           ),
 
-          // Job Icon Button with responsive sizing
+          // Create Post Icon Button with responsive sizing
           IconButton(
-            icon: SvgPicture.asset(
-              AppAssets.jobicon,
-              width: AppDimensions.iconXL,
-              height: AppDimensions.iconXL,
+            icon: Icon(
+              Icons.add_circle_outline,
+              color: AppColors.primary,
+              size: AppDimensions.iconXL,
             ),
-            onPressed: () => _showPostBottomSheet(context),
-          ),
-
-          // Conditional spacing before Pro label
-
-          // Pro Label - Aligned with search bar dropdown position
-          GestureDetector(
-            onTap: viewModel.goToSubscription,
-            child: Container(
-              padding: const EdgeInsets.all(AppDimensions.paddingS),
-              decoration: BoxDecoration(
-                color: AppColors.accent,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-              ),
-              child: ResponsiveTextWidget(
-                AppStrings.proLabel,
-                textType: TextType.label,
-                fontSize: AppDimensions.textS,
-                color: AppColors.proLabelText,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            onPressed: () => viewModel.goToCreatePost(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSearchBar(BuildContext context) {
-    String selectedFilter = AppStrings.allFilter;
-
-    return ResponsiveContainer(
-      mobileMaxWidth: double.infinity,
-      tabletMaxWidth: double.infinity,
-      desktopMaxWidth: double.infinity,
-      child: StatefulBuilder(
-        builder: (context, setState) {
-          return Container(
-            margin: context.responsiveMargin,
-            padding: context.responsivePadding,
-            decoration: BoxDecoration(
-              color: AppColors.onPrimary,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-            ),
-            child: Row(
-              children: [
-                 Icon(Icons.search, color: AppColors.onSurfaceVariant, size: context.getConditionalIconSize()),
-                 SizedBox(width: context.getConditionalSpacing()),
-
-                /// 🔹 Search Field
-                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: AppStrings.searchHint,
-                      hintStyle: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: context.getConditionalFont(),
-                      ),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      isDense: true,
-                      filled: false,
-                      fillColor: Colors.transparent,
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: AppDimensions.textM,
-                    ),
-                  ),
-                ),
-
-                /// 🔹 Dropdown Filter
-                DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    dropdownColor: AppColors.onPrimary,
-                    isExpanded: false,
-                    menuMaxHeight: context.screenHeight * 0.35,
-                    icon: Container(
-                      padding: const EdgeInsets.all(AppDimensions.paddingXS),
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.arrow_drop_down, color: AppColors.onPrimary),
-                    ),
-                    items: const [
-                      DropdownMenuItem(
-                        value: AppStrings.live,
-                        child: Row(
-                          children: [
-                            Icon(Icons.wifi_tethering, color: AppColors.primary, size: 20),
-                            SizedBox(width: AppDimensions.spaceS),
-                            Text(AppStrings.live, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: AppStrings.upcoming,
-                        child: Row(
-                          children: [
-                            Icon(Icons.schedule, color: AppColors.primary, size: 20),
-                            SizedBox(width: AppDimensions.spaceS),
-                            Text(AppStrings.upcoming, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: AppStrings.past,
-                        child: Row(
-                          children: [
-                            Icon(Icons.history, color: AppColors.primary, size: 20),
-                            SizedBox(width: AppDimensions.spaceS),
-                            Text(AppStrings.past, style: TextStyle(color: AppColors.primary)),
-                          ],
-                        ),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() => selectedFilter = value);
-                        debugPrint("Selected Filter: $value");
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
       ),
     );
   }

@@ -53,9 +53,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                         color: AppColors.googleRed,
                         icon: AppAssets.googleIcon,
                         label: AppStrings.loginWithGoogle,
-                        onPressed: () => context.showInfoSnackBar(
-                          AppStrings.googleLoginDevelopment,
-                        ),
+                        onPressed: viewModel.loginWithGoogle,
                       ),
                       SizedBox(height: context.getConditionalSpacing()),
                       _LoginButton(
@@ -69,9 +67,7 @@ class WelcomeView extends BaseView<WelcomeViewModel> {
                         color: AppColors.black,
                         icon: AppAssets.appleIcon,
                         label: AppStrings.loginWithApple,
-                        onPressed: () => context.showInfoSnackBar(
-                          AppStrings.appleLoginDevelopment,
-                        ),
+                        onPressed: viewModel.loginWithApple,
                       ),
                       SizedBox(height: context.getConditionalSpacing()),
                       _SignupText(onTap: viewModel.goToSignup),

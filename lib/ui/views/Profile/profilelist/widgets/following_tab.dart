@@ -28,6 +28,10 @@ class FollowingTab extends StatelessWidget {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusXXL),
+                borderSide: const BorderSide(color: AppColors.onPrimary, width: 2), // ✅ White border when active
+              ),
             ),
             onChanged: viewModel.searchFollowing,
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
-import '../../../core/services/firebase_auth_service.dart';
+import '../../../core/services/auth_service.dart';
 import '../../../core/services/phone_auth_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
@@ -11,7 +11,7 @@ import '../../../core/constants/app_durations.dart';
 
 class OtpViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  final FirebaseAuthService _authService = FirebaseAuthService();
+  final AuthService _authService = AuthService();
   final PhoneAuthService _phoneAuthService = PhoneAuthService();
 
   String _otpCode = "";
@@ -20,9 +20,9 @@ class OtpViewModel extends BaseViewModel {
   final FocusNode _otpFocus = FocusNode();
   bool _isFocusChanging = false;
   
-  // Firebase Auth state
-  String? _verificationId;
+  // Phone verification state
   String? _phoneNumber;
+  String? _verificationId;
 
   String get otpCode => _otpCode;
   String? get errorText => _errorText;
@@ -30,26 +30,13 @@ class OtpViewModel extends BaseViewModel {
   FocusNode get otpFocus => _otpFocus;
   String? get phoneNumber => _phoneNumber;
   String get formattedPhoneNumber {
-    if (_phoneNumber == null) return '+62 873 7764 2922'; // Default fallback
-    
-    // Format phone number for display
-    String phone = _phoneNumber!;
-    if (phone.startsWith('+')) {
-      // Remove + and format
-      phone = phone.substring(1);
-    }
-    
-    // Add spaces for better readability
-    if (phone.length >= 10) {
-      return '+${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8)}';
-    }
-    
-    return '+$phone';
+    if (_phoneNumber == null) return '+1234567890'; // Default fallback
+    return _phoneNumber!;
   }
   
   String get displayPhoneNumber {
-    if (_phoneNumber == null) return '+62 873 7764 2922'; // Default fallback
-    return _phoneNumber!; // Show the full formatted number
+    if (_phoneNumber == null) return '+1234567890'; // Default fallback
+    return _phoneNumber!;
   }
 
   bool get isOtpValid => _otpCode.length == 4;
@@ -93,14 +80,14 @@ class OtpViewModel extends BaseViewModel {
   @override
   void init() {
     super.init();
-    // Get phone number from signup view model
+    // Get phone number from PhoneAuthService
     _initializePhoneNumber();
     // Auto-focus OTP field when screen loads (only once)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!isDisposed && !_otpFocus.hasFocus) {
         focusOtpField();
       }
-      // Refresh phone number data after a short delay
+      // Refresh phone data after a short delay
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!isDisposed) {
           _initializePhoneNumber();
@@ -119,7 +106,6 @@ class OtpViewModel extends BaseViewModel {
         print('=== OTP View Phone Data ===');
         print('Phone number retrieved: $_phoneNumber');
         print('Verification ID retrieved: $_verificationId');
-        print('PhoneAuthService has data: ${_phoneAuthService.hasPhoneData}');
         print('==========================');
       }
     } catch (e) {
@@ -139,7 +125,7 @@ class OtpViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  /// 🔹 Verify entered OTP with Firebase
+  /// 🔹 Verify phone OTP with Firebase
   Future<void> verifyCode() async {
     if (!isOtpValid) {
       _errorText = AppStrings.invalidOtpError;
@@ -148,7 +134,7 @@ class OtpViewModel extends BaseViewModel {
     }
 
     await handleAsync(() async {
-      // Get verification ID from shared service
+      // Get verification ID from PhoneAuthService
       _verificationId = _phoneAuthService.verificationId;
       _phoneNumber = _phoneAuthService.phoneNumber;
 
@@ -165,7 +151,7 @@ class OtpViewModel extends BaseViewModel {
 
       if (result.isSuccess) {
         _errorText = null;
-        // Navigate to next screen
+        // Navigate to name screen
         _navigationService.navigateTo(AppRoutes.name);
       } else {
         _errorText = result.errorMessage ?? AppStrings.otpVerificationError;
@@ -175,16 +161,16 @@ class OtpViewModel extends BaseViewModel {
     minimumLoadingDuration: AppDurations.otpVerificationDuration);
   }
 
-  /// Refresh phone number data
+  /// Refresh phone data
   void refreshPhoneData() {
     _initializePhoneNumber();
     notifyListeners();
   }
 
-  /// 🔹 Resend OTP Code with Firebase
+  /// 🔹 Resend phone OTP
   Future<void> resendCode() async {
     await handleAsync(() async {
-      // Get phone number from shared service
+      // Get phone number from PhoneAuthService
       _phoneNumber = _phoneAuthService.phoneNumber;
 
       if (_phoneNumber == null) {
@@ -205,6 +191,7 @@ class OtpViewModel extends BaseViewModel {
         },
         codeSent: (verificationId, resendToken) {
           _verificationId = verificationId;
+          _phoneAuthService.setPhoneData(_phoneNumber!, verificationId);
           if (kDebugMode) print('Verification code resent to $_phoneNumber');
         },
         codeAutoRetrievalTimeout: (verificationId) {
