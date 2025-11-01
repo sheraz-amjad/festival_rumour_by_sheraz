@@ -7,6 +7,7 @@ import '../../../core/constants/app_sizes.dart';
 import '../../../core/utils/backbutton.dart';
 import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../shared/extensions/context_extensions.dart';
+import '../../../core/router/app_router.dart';
 import 'performance_view_model.dart';
 
 class PerformanceView extends BaseView<PerformanceViewModel> {
@@ -24,16 +25,6 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.performanceLightBlue,
-              AppColors.white,
-            ],
-          ),
-        ),
         child: SafeArea(
           child: Column(
             children: [
@@ -41,7 +32,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
               const SizedBox(height: AppDimensions.spaceL),
               _buildPerformanceCard(context),
               const SizedBox(height: AppDimensions.spaceL),
-              _buildToiletsSection(context),
+              _buildPerformanceSection(context),
               const SizedBox(height: AppDimensions.spaceM),
               Expanded(
                 child: _buildPerformanceCategories(context, viewModel),
@@ -66,7 +57,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.paddingS),
               decoration: BoxDecoration(
-                color: AppColors.performanceGreen,
+                color: AppColors.eventGreen,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -132,21 +123,21 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
     );
   }
 
-  Widget _buildToiletsSection(BuildContext context) {
+  Widget _buildPerformanceSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const ResponsiveTextWidget(
-            AppStrings.toilets,
+            AppStrings.performance,
             textType: TextType.title,
             color: AppColors.black,
             fontWeight: FontWeight.bold,
           ),
           GestureDetector(
             onTap: () {
-              // Handle view all action
+              Navigator.pushNamed(context, AppRoutes.viewAll, arguments: 2);
             },
             child: const ResponsiveTextWidget(
               AppStrings.viewAll,
@@ -277,19 +268,30 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
 
   Widget _buildPreviewAppBar(BuildContext context, PerformanceViewModel viewModel) {
     return Container(
-      color: AppColors.performanceLightBlue,
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
-        vertical: AppDimensions.paddingM,
+        vertical: AppDimensions.paddingS,
       ),
       child: Row(
         children: [
-          CustomBackButton(
+       GestureDetector(
             onTap: () {
               viewModel.showPerformancePreview = false;
               viewModel.notifyListeners();
             },
-          ),
+      child: Container(
+        padding: const EdgeInsets.all(AppDimensions.paddingS),
+        decoration: BoxDecoration(
+          color: AppColors.eventGreen,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.arrow_back,
+          color: AppColors.white,
+          size: AppDimensions.iconM,
+        ),
+      ),
+    ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
             AppStrings.performancePreview,
@@ -308,13 +310,6 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const ResponsiveTextWidget(
-          AppStrings.performanceInformation,
-          textType: TextType.title,
-          color: AppColors.black,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: AppDimensions.spaceM),
 
         // Festival Name
         _buildInfoCard(
@@ -362,7 +357,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
         _buildInfoCard(
           context,
           AppStrings.performanceTitle,
-          AppStrings.loremIpsumDummy,
+          AppStrings.performancetitle,
           Icons.flag,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -371,7 +366,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
         _buildInfoCard(
           context,
           AppStrings.band,
-          AppStrings.loremIpsumDummy,
+          AppStrings.brand,
           Icons.music_note,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -380,7 +375,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
         _buildInfoCard(
           context,
           AppStrings.artist,
-          AppStrings.loremIpsumDummy,
+          AppStrings.Atrist,
           Icons.mic,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -393,7 +388,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
         _buildInfoCard(
           context,
           AppStrings.specialGuests,
-          AppStrings.loremIpsumDummy,
+          AppStrings.duaLipa,
           Icons.star,
         ),
         const SizedBox(height: AppDimensions.spaceM),
@@ -568,7 +563,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
         Container(
           padding: const EdgeInsets.all(AppDimensions.paddingM),
           decoration: BoxDecoration(
-            color: AppColors.grey600.withOpacity(0.1),
+            color: AppColors.performanceLightBlue,
             borderRadius: BorderRadius.circular(AppDimensions.radiusM),
             border: Border(
               left: BorderSide(
@@ -578,7 +573,7 @@ class PerformanceView extends BaseView<PerformanceViewModel> {
             ),
           ),
           child: const ResponsiveTextWidget(
-            AppStrings.loremIpsumLong,
+            AppStrings.festivalPerformanceNote,
             textType: TextType.body,
             color: AppColors.black,
           ),

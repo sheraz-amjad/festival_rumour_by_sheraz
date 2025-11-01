@@ -232,9 +232,9 @@ class ChatView extends BaseView<ChatViewModel> {
         padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingS),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 cards per row
-          crossAxisSpacing: 16,
+          crossAxisSpacing: 10,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.85, // Adjust height vs width ratio
+          childAspectRatio: 0.75, // Adjust height vs width ratio
         ),
         itemCount: viewModel.chatRooms1.length,
         itemBuilder: (context, index) {
@@ -267,7 +267,7 @@ class ChatView extends BaseView<ChatViewModel> {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                       child: Image.asset(
-                        room['image'] ?? AppAssets.post1,
+                        room['image'] ?? AppAssets.post,
                         fit: BoxFit.cover,
                         width: double.infinity,
                       ),
@@ -281,6 +281,7 @@ class ChatView extends BaseView<ChatViewModel> {
                       room['name'] ?? AppStrings.lunaCommunityRoom,
                       textAlign: TextAlign.center,
                       textType: TextType.caption,
+                      fontSize: AppDimensions.textM,
                       color: AppColors.white,
                       fontWeight: FontWeight.w600,
                     ),
@@ -299,9 +300,9 @@ class ChatView extends BaseView<ChatViewModel> {
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingL, vertical: AppDimensions.paddingS),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // 2 cards per row
-        crossAxisSpacing: 16,
+        crossAxisSpacing: 15,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.85, // Adjust height vs width ratio
+        childAspectRatio: 0.75, // Adjust height vs width ratio
       ),
       itemCount: viewModel.privateChats.length,
       itemBuilder: (context, index) {
@@ -342,7 +343,7 @@ class ChatView extends BaseView<ChatViewModel> {
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                 child: Image.asset(
-                  chat['image'] ?? AppAssets.post1,
+                  chat['image'] ?? AppAssets.post,
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -351,10 +352,11 @@ class ChatView extends BaseView<ChatViewModel> {
 
             // Text section - same as public chat
             Padding(
-              padding: EdgeInsets.all(AppDimensions.spaceS),
+              padding: EdgeInsets.all(AppDimensions.paddingS),
               child: ResponsiveTextWidget(
                 chat['name'] ?? AppStrings.chatName,
                 textAlign: TextAlign.center,
+                fontSize: AppDimensions.textM,
                 textType: TextType.caption,
                 color: AppColors.white,
                 fontWeight: FontWeight.w600,

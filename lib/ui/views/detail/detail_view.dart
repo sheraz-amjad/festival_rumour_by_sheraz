@@ -30,7 +30,7 @@ class DetailView extends BaseView<DetailViewModel> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: AppColors.black,
+
         body: Stack(
         children: [
           // Background image (same as profile view)
@@ -51,11 +51,7 @@ class DetailView extends BaseView<DetailViewModel> {
             child: Column(
               children: [
                 _buildAppBar(context, viewModel),
-                SizedBox(height: context.isSmallScreen 
-                    ? AppDimensions.spaceL
-                    : context.isMediumScreen 
-                        ? AppDimensions.spaceXL
-                        : AppDimensions.spaceXXL),
+                SizedBox(height: AppDimensions.spaceL),
                 Expanded(
                   child: _buildContentCards(context),
                 ),
@@ -87,7 +83,7 @@ class DetailView extends BaseView<DetailViewModel> {
             'Detail',
             textType: TextType.title,
             color: AppColors.white,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             ),
         ],
       ),
@@ -116,18 +112,12 @@ class DetailView extends BaseView<DetailViewModel> {
                   context,
                   'TOILET',
                   AppAssets.toilet,
-                  onTap: () {
-                    if (onNavigateToSub != null) {
-                      onNavigateToSub!('toilets');
-                    } else {
-                      Navigator.pushNamed(context, AppRoutes.toilets);
-                    }
-                  },
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.toilets),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppDimensions.spaceM),
+          const SizedBox(height: AppDimensions.spaceL),
           
           // Bottom row - two full-width cards
           _buildCard(
@@ -137,7 +127,7 @@ class DetailView extends BaseView<DetailViewModel> {
             isFullWidth: true,
             onTap: () => Navigator.pushNamed(context, AppRoutes.performance),
           ),
-          const SizedBox(height: AppDimensions.spaceM),
+          const SizedBox(height: AppDimensions.spaceL),
           
           _buildCard(
             context,
@@ -179,7 +169,7 @@ class DetailView extends BaseView<DetailViewModel> {
               Positioned.fill(
                 child: Image.asset(
                   imagePath,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
 

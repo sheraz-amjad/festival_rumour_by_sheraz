@@ -5,14 +5,14 @@ import 'package:country_code_picker/country_code_picker.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/navigation_service.dart';
-import '../../../../core/services/firebase_auth_service.dart';
+import '../../../../core/services/auth_service.dart';
 import '../../../../core/services/phone_auth_service.dart';
 import '../../../../core/viewmodels/base_view_model.dart';
 import '../../../../core/constants/app_strings.dart';
 
 class SignupViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
-  final FirebaseAuthService _authService = FirebaseAuthService();
+  final AuthService _authService = AuthService();
   final PhoneAuthService _phoneAuthService = PhoneAuthService();
 
   /// 🔹 Controllers

@@ -196,7 +196,7 @@ class SignupView extends BaseView<SignupViewModel> {
 
   Widget _buildDescription(BuildContext context) {
     return ResponsiveTextWidget(
-      AppStrings.description,
+      AppStrings.otpdescription,
       style: TextStyle(
         color: AppColors.white,
         fontSize: context.responsiveTextM,

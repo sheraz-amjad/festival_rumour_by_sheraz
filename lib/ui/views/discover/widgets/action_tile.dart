@@ -5,12 +5,14 @@ import '../../../../core/constants/app_sizes.dart';
 class ActionTile extends StatelessWidget {
   final String iconPath; // image path (PNG/JPG)
   final String text;
+  final bool isSelected; // 👈 add this
   final VoidCallback? onTap;
 
   const ActionTile({
     super.key,
     required this.iconPath,
     required this.text,
+    this.isSelected = false, // 👈 default false
     this.onTap,
   });
 
@@ -19,10 +21,16 @@ class ActionTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: double.infinity, // ensures bounded width
+        width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.onSurface,
+          color: isSelected
+              ? AppColors.accent.withOpacity(0.15)
+              : AppColors.onSurface,
           borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+          border: Border.all(
+            color: isSelected ? AppColors.accent : Colors.transparent,
+            width: 1.5,
+          ),
         ),
         padding: const EdgeInsets.symmetric(
           vertical: AppDimensions.paddingM,
@@ -47,14 +55,32 @@ class ActionTile extends StatelessWidget {
                   Flexible(
                     child: Text(
                       text,
-                      style: const TextStyle(color: AppColors.primary),
+                      style: TextStyle(
+                        color:
+                        isSelected ? AppColors.accent : AppColors.primary,
+                        fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, color: AppColors.white, size: 12),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (child, animation) =>
+                  ScaleTransition(scale: animation, child: child),
+              child: isSelected
+                  ? const Icon(Icons.check,
+                  key: ValueKey('check'),
+                  color: AppColors.accent,
+                  size: 18)
+                  : const Icon(Icons.arrow_forward_ios,
+                  key: ValueKey('arrow'),
+                  color: AppColors.white,
+                  size: 12),
+            ),
           ],
         ),
       ),

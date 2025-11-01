@@ -1,3 +1,4 @@
+import 'package:festival_rumour/shared/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/base_view.dart';
@@ -5,7 +6,6 @@ import '../../../shared/widgets/responsive_text_widget.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_assets.dart';
-import '../../../core/utils/backbutton.dart';
 import 'toilet_view_model.dart';
 
 class ToiletView extends BaseView<ToiletViewModel> {
@@ -30,38 +30,25 @@ class ToiletView extends BaseView<ToiletViewModel> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: AppColors.black,
-        body: Stack(
-        children: [
-          // Dark background
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(AppAssets.bottomsheet),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-
-          // Main content
-          SafeArea(
+        backgroundColor: AppColors.white,
+        body: Container(
+          child: SafeArea(
             child: Column(
               children: [
-                _buildAppBar(context),
-                const SizedBox(height: AppDimensions.spaceL),
+                _buildAppBar(context, viewModel),
+                const SizedBox(height: AppDimensions.spaceS),
+                _buildToiletsCard(context),
+                const SizedBox(height: AppDimensions.spaceM),
                 Expanded(child: _buildToiletList(context, viewModel)),
               ],
             ),
           ),
-        ],
+        ),
       ),
-    ),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  Widget _buildAppBar(BuildContext context, ToiletViewModel viewModel) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingM,
@@ -69,24 +56,83 @@ class ToiletView extends BaseView<ToiletViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(
-            onTap: onBack ?? () {
-              // Navigate back to discover screen
-              Navigator.pop(context);
+          GestureDetector(
+            onTap: () {
+              if (onBack != null) {
+                onBack!();
+              } else {
+                Navigator.pop(context);
+              }
             },
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.eventGreen,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.primary,
+                size: AppDimensions.iconM,
+              ),
+            ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           const ResponsiveTextWidget(
             AppStrings.toilets,
             textType: TextType.title,
-            color: AppColors.white,
+            color: AppColors.onPrimary,
             fontWeight: FontWeight.bold,
           ),
         ],
       ),
     );
   }
+  Widget _buildToiletsCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
+      padding: const EdgeInsets.all(AppDimensions.paddingL),
+      width: double.infinity,
+      height: context.screenHeight * 0.25,
 
+      decoration: BoxDecoration(
+        color: AppColors.eventGreen,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusL),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const ResponsiveTextWidget(
+              AppStrings.toilets,
+              textType: TextType.heading,
+              color: AppColors.white,
+              //fontSize: AppDimensions.textXXL,
+              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: AppDimensions.spaceM),
+            // Clipboard with checklist icon
+            Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+
+              child: Image.asset(
+                AppAssets.assignmentIcon, // 👈 your image path constant
+                width: AppDimensions.iconXXL,
+                height: AppDimensions.iconXXL,
+                fit: BoxFit.contain,
+              ),
+            ),
+            // Yellow pencil icon
+          ]
+      ),
+    );
+  }
   Widget _buildToiletList(BuildContext context, ToiletViewModel viewModel) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
@@ -99,56 +145,60 @@ class ToiletView extends BaseView<ToiletViewModel> {
   }
 
   Widget _buildToiletCard(
-    BuildContext context,
-    ToiletItem toilet,
-    ToiletViewModel viewModel,
-  ) {
+      BuildContext context,
+      ToiletItem toilet,
+      ToiletViewModel viewModel,
+      ) {
     return Container(
-      margin: const EdgeInsets.only(bottom: AppDimensions.spaceM),
+      margin: const EdgeInsets.only(bottom: AppDimensions.marginS),
       padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
-        color: AppColors.onPrimary.withOpacity(0.7),
+        color: AppColors.white, // same as festival card
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-        border: Border.all(color: AppColors.grey600, width: AppDimensions.borderWidthS),
+        border: Border.all(
+          color: AppColors.transparent,// same green border tone
+          width: AppDimensions.borderWidthS,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          // Toilet image
+          // 🔹 Toilet Icon (same circular design)
           Container(
-            width: AppDimensions.imageL,
-            height: AppDimensions.imageL,
-            // child: ClipRRect(
-            //   borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-            child: Container(
-              child: Center(
-                child: Image.asset(
-                  AppAssets.toilet1, // 👈 your custom icon path
-                  width: AppDimensions.iconXXL,
-                  height: AppDimensions.iconXXL,
-                  // color: Colors.white, // optional if you want to tint the image
-                  fit: BoxFit.contain,
-                ),
-              ),
+            padding: const EdgeInsets.all(AppDimensions.paddingS),
+            decoration: const BoxDecoration(
+              color: AppColors.eventGreen,
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              AppAssets.assignmentIcon,
+              width: AppDimensions.iconL,
+              height: AppDimensions.iconL,
+              fit: BoxFit.contain,
             ),
           ),
+
           const SizedBox(width: AppDimensions.spaceM),
 
-          // Toilet name
+          // 🔹 Toilet Name
           Expanded(
             child: ResponsiveTextWidget(
               toilet.name,
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: AppDimensions.textL,
-                //fontWeight: FontWeight.w600,
-              ),
+              textType: TextType.body,
+              color: AppColors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
 
-          // View Detail button
+          // 🔹 View Detail button (same design & alignment)
           GestureDetector(
             onTap: () {
-              // Navigate to toilet detail using ViewModel
               viewModel.navigateToDetail(toilet);
             },
             child: Container(
@@ -157,15 +207,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
                 vertical: AppDimensions.paddingS,
               ),
               decoration: BoxDecoration(
-                color: AppColors.buttonYellow,
+                color: AppColors.newsGreen,
                 borderRadius: BorderRadius.circular(AppDimensions.radiusM),
               ),
               child: const ResponsiveTextWidget(
                 AppStrings.viewDetail,
-                textType: TextType.body,
-                color: AppColors.black,
-                fontSize: AppDimensions.textM,
-                //fontWeight: FontWeight.w600,
+                textType: TextType.caption,
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -178,50 +227,36 @@ class ToiletView extends BaseView<ToiletViewModel> {
     final toilet = viewModel.selectedToilet!;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Dark background
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(AppAssets.bottomsheet),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-
-          // Main content
-          SafeArea(
-            child: Column(
-              children: [
-                _buildDetailAppBar(context, viewModel),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(AppDimensions.paddingM),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildFestivalInformationSection1(context, toilet),
-                        const SizedBox(height: AppDimensions.spaceXS),
-                        _buildFestivalInformationSection2(context, toilet),
-                        // const SizedBox(height: AppDimensions.spaceL),
-                        _buildFestivalInformationSection3(context, toilet),
-                        // const SizedBox(height: AppDimensions.spaceL),
-                        _buildImageSection(context, toilet),
-                        // const SizedBox(height: AppDimensions.spaceL),
-                        _buildLocationSection(context, toilet),
-                        const SizedBox(height: AppDimensions.spaceXS),
-                        _buildLocationSection2(context, toilet),
-                      ],
-                    ),
+      backgroundColor: AppColors.primary,
+      body: Container(
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildDetailAppBar(context, viewModel),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(AppDimensions.paddingM),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    //  _buildFestivalInformationSection1(context, toilet),
+                      const SizedBox(height: AppDimensions.spaceXS),
+                      _buildFestivalInformationSection2(context, toilet),
+                      //const SizedBox(height: AppDimensions.spaceL),
+                      _buildFestivalInformationSection3(context, toilet),
+                      // const SizedBox(height: AppDimensions.spaceL),
+                      _buildImageSection(context, toilet),
+                      // const SizedBox(height: AppDimensions.spaceL),
+                      _buildLocationSection(context, toilet),
+                      const SizedBox(height: AppDimensions.spaceXS),
+                      _buildLocationSection2(context, toilet),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -234,17 +269,26 @@ class ToiletView extends BaseView<ToiletViewModel> {
       ),
       child: Row(
         children: [
-          CustomBackButton(
-            onTap: () {
-              // Navigate back to toilet list using ViewModel
-              viewModel.navigateBackToList();
-            },
+          GestureDetector(
+            onTap: () => viewModel.navigateBackToList(),
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.paddingS),
+              decoration: BoxDecoration(
+                color: AppColors.eventGreen,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: AppColors.white,
+                size: AppDimensions.iconM,
+              ),
+            ),
           ),
           const SizedBox(width: AppDimensions.spaceM),
           ResponsiveTextWidget(
             viewModel.selectedToilet?.name ?? AppStrings.toiletDetail,
             style: const TextStyle(
-              color: AppColors.white,
+              color: AppColors.onPrimary,
               fontSize: AppDimensions.textL,
               fontWeight: FontWeight.bold,
             ),
@@ -254,23 +298,6 @@ class ToiletView extends BaseView<ToiletViewModel> {
     );
   }
 
-  Widget _buildFestivalInformationSection1(
-    BuildContext context,
-    ToiletItem toilet,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
-      child: ResponsiveTextWidget(
-        AppStrings.festivalInformation, // 👈 your display text
-        style: const TextStyle(
-          color: AppColors.white, // or AppColors.primary if preferred
-          fontSize: AppDimensions.textL,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.center, // optional: center or left alignment
-      ),
-    );
-  }
 
   Widget _buildFestivalInformationSection2(
     BuildContext context,
@@ -331,7 +358,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
   Widget _buildLocationSection(BuildContext context, ToiletItem toilet) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingM, vertical: AppDimensions.paddingS),
-      child: Column(
+      child: Row(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,12 +366,13 @@ class ToiletView extends BaseView<ToiletViewModel> {
               const ResponsiveTextWidget(
                 AppStrings.location,
                 textType: TextType.body,
-                color: AppColors.primary,
+                color: AppColors.onPrimary,
                 fontSize: AppDimensions.textL,
                 fontWeight: FontWeight.bold,
               ),
             ],
-      ),
+          ),
+            const Spacer(),
             GestureDetector(
               onTap: () {
                 // Handle open map action
@@ -354,14 +382,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
                   const ResponsiveTextWidget(
                     AppStrings.openMap,
                     textType: TextType.body,
-                    color: AppColors.primary,
+                    color: AppColors.onPrimary,
                     fontSize: AppDimensions.textS,
                     fontWeight: FontWeight.w600,
                   ),
                   const SizedBox(width: AppDimensions.spaceS),
                   const Icon(
                     Icons.map,
-                    color: AppColors.primary,
+                    color: AppColors.onPrimary,
                     size: AppDimensions.iconS,
                   ),
                 ],
@@ -391,14 +419,14 @@ class ToiletView extends BaseView<ToiletViewModel> {
   Widget _buildWhiteCard(BuildContext context, String title, Widget content) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: AppDimensions.spaceL),
-      padding: const EdgeInsets.all(AppDimensions.paddingL),
+      margin: const EdgeInsets.only(bottom: AppDimensions.marginS),
+      padding: const EdgeInsets.all(AppDimensions.paddingM),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.eventLightBlue,
         borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.1),
+            color: AppColors.onPrimary.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -412,7 +440,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
             ResponsiveTextWidget(
               title,
               style: const TextStyle(
-                color: AppColors.grey600,
+                color: AppColors.onPrimary,
                 fontSize: AppDimensions.textL,
                 fontWeight: FontWeight.bold,
               ),
@@ -441,7 +469,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
           ),
           child: Icon(
             icon,
-            color: AppColors.grey600,
+            color: AppColors.onPrimary,
             size: AppDimensions.iconM,
           ),
         ),
@@ -453,7 +481,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
               ResponsiveTextWidget(
                 label,
                 style: const TextStyle(
-                  color: AppColors.grey600,
+                  color: AppColors.onPrimary,
                   fontSize: AppDimensions.textS,
                   fontWeight: FontWeight.w700,
                 ),
@@ -462,7 +490,7 @@ class ToiletView extends BaseView<ToiletViewModel> {
               ResponsiveTextWidget(
                 value,
                 style: const TextStyle(
-                  color: AppColors.grey600,
+                  color: AppColors.onPrimary,
                   fontSize: AppDimensions.textM,
                   //fontWeight: FontWeight.bold,
                 ),

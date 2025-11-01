@@ -64,6 +64,7 @@ class AppAssets {
   static const String toilet = 'assets/images/toilet.png';
   static const String news1 = 'assets/images/news1.png';
   static const String performance = 'assets/images/performance.png';
+  static const String performance1 = 'assets/images/performanceimage.jpg';
 
 
   static const String proback = 'assets/images/proback.png';

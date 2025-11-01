@@ -10,7 +10,9 @@ class NavigationService {
         print('NavigationService: Navigator state is null');
         return null;
       }
-      return await navigatorKey.currentState!.pushNamed<T>(routeName, arguments: arguments);
+      final result = await navigatorKey.currentState!.pushNamed<dynamic>(routeName, arguments: arguments);
+      // Cast the result to the expected type
+      return result as T?;
     } catch (e) {
       print('NavigationService: Error navigating to $routeName: $e');
       return null;
@@ -72,6 +74,18 @@ class NavigationService {
   /// Navigate to login and clear stack
   Future<T?> navigateToLogin<T extends Object?>() {
     return pushNamedAndRemoveUntil<T>('/welcome', (route) => false);
+  }
+  void showSnackbar(String message, {bool isError = false}) {
+    final context = navigatorKey.currentContext;
+    if (context == null) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }
 

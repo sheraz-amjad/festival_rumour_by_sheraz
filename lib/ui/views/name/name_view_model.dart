@@ -4,11 +4,13 @@ import '../../../core/constants/app_durations.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/services/navigation_service.dart';
+import '../../../core/services/auth_service.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/constants/app_strings.dart';
 
 class NameViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService _authService = AuthService();
 
   String _firstName = "";
   String get firstName => _firstName;
@@ -79,12 +81,18 @@ class NameViewModel extends BaseViewModel {
     unfocusName();
 
     await handleAsync(() async {
+      // Save name to Firebase user profile
+      await _authService.updateDisplayName(_firstName.trim());
+      
       await Future.delayed(AppDurations.buttonLoadingDuration);
       _showWelcome = true;
       notifyListeners();
 
-      await Future.delayed(AppDurations.buttonLoadingDuration);
-    }, errorMessage: AppStrings.saveNameError);
+              await Future.delayed(AppDurations.buttonLoadingDuration);
+              
+              // Navigate to photo upload after name is saved
+              _navigationService.navigateTo(AppRoutes.photoUpload);
+            }, errorMessage: AppStrings.saveNameError);
   }
 
   void onEditName() {

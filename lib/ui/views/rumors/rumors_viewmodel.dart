@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../../core/constants/app_numbers.dart';
 import '../../../core/viewmodels/base_view_model.dart';
 import '../../../core/di/locator.dart';
@@ -20,7 +22,7 @@ class RumorsViewModel extends BaseViewModel {
           username: "RumorMaster",
           timeAgo: "2 hours ago",
           content: "Heard that the main stage will have a surprise performance tonight! 🤫",
-          imagePath: AppAssets.post1,
+          imagePath: AppAssets.performance1,
           likes: 156,
           comments: 23,
           status: AppStrings.live,
@@ -56,7 +58,7 @@ class RumorsViewModel extends BaseViewModel {
           username: "StageWhisper",
           timeAgo: "10 hours ago",
           content: "Rumor alert: The sound system is getting an upgrade for tonight's show! 🔊",
-          imagePath: AppAssets.post5,
+          imagePath: AppAssets.performance1,
           likes: 67,
           comments: 8,
           status: AppStrings.live,
@@ -89,5 +91,18 @@ class RumorsViewModel extends BaseViewModel {
 
   void goToSubscription() {
     _navigationService.navigateTo(AppRoutes.subscription);
+  }
+
+  Future<void> goToCreatePost() async {
+    final createdPost = await _navigationService.navigateTo<PostModel>(AppRoutes.createPost);
+    // If a post was created, add it to the beginning of the list
+    if (createdPost != null) {
+      rumors.insert(0, createdPost);
+      notifyListeners();
+    }
+  }
+
+  void navigateBack(BuildContext context) {
+    Navigator.pop(context);
   }
 }

@@ -1,13 +1,16 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/services/navigation_service.dart';
+import '../../../core/services/auth_service.dart';
 import '../../../core/viewmodels/base_view_model.dart';
+import '../../../shared/extensions/context_extensions.dart';
 
 class WelcomeViewModel extends BaseViewModel {
   bool _isLoading = false;
   final NavigationService _navigationService = locator<NavigationService>();
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final AuthService _authService = AuthService();
 
   bool get isLoading => _isLoading;
 
@@ -16,24 +19,20 @@ class WelcomeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<String> _googleEmails = [];
-  List<String> get googleEmails => _googleEmails;
-
   Future<void> loginWithGoogle() async {
     setLoading(true);
 
     try {
-      final GoogleSignInAccount? account = await _googleSignIn.signIn();
-      if (account != null) {
-        // User signed in successfully
-        _googleEmails = [account.email]; // store email
-        notifyListeners();
-
-        // Optional: you could also fetch more accounts if supported
-        print("Signed in as: ${account.email}");
+      final userCredential = await _authService.signInWithGoogle();
+      if (userCredential != null) {
+        // User signed in successfully with Firebase
+        print("Google Sign-In successful: ${userCredential.user?.email}");
+        // Navigate to home or next screen
+        _navigationService.navigateTo(AppRoutes.festivals);
       }
     } catch (error) {
       print("Google Sign-In Error: $error");
+      // You can show error message to user here
     }
 
     setLoading(false);
@@ -45,7 +44,20 @@ class WelcomeViewModel extends BaseViewModel {
 
   Future<void> loginWithApple() async {
     setLoading(true);
-    await Future.delayed(const Duration(seconds: 2));
+
+    try {
+      final userCredential = await _authService.signInWithApple();
+      if (userCredential != null) {
+        // User signed in successfully with Firebase
+        print("Apple Sign-In successful: ${userCredential.user?.email}");
+        // Navigate to home or next screen
+        _navigationService.navigateTo(AppRoutes.festivals);
+      }
+    } catch (error) {
+      print("Apple Sign-In Error: $error");
+      // You can show error message to user here
+    }
+
     setLoading(false);
   }
 
