@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "932830993877-dm1lc8rlrsrtvoh9q40jmfj0eoogmjca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.festival_rumour",
+            "certificate_hash": "6815d0031b931e7f57b5a619c657abb65163177c"
+          }
+        },
+        {
           "client_id": "932830993877-tog9a0nt40iog9dc0crf52jua3492ovb.apps.googleusercontent.com",
           "client_type": 3
         }

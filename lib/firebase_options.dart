@@ -44,12 +44,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD8njqRuhAa_nOVvBvKDkjFGk8NBK5EJU0',
-    appId: '1:932830993877:ios:76ed99cad720006704315c',
+    appId: '1:932830993877:ios:305435e5f88179e504315c',
     messagingSenderId: '932830993877',
     projectId: 'festivalrumour',
     storageBucket: 'festivalrumour.firebasestorage.app',
-    iosClientId: '932830993877-372tlrvjog6gvh3a672ib169bja1li1l.apps.googleusercontent.com',
-    iosBundleId: 'com.festival-rumour',
+    androidClientId: '932830993877-dm1lc8rlrsrtvoh9q40jmfj0eoogmjca.apps.googleusercontent.com',
+    iosClientId: '932830993877-tfusqfrjp61dges3a1mhg9k618l0n20m.apps.googleusercontent.com',
+    iosBundleId: 'com.festival.rumour',
   );
 
 }

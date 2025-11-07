@@ -50,8 +50,8 @@ class AuthService {
       }
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth = await googleUser
-          .authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -70,50 +70,35 @@ class AuthService {
   /// Sign in with Apple
   Future<UserCredential?> signInWithApple() async {
     try {
-      // Generate a random nonce for security
       final rawNonce = _generateNonce();
-      final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+      final nonce = _sha256ofString(rawNonce);
 
-      // Request Apple Sign-In
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        nonce: hashedNonce,
+        nonce: nonce,
       );
 
-      // Create Firebase credential
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
+        accessToken: appleCredential.authorizationCode,
       );
 
-      // Sign in to Firebase with Apple credential
       final userCredential = await _auth.signInWithCredential(oauthCredential);
-
-      // Handle Apple's privacy feature - if user chooses to hide email
-      if (appleCredential.givenName != null ||
-          appleCredential.familyName != null) {
-        final displayName = '${appleCredential.givenName ??
-            ''} ${appleCredential.familyName ?? ''}'.trim();
-        await userCredential.user?.updateDisplayName(displayName);
-      }
-
       return userCredential;
     } catch (e) {
-      print('Apple Sign-In Error: $e');
-      rethrow;
+      print("Apple Sign-In Error: $e");
+      return null;
     }
   }
 
   /// Sign out
   Future<void> signOut() async {
     try {
-      await Future.wait([
-        _auth.signOut(),
-        _googleSignIn.signOut(),
-      ]);
+      await Future.wait([_auth.signOut(), _googleSignIn.signOut()]);
     } catch (e) {
       print('Sign out error: $e');
       rethrow;
@@ -122,11 +107,19 @@ class AuthService {
 
   /// Generate a random nonce for Apple Sign-In security
   String _generateNonce([int length = 32]) {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List
-        .generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+    return List.generate(
+      length,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
+  }
+
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   /// Check if Apple Sign-In is available (iOS 13+)
