@@ -102,7 +102,27 @@ abstract class BaseViewModel extends ChangeNotifier {
       
       if (showLoading && !_isDisposed) setLoading(false);
       
-      final error = errorMessage ?? e.toString();
+      // Extract the actual error message from the exception
+      // Prefer the exception's message over generic errorMessage
+      // This allows services to provide specific, user-friendly error messages
+      String error;
+      if (e is Exception) {
+        final errorString = e.toString();
+        // Remove "Exception: " prefix if present
+        if (errorString.startsWith('Exception: ')) {
+          error = errorString.substring(11); // Remove "Exception: " (11 characters)
+        } else {
+          error = errorString;
+        }
+      } else {
+        error = e.toString();
+      }
+      
+      // If the extracted error is empty or just "null", use fallback
+      if (error.isEmpty || error == 'null' || error.trim().isEmpty) {
+        error = errorMessage ?? 'An error occurred. Please try again.';
+      }
+      
       if (!_isDisposed) {
         setError(error);
         
@@ -114,6 +134,7 @@ abstract class BaseViewModel extends ChangeNotifier {
       // Log error in debug mode
       if (kDebugMode) {
         print('Error in ${runtimeType}: $error');
+        print('Original exception: $e');
       }
       
       return null;

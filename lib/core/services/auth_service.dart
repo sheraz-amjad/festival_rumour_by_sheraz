@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 
 /// Auth result class for handling authentication responses
 class AuthResult {
@@ -27,7 +28,14 @@ class AuthService {
   AuthService._internal();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // Configure GoogleSignIn with server client ID for Firebase Authentication
+  // Server client ID (client_type: 3) from google-services.json: 7789770188-m3l1q2vub09s6atao2krdv5hompbrd33.apps.googleusercontent.com
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+    // Server client ID is required for Firebase Authentication
+    // This is the Web client (OAuth 2.0) client ID from google-services.json
+    serverClientId: '7789770188-m3l1q2vub09s6atao2krdv5hompbrd33.apps.googleusercontent.com',
+  );
 
   /// Current user stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -39,13 +47,14 @@ class AuthService {
   bool get isSignedIn => currentUser != null;
 
   /// Sign in with Google
+  /// Returns null if user cancels, throws exception on error
   Future<UserCredential?> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        // User cancelled the sign-in
+        // User cancelled the sign-in - return null (not an error)
         return null;
       }
 
@@ -61,13 +70,21 @@ class AuthService {
 
       // Sign in to Firebase with the Google credential
       return await _auth.signInWithCredential(credential);
+    } on PlatformException catch (e) {
+      // Handle platform-specific errors (common with Google Sign-In setup issues)
+      throw Exception(_getPlatformErrorMessage(e));
+    } on FirebaseAuthException catch (e) {
+      // Re-throw Firebase auth exceptions with user-friendly messages
+      // Create a new exception with the user-friendly message
+      throw Exception(_getFirebaseAuthErrorMessage(e));
     } catch (e) {
-      print('Google Sign-In Error: $e');
-      rethrow;
+      // Re-throw other exceptions with user-friendly message
+      throw Exception(_getGenericErrorMessage(e));
     }
   }
 
   /// Sign in with Apple
+  /// Returns null if user cancels, throws exception on error
   Future<UserCredential?> signInWithApple() async {
     try {
       final rawNonce = _generateNonce();
@@ -89,9 +106,23 @@ class AuthService {
 
       final userCredential = await _auth.signInWithCredential(oauthCredential);
       return userCredential;
+    } on SignInWithAppleAuthorizationException catch (e) {
+      // User cancelled or authorization failed
+      // Check if user cancelled (code 1001) or other authorization errors
+      if (e.code == AuthorizationErrorCode.canceled || 
+          e.code == AuthorizationErrorCode.unknown) {
+        // User cancelled - return null (not an error)
+        return null;
+      }
+      // Re-throw other authorization errors with user-friendly message
+      throw Exception('Apple Sign-In failed: ${e.message ?? "Please try again"}');
+    } on FirebaseAuthException catch (e) {
+      // Re-throw Firebase auth exceptions with user-friendly messages
+      // Create a new exception with the user-friendly message
+      throw Exception(_getFirebaseAuthErrorMessage(e));
     } catch (e) {
-      print("Apple Sign-In Error: $e");
-      return null;
+      // Re-throw other exceptions
+      rethrow;
     }
   }
 
@@ -235,6 +266,113 @@ class AuthService {
       }
     }
     return 'An unexpected error occurred. Please try again.';
+  }
+
+  /// Get user-friendly error message for Firebase authentication errors
+  String _getFirebaseAuthErrorMessage(FirebaseAuthException error) {
+    switch (error.code) {
+      case 'network-request-failed':
+        return 'Network error. Please check your connection and try again.';
+      case 'too-many-requests':
+        return 'Too many requests. Please try again later.';
+      case 'operation-not-allowed':
+        return 'This sign-in method is not enabled. Please contact support.';
+      case 'invalid-credential':
+        return 'Invalid credentials. Please try again.';
+      case 'account-exists-with-different-credential':
+        return 'An account already exists with a different sign-in method.';
+      case 'user-disabled':
+        return 'This account has been disabled. Please contact support.';
+      case 'user-not-found':
+        return 'No account found. Please sign up first.';
+      default:
+        return error.message ?? 'Authentication failed. Please try again.';
+    }
+  }
+
+  /// Get user-friendly error message for PlatformException errors
+  /// These typically occur due to configuration issues with Google Sign-In
+  String _getPlatformErrorMessage(PlatformException error) {
+    final code = error.code.toLowerCase();
+    final message = error.message ?? '';
+
+    // Common Google Sign-In platform errors
+    if (code.contains('sign_in_failed') || 
+        code.contains('sign_in_canceled') ||
+        message.toLowerCase().contains('sign_in_failed')) {
+      if (message.toLowerCase().contains('developer_error') ||
+          code.contains('developer_error')) {
+        return 'Google Sign-In configuration error. Please check:\n'
+               '1. SHA-1 fingerprint is added to Firebase Console\n'
+               '2. OAuth 2.0 Client ID is configured\n'
+               '3. google-services.json is properly configured';
+      }
+      return 'Google Sign-In failed. Please try again.';
+    }
+    
+    if (code.contains('network_error') || 
+        message.toLowerCase().contains('network')) {
+      return 'Network error. Please check your internet connection and try again.';
+    }
+    
+    if (code.contains('api_not_available') || 
+        message.toLowerCase().contains('api_not_available')) {
+      return 'Google Sign-In is not available on this device. Please check your device settings.';
+    }
+    
+    if (code.contains('developer_error') || 
+        message.toLowerCase().contains('developer_error')) {
+      return 'Google Sign-In configuration error. Please ensure:\n'
+             '1. SHA-1 fingerprint is added to Firebase\n'
+             '2. OAuth client is properly configured\n'
+             '3. google-services.json is correct';
+    }
+    
+    if (code.contains('invalid_account') || 
+        message.toLowerCase().contains('invalid_account')) {
+      return 'Invalid Google account. Please try a different account.';
+    }
+
+    // If we have a meaningful message, use it
+    if (message.isNotEmpty && 
+        !message.toLowerCase().contains('platformexception') &&
+        message.length < 200) {
+      return message;
+    }
+    
+    // Default message with helpful information
+    return 'Google Sign-In error occurred. This is usually due to:\n'
+           '• Missing SHA-1 fingerprint in Firebase Console\n'
+           '• Incorrect OAuth client configuration\n'
+           '• Network connectivity issues\n\n'
+           'Please check your Firebase configuration or try again.';
+  }
+
+  /// Get user-friendly error message for generic exceptions
+  String _getGenericErrorMessage(dynamic error) {
+    final errorString = error.toString().toLowerCase();
+    
+    // Check for common error patterns
+    if (errorString.contains('network') || errorString.contains('connection')) {
+      return 'Network error. Please check your connection and try again.';
+    }
+    
+    if (errorString.contains('timeout')) {
+      return 'Request timed out. Please try again.';
+    }
+    
+    if (errorString.contains('configuration') || 
+        errorString.contains('config')) {
+      return 'Configuration error. Please check your Firebase setup.';
+    }
+    
+    if (errorString.contains('permission') || 
+        errorString.contains('denied')) {
+      return 'Permission denied. Please check app permissions.';
+    }
+    
+    // Return a generic message
+    return 'An unexpected error occurred during sign-in. Please try again.';
   }
 
   /// Sign in with phone number

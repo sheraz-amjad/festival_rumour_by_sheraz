@@ -1,66 +1,81 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../core/constants/app_strings.dart';
 import '../../../core/di/locator.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/services/navigation_service.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/viewmodels/base_view_model.dart';
-import '../../../shared/extensions/context_extensions.dart';
 
+/// ViewModel for Welcome screen handling authentication flows
 class WelcomeViewModel extends BaseViewModel {
-  bool _isLoading = false;
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = AuthService();
 
-  bool get isLoading => _isLoading;
-
-  void setLoading(bool value) {
-    _isLoading = value;
-    notifyListeners();
-  }
-
+  /// Sign in with Google account
+  /// Uses Firebase Authentication with Google Sign-In
   Future<void> loginWithGoogle() async {
-    setLoading(true);
+    await handleAsync(
+      () async {
+        final userCredential = await _authService.signInWithGoogle();
+        
+        if (userCredential == null) {
+          // User cancelled the sign-in - don't show error
+          return;
+        }
 
-    try {
-      final userCredential = await _authService.signInWithGoogle();
-      if (userCredential != null) {
-        // User signed in successfully with Firebase
-        print("Google Sign-In successful: ${userCredential.user?.email}");
-        // Navigate to home or next screen
-        _navigationService.navigateTo(AppRoutes.festivals);
-      }
-    } catch (error) {
-      print("Google Sign-In Error: $error");
-      // You can show error message to user here
-    }
-
-    setLoading(false);
+        // User signed in successfully
+        final user = userCredential.user;
+        if (user != null) {
+          // Navigate to festivals screen after successful login
+          _navigationService.navigateTo(AppRoutes.festivals);
+        }
+      },
+      // Don't provide generic errorMessage - let the actual exception message be shown
+      // The AuthService already provides user-friendly error messages
+      showLoading: true,
+      onError: (error) {
+        // Log the actual error for debugging
+        // The error message will be shown via BaseView's error handling
+      },
+    );
   }
 
+  /// Sign in with Apple account
+  /// Uses Firebase Authentication with Apple Sign-In
+  /// Only available on iOS devices
+  Future<void> loginWithApple() async {
+    await handleAsync(
+      () async {
+        final userCredential = await _authService.signInWithApple();
+        
+        if (userCredential == null) {
+          // User cancelled or sign-in failed - error already handled by AuthService
+          return;
+        }
+
+        // User signed in successfully
+        final user = userCredential.user;
+        if (user != null) {
+          // Navigate to festivals screen after successful login
+          _navigationService.navigateTo(AppRoutes.festivals);
+        }
+      },
+      // Don't provide generic errorMessage - let the actual exception message be shown
+      // The AuthService already provides user-friendly error messages
+      showLoading: true,
+      onError: (error) {
+        // Log the actual error for debugging
+        // The error message will be shown via BaseView's error handling
+      },
+    );
+  }
+
+  /// Navigate to email/phone login screen
   Future<void> loginWithEmail() async {
     _navigationService.navigateTo(AppRoutes.username);
   }
 
-  Future<void> loginWithApple() async {
-    setLoading(true);
-
-    try {
-      final userCredential = await _authService.signInWithApple();
-      if (userCredential != null) {
-        // User signed in successfully with Firebase
-        print("Apple Sign-In successful: ${userCredential.user?.email}");
-        // Navigate to home or next screen
-        _navigationService.navigateTo(AppRoutes.festivals);
-      }
-    } catch (error) {
-      print("Apple Sign-In Error: $error");
-      // You can show error message to user here
-    }
-
-    setLoading(false);
-  }
-
+  /// Navigate to signup screen
   void goToSignup() {
     _navigationService.navigateTo(AppRoutes.signupEmail);
   }
