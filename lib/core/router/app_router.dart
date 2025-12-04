@@ -1,11 +1,8 @@
 import 'package:festival_rumour/ui/views/username/username_view.dart';
 import 'package:flutter/material.dart';
-import '../../ui/views/forgot_password/forgot_password_view.dart';
 import '../../ui/views/jobdetail/festivals_job_view.dart';
 import '../../ui/views/jobpost/festivals_job_post_view.dart';
 import '../../ui/views/signup/signupphone/signup_view.dart';
-import '../../ui/views/username/username_view.dart';
-import '../../ui/views/viewall/viewall_view.dart';
 import '../constants/app_strings.dart';
 import '../../ui/views/Profile/profile_view.dart';
 import '../../ui/views/Profile/profilelist/profile_list_view.dart';
@@ -37,8 +34,6 @@ import '../../ui/views/posts/posts_view.dart';
 import '../../ui/views/chat/create_chat_room_view.dart';
 import '../../ui/views/rumors/rumors_view.dart';
 import '../../ui/views/test/firebase_test_view.dart';
-import '../../ui/views/email_verification/email_verification_view.dart';
-import '../../ui/views/create_post/create_post_view.dart';
 import '../utils/transition.dart';
 
 class AppRoutes {
@@ -77,15 +72,11 @@ class AppRoutes {
   static const String rumors = '/rumors';
   static const String jobpost = '/jobpost';
   static const String firebaseTest = '/firebase_test';
-  static const String emailVerification = '/email_verification';
-  static const String photoUpload = '/photo_upload';
-  static const String viewAll = '/view_all';
-  static const String forgotpassword = '/forgot_password';
-  static const String createPost = '/create_post';
 }
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
+
     case AppRoutes.welcome:
       return SmoothPageRoute(page: const WelcomeView());
 
@@ -195,26 +186,12 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
     case AppRoutes.firebaseTest:
       return SmoothPageRoute(page: const FirebaseTestView());
 
-    case AppRoutes.emailVerification:
-      return SmoothPageRoute(page: const EmailVerificationView());
-
-    case AppRoutes.photoUpload:
-      return SmoothPageRoute(page: const UploadPhotosViews());
-
-    case AppRoutes.forgotpassword:
-      return SmoothPageRoute(page: const ForgotPasswordView());
-
-    case AppRoutes.viewAll:
-      final initialTab = settings.arguments as int?;
-      return SmoothPageRoute(page: ViewAllView(initialTab: initialTab));
-
-    case AppRoutes.createPost:
-      return SmoothPageRoute(page: const CreatePostView());
-
     default:
       return MaterialPageRoute(
-        builder: (_) =>
-            const Scaffold(body: Center(child: Text(AppStrings.pageNotFound))),
+        builder:
+            (_) => const Scaffold(
+              body: Center(child: Text(AppStrings.pageNotFound)),
+            ),
       );
   }
 }
